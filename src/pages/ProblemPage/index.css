@@ -1,0 +1,14 @@
+#problem-container {
+    display: flex;
+    justify-content: stretch;
+}
+#problem-container > #problem-detail-container {
+    flex: 1;
+    margin: 20px;
+    /* width:100%; */
+}
+#problem-container > #problem-info-container {
+    width: 15em;
+    margin: 20px;
+    /* width:100%; */
+}

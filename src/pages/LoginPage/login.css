@@ -1,0 +1,18 @@
+#login-contain {
+    height:100%;
+    background-size:cover;
+    display: flex;
+    flex:1;
+    justify-content: center;
+    align-items:center;
+    background-image: url('../../image/login_background.jpg'); 
+}
+#components-form-demo-normal-login .login-form {
+    max-width: 300px;
+  }
+  #components-form-demo-normal-login .login-form-forgot {
+    float: right;
+  }
+  #components-form-demo-normal-login .login-form-button {
+    width: 100%;
+  }

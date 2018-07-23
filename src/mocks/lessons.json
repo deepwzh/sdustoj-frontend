@@ -1,0 +1,37 @@
+{
+    "count": 1,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "meta": 2,
+            "meta_caption": "C++",
+            "creator": "zqm",
+            "create_time": "2018-07-01T12:41:24.680027Z",
+            "updater": "zqm",
+            "update_time": "2018-07-01T12:41:24.680063Z",
+            "available": true,
+            "deleted": false,
+            "cid": 3,
+            "caption": "C++面向对象程序设计",
+            "introduction": null,
+            "start_time": "2018-07-01",
+            "end_time": "2018-07-04"
+        },
+        {
+            "meta": 3,
+            "meta_caption": "C++",
+            "creator": "zqm",
+            "create_time": "2018-07-01T12:41:24.680027Z",
+            "updater": "zqm",
+            "update_time": "2018-07-01T12:41:24.680063Z",
+            "available": true,
+            "deleted": false,
+            "cid": 3,
+            "caption": "程序设计基础",
+            "introduction": null,
+            "start_time": "2018-07-01",
+            "end_time": "2018-07-04"
+        }
+    ]
+}

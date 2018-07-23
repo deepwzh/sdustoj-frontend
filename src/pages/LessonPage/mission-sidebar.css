@@ -1,0 +1,28 @@
+#mission-sidebar {
+    /* border:2px solid; */
+    margin-top: 5px;
+    /* margin-left: 25px; */
+    /* border-radius:25px; */
+    /* border-color: rgba(25, 23, 212, 1); */
+    /* box-shadow: 10px 10px 5px #888888; */
+    color:#495060;
+    width: 200px;
+    /* z-index:1000; */
+    background: rgb(255, 255, 255);
+    /* background: ; */
+    border: rgb(233, 234, 236) solid 1px;
+}
+#mission-sidebar :not(:last-child) {
+    border-bottom: 1px dashed #e9eaec;    
+}
+#mission-sidebar > div {
+    padding: 15px 20px;
+}
+#mission-sidebar #mission-sidebar-item:hover  {
+    border-left:blue solid 0.2em;
+}
+#mission-sidebar #mission-sidebar-item-selected  {
+    background:rgb(13, 184, 84);
+    /* border-left:blue solid 0.2em; */
+
+}
