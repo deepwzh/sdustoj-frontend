@@ -8,14 +8,14 @@ const unlogin_menu = (
   </Menu>
 )
 function logout() {
-  let url = 'http://127.0.0.1:8000/JudgeOnline/api/logout/';
+  let url = 'http://sdustoj.92ac.cn/JudgeOnline/api/logout/';
   fetch(url, {
     method:'get',
     credentials:'include'
   });
 }
 function session() {
-  let url = 'http://127.0.0.1:8000/JudgeOnline/api/session/';
+  let url = 'http://sdustoj.92ac.cn/JudgeOnline/api/session/';
   return fetch(url, {
     method:'get',
     credentials:'include'

@@ -8,7 +8,7 @@ class LessonPage extends React.Component {
         }
     }
     componentDidMount() {
-        fetch('http://127.0.0.1:8000/JudgeOnline/api/learning-courses/', {
+        fetch('http://sdustoj.92ac.cn/JudgeOnline/api/learning-courses/', {
             method:'get',
             mode:'cors',
             credentials: "include"

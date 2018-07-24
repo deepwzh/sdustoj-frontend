@@ -47,13 +47,13 @@ class LessonDetailPage extends React.Component{
         return data;
     }
     get_mission_group = (lesson_id) => {
-        fetch(`http://127.0.0.1:8000/JudgeOnline/api/courses/${lesson_id}/mission-groups/`, {
+        fetch(`http://sdustoj.92ac.cn/JudgeOnline/api/courses/${lesson_id}/mission-groups/`, {
             method: 'get',
             credentials: 'include'    
         }).then(res => res.json()).then((v) => this.setState({column: this._convert_mission_group_data(v)}));
     }
     get_mission = (mission_id) =>{
-        let url = `http://127.0.0.1:8000/JudgeOnline/api/missions/${mission_id}/problems/?ordering=problem_id`;
+        let url = `http://sdustoj.92ac.cn/JudgeOnline/api/missions/${mission_id}/problems/?ordering=problem_id`;
         // console.log(url);
         fetch(url, {
             method: 'get',

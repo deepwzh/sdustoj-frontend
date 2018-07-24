@@ -11,7 +11,7 @@ class NormalLoginForm extends React.Component {
     new Promise((resolve, reject) => { 
       // let data = FormData();
       // data.
-      fetch('http://127.0.0.1:8000/JudgeOnline/api/login/',{
+      fetch('http://sdustoj.92ac.cn/JudgeOnline/api/login/',{
                 method: 'post',
                 mode:'cors',
                 headers: {
@@ -32,7 +32,7 @@ class NormalLoginForm extends React.Component {
   
   get_token = () => 
     new Promise((resolve, reject) => {
-      fetch('http://127.0.0.1:8000/JudgeOnline/api/csrf_token/',{
+      fetch('http://sdustoj.92ac.cn/JudgeOnline/api/csrf_token/',{
         method:'get',
         mode:'cors',
       }).then(
