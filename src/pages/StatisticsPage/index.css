@@ -1,0 +1,24 @@
+#statistics-page{
+    
+    flex-direction: row;
+    background-color: darkgreen;
+    align-items: center;
+    
+}
+
+#float-left{
+    float:left;
+    width:50%;
+   
+}
+
+#stretch{
+    align-items: center;
+}
+
+#float-right{
+    float:right;
+    width:50%;
+}
+
+

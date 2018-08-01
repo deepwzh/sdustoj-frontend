@@ -11,7 +11,7 @@ class NormalLoginForm extends React.Component {
     new Promise((resolve, reject) => { 
       // let data = FormData();
       // data.
-      fetch('http://sdustoj.92ac.cn/JudgeOnline/api/login/',{
+      fetch('http://192.168.130.249:8008/JudgeOnline/api/login/',{
                 method: 'post',
                 mode:'cors',
                 headers: {
@@ -32,7 +32,7 @@ class NormalLoginForm extends React.Component {
   
   get_token = () => 
     new Promise((resolve, reject) => {
-      fetch('http://sdustoj.92ac.cn/JudgeOnline/api/csrf_token/',{
+      fetch('http://192.168.130.249:8008/JudgeOnline/api/csrf_token/',{
         method:'get',
         mode:'cors',
       }).then(
@@ -51,8 +51,8 @@ class NormalLoginForm extends React.Component {
         if (!err) {
         console.log('Received values of form: ', values);
         }
-        let token_req  = this.get_token(); //获取token
-        let login_req = token_req.then((token) => this.login(token, values));
+        // let token_req  = this.get_token(); //获取token
+        let login_req = this.login("token", values);
         login_req.then(
           (data) => 
             this.props.history.push(this.props.redirect)

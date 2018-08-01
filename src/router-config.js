@@ -7,6 +7,7 @@ import MainPage from './pages/MainPage';
 import MissionPage from './pages/MissionPage';
 import ProblemPage from './pages/ProblemPage';
 import SubmissionPage from './pages/SubmissionPage';
+import StatusPage from './pages/StatusPage';
 const routers = [
     {
         path: '/',
@@ -37,6 +38,11 @@ const routers = [
         path: '/lesson/:id/mission/:mission_id/submission',
         component: SubmissionPage,
         layout: MainPageLayout
+    }, {
+        path: '/status',
+        component: StatusPage,
+        layout: MainPageLayout
     }
+
 ];
 export default routers;

@@ -1,9 +1,10 @@
 import React from "react";
-import { NavLink, withRouter  } from 'react-router-dom'
+import { NavLink, withRouter  } from 'react-router-dom';
 import { Layout, Menu, Breadcrumb } from 'antd';
 import './index.css';
 import { Dropdown, Icon } from 'antd';
 import AccountDropdown from "./AccountDropdown";
+
 const { Header, Content, Footer } = Layout;
 class Logo extends React.Component {
     render() {
@@ -24,6 +25,8 @@ class MainPageLayout extends React.Component {
             this.props.history.push('/');
         } else if (selectedKeys[0] == 2) {
             this.props.history.push('/lesson');
+        } else if (selectedKeys[0] == 4) {
+            this.props.history.push('/status');
         }
     }
     render() {
@@ -33,7 +36,10 @@ class MainPageLayout extends React.Component {
         if (match.path === "/") {
             cur_item = '1';
         } else if (match.path.startsWith("/lesson")) {
-            cur_item = '2';
+            cur_item = '2'; 
+        } else if (match.path.startsWith("/status")) {
+            cur_item = '4';
+            
         }
         return (
             <Layout className="layout" id="components-layout-demo-top">
@@ -55,8 +61,13 @@ class MainPageLayout extends React.Component {
                     <Menu.Item key="3">
                         题库
                     </Menu.Item>
-                    <AccountDropdown/>
 
+                    <Menu.Item key="4">
+                        Status
+                    </Menu.Item>
+                    
+                    <AccountDropdown/>
+                    
                 </Menu>
                 </Header>
                 <Content id="content">

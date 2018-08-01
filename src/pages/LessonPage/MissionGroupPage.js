@@ -1,6 +1,6 @@
 import React from 'react';
 import TableComponent from "./MissionTable";
-class MissionGroupPage extends React.Component {
+class  MissionGroupPage extends React.Component {
     constructor(props) {
         super(props);
     }
