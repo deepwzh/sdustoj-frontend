@@ -1,8 +1,8 @@
 import React from 'react';
 import { BlankLayout, MainPageLayout } from "./layouts";
 import LoginPage from "./pages/LoginPage";
-import LessonPage from './pages/LessonPage';
-import LessonDetailPage from './pages/LessonPage/LessonDetailPage';
+import CourseList from './containers/CourseListContainer';
+import LessonDetailPage from './pages/CourseListPage/LessonDetailPage';
 import MainPage from './pages/MainPage';
 import MissionPage from './pages/MissionPage';
 import ProblemPage from './pages/ProblemPage';
@@ -19,7 +19,7 @@ const routers = [
         layout: BlankLayout
     }, {
         path: '/lesson',
-        component: LessonPage,
+        component: CourseList,
         layout: MainPageLayout
     }, {
         path: '/lesson/:id',

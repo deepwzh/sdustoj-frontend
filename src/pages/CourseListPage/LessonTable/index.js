@@ -1,5 +1,6 @@
 import React from "react";
-import { Table, Button } from 'antd';
+import { Button } from 'antd';
+import Table from "../../../components/Table";
 import { Link } from 'react-router-dom';
 class TableComponent extends React.Component {
   state = {
@@ -91,7 +92,7 @@ class TableComponent extends React.Component {
           {/* <Button onClick={this.clearFilters}>Clear filters</Button> */}
           {/* <Button onClick={this.clearAll}>Clear filters and sorters</Button> */}
         </div>
-        <Table columns={columns} dataSource={this.props.data} onChange={this.handleChange} />
+        <Table columns={columns} dataSource={this.props.data} onChange={this.handleChange} error={this.props.error} loading={this.props.loading}/>
       </div>
     );
   }
