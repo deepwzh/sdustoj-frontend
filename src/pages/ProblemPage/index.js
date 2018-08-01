@@ -15,13 +15,14 @@ class ProblemPage extends React.Component {
         fetch(url, {
             method: 'get',
             credentials: 'include'
-        }).then((response) => response.json()).then((res) => {console.log(res),this.setState({problem_data: res, problem_id: res.id})});
+        }).then((response) => response.json()).then((res) => {console.log(res),this.setState({problem_data: res, id: res.id, problem_id: res.problem.id})});
     }
     constructor(props) {
         super(props);
         this.state = {
             problem_id: null,
-            problem_data: null
+            problem_data: null,
+            id: null
         }
     }
     componentDidMount() {
@@ -32,6 +33,7 @@ class ProblemPage extends React.Component {
             fetch('http://192.168.130.249:8008/JudgeOnline/api/csrf_token/',{
                 method:'get',
                 mode:'cors',
+                credentials:'include'
             }).then(
                 (response) => response.json()
             )
@@ -59,7 +61,7 @@ class ProblemPage extends React.Component {
                 method:'post',
                 headers: {
                     "Content-Type": "application/json",
-                    "X-CSRFTOKEN": Cookie.get('csrftoken')
+                    "X-CSRFTOKEN": token
                 },
                 mode:'cors',
                 credentials:'include',

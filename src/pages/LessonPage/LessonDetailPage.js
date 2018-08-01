@@ -1,5 +1,6 @@
 import './index.css';
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 import pic from "../../image/lesson_c.png";
 import MissionSideBar from './MissionSideBar';
 import MissionGroupPage from './MissionGroupPage';
@@ -35,7 +36,8 @@ class LessonDetailPage extends React.Component{
         // );
     }
     componentDidMount() {
-        this.get_mission_group(3);    
+        let { match } = this.props;
+        this.get_mission_group(match.params.id);    
     }
     _convert_mission_group_data = (v) => {
         let data = [];
@@ -86,4 +88,4 @@ class LessonDetailPage extends React.Component{
         );
     }
 }
-export default LessonDetailPage;
+export default withRouter(LessonDetailPage);

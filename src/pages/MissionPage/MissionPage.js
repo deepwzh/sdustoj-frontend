@@ -36,7 +36,8 @@ class LessonDetailPage extends React.Component{
         // );
     }
     componentDidMount() {
-        this.get_mission_group(3);    
+        let {match} = this.props;
+        this.get_mission_group(match.params.id);    
     }
     _convert_mission_group_data = (v) => {
         let data = [];

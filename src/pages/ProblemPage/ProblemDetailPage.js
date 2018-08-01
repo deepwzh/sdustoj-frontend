@@ -9,11 +9,11 @@ class ProblemDetailPage extends React.Component {
                 <h1>{title}</h1>
                 <div>
                     <div>
-                        <h3>描述</h3>
-                        <p>{description}</p>
+                        {/* <h3>描述</h3> */}
+                        <ReactMarkDown source={description} />
                     </div>
                     <div>
-                        <h3>样例</h3>
+                        {/* <h3>样例</h3> */}
                         <ReactMarkDown source={sample}/>
                     </div>
                     <div>

@@ -1,0 +1,5 @@
+{
+    "fileheader.Author": "deepwzh",
+    "fileheader.LastModifiedBy": "deepwzh",
+    "fileheader.tpl": "/**\r\n * Copyright (c) 2018-present, SDUST ACM Association Development Group. \r\n * @Author: {author} \r\n * @Date: {createTime} \r\n * @Last Modified by:   {lastModifiedBy} \r\n * @Last Modified time: {updateTime} \r\n */\r\n"
+}
