@@ -11,11 +11,11 @@ class NormalLoginForm extends React.Component {
     new Promise((resolve, reject) => { 
       // let data = FormData();
       // data.
-      fetch('http://sdustoj.92ac.cn/JudgeOnline/api/login/',{
+      fetch('http://192.168.130.249:8008/JudgeOnline/api/login/',{
                 method: 'post',
                 mode:'cors',
                 headers: {
-                  'X-CSRFTOKEN': token,
+                  // 'X-CSRFTOKEN': token,
                   "Content-Type": "application/json" 
                 },
                 credentials:'include',
@@ -31,19 +31,20 @@ class NormalLoginForm extends React.Component {
   );
   
   get_token = () => 
-    new Promise((resolve, reject) => {
-      fetch('http://sdustoj.92ac.cn/JudgeOnline/api/csrf_token/',{
-        method:'get',
-        mode:'cors',
-      }).then(
-        (response) => response.json()
-      )
-      .then(
-        (value)=> resolve(value.token)
-      ).catch(
-        (err) => reject(err)
-      );
-    });
+    new Promise((resolve, reject) => resolve("blablabla"))  
+  // new Promise((resolve, reject) => {
+    //   fetch('http://192.168.130.249:8008/JudgeOnline/api/csrf_token/',{
+    //     method:'get',
+    //     mode:'cors',
+    //   }).then(
+    //     (response) => response.json()
+    //   )
+    //   .then(
+    //     (value)=> resolve(value.token)
+    //   ).catch(
+    //     (err) => reject(err)
+    //   );
+    // });
   
   handleSubmit = (e) => {
     e.preventDefault();

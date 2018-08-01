@@ -11,17 +11,18 @@ class ProblemPage extends React.Component {
     get_problem_info = () => {
         let {match} = this.props;
         let url = 
-            `http://sdustoj.92ac.cn/JudgeOnline/api/missions/${match.params.mission_id}/problems/${match.params.problem_id}/`;
+            `http://192.168.130.249:8008/JudgeOnline/api/missions/${match.params.mission_id}/problems/${match.params.problem_id}/`;
         fetch(url, {
             method: 'get',
             credentials: 'include'
-        }).then((response) => response.json()).then((res) => {console.log(res),this.setState({problem_data: res, problem_id: res.id})});
+        }).then((response) => response.json()).then((res) => {console.log(res),this.setState({problem_data: res, id: res.id, problem_id: res.problem.id})});
     }
     constructor(props) {
         super(props);
         this.state = {
             problem_id: null,
-            problem_data: null
+            problem_data: null,
+            id: null
         }
     }
     componentDidMount() {
@@ -29,9 +30,10 @@ class ProblemPage extends React.Component {
     }
     get_token = () => 
         new Promise((resolve, reject) => {
-            fetch('http://sdustoj.92ac.cn/JudgeOnline/api/csrf_token/',{
+            fetch('http://192.168.130.249:8008/JudgeOnline/api/csrf_token/',{
                 method:'get',
                 mode:'cors',
+                credentials:'include'
             }).then(
                 (response) => response.json()
             )
@@ -52,14 +54,14 @@ class ProblemPage extends React.Component {
                 code:code
             }
         };
-        let url = `http://sdustoj.92ac.cn/JudgeOnline/api/missions/${match.params.mission_id}/submissions/`;
+        let url = `http://192.168.130.249:8008/JudgeOnline/api/missions/${match.params.mission_id}/submissions/`;
         this.get_token().then((token) => {
             console.log(JSON.stringify(data) );
             fetch(url, {
                 method:'post',
                 headers: {
                     "Content-Type": "application/json",
-                    "X-CSRFTOKEN": Cookie.get('csrftoken')
+                    "X-CSRFTOKEN": token
                 },
                 mode:'cors',
                 credentials:'include',

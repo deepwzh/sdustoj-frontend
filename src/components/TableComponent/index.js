@@ -1,3 +1,11 @@
+/**
+ * Copyright (c) 2018-present, SDUST ACM Association Development Group. 
+ * @Author: deepwzh 
+ * @Date: 2018-07-31 09:26:05 
+ * @Last Modified by: deepwzh
+ * @Last Modified time: 2018-07-31 21:31:48
+ */
+
 import React from "react";
 import { Table, Button } from 'antd';
 import Mock from "../../mocks/lessons.json";

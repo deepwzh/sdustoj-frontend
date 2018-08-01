@@ -1,5 +1,6 @@
 import './index.css';
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 import pic from "../../image/lesson_c.png";
 import MissionSideBar from './MissionSideBar';
 import MissionGroupPage from './MissionGroupPage';
@@ -35,7 +36,8 @@ class LessonDetailPage extends React.Component{
         // );
     }
     componentDidMount() {
-        this.get_mission_group(3);    
+        let { match } = this.props;
+        this.get_mission_group(match.params.id);    
     }
     _convert_mission_group_data = (v) => {
         let data = [];
@@ -46,13 +48,13 @@ class LessonDetailPage extends React.Component{
         return data;
     }
     get_mission_group = (lesson_id) => {
-        fetch(`http://sdustoj.92ac.cn/JudgeOnline/api/courses/${lesson_id}/mission-groups/`, {
+        fetch(`http://192.168.130.249:8008/JudgeOnline/api/courses/${lesson_id}/mission-groups/`, {
             method: 'get',
             credentials: 'include'    
         }).then(res => res.json()).then((v) => this.setState({column: this._convert_mission_group_data(v)}));
     }
     get_mission = (mission_group_id) =>{
-        let url = `http://sdustoj.92ac.cn/JudgeOnline/api/mission-groups/${mission_group_id}/missions/`;
+        let url = `http://192.168.130.249:8008/JudgeOnline/api/mission-groups/${mission_group_id}/missions/`;
         fetch(url, {
             method: 'get',
             credentials: 'include'    
@@ -86,4 +88,4 @@ class LessonDetailPage extends React.Component{
         );
     }
 }
-export default LessonDetailPage;
+export default withRouter(LessonDetailPage);
