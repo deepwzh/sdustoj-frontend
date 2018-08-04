@@ -54,7 +54,10 @@ class TableComponent extends React.Component {
       sortOrder: sortedInfo.columnKey === 'title' && sortedInfo.order,
       render: (text, record, index) => {
         console.log(record);
-        let to = this.props.location.pathname + "/problem/" + record.id;
+        /**
+         * @description warning 这里有点乱，它的路由在 {MissionContentPage} 里
+         */
+        let to = this.props.location.pathname + "#/problem/" + record.id;
         return <Link to={to} >{text}</Link>
       }
     }, {

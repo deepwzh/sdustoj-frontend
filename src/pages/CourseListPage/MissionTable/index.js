@@ -70,19 +70,28 @@ class TableComponent extends React.Component {
       key: 'end_time',
       sorter: (a, b) => a.end_time - b.end_time, //从小到大
       sortOrder: sortedInfo.columnKey === 'end_time' && sortedInfo.order,
-    }, {
-      title: '可用',
+    }, 
+    // {
+    //   title: '可用',
+    //   dataIndex: 'available',
+    //   key: 'available',
+    //   render: (text, record, index) => {
+    //     return <span>{text?"是":"否"}</span>
+    //   }
+    // }, {
+    //   title: '废弃',
+    //   dataIndex: 'deleted',
+    //   key: 'deleted',
+    //   render: (text, record, index) => {
+    //     return <span>{text?"是":"否"}</span>
+    //   }
+    // }, 
+    {
+      title: '状态',
       dataIndex: 'available',
-      key: 'available',
+      key : 'available',
       render: (text, record, index) => {
-        return <span>{text?"是":"否"}</span>
-      }
-    }, {
-      title: '废弃',
-      dataIndex: 'deleted',
-      key: 'deleted',
-      render: (text, record, index) => {
-        return <span>{text?"是":"否"}</span>
+        return <span>{text?"可用":"废弃"}</span>
       }
     }
   ];

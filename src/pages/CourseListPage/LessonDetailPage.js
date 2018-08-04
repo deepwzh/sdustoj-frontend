@@ -2,8 +2,9 @@ import './index.css';
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import pic from "../../image/lesson_c.png";
-import MissionSideBar from './MissionSideBar';
+import LessonSideBar from './LessonSideBar';
 import MissionGroupPage from './MissionGroupPage';
+import {Card} from 'antd';
 // const data = [
 //     {
 //         key: 0,
@@ -25,7 +26,8 @@ class LessonDetailPage extends React.Component{
         this.state = {
             column : [],
             mission_id: 2,
-            mission_data: []
+            mission_data: [],
+            sideBarEntryID: 0
         }
     }
     get_lesson_detail = () => {
@@ -66,16 +68,26 @@ class LessonDetailPage extends React.Component{
         })
         this.get_mission(mission_id);
     }
+
+    onSideBarChange = (key) =>{
+        if(key != this.state.sideBarEntryID)
+            this.setState({sideBarEntryID : key});
+    }
+
+    changeLessonContentBy = (key)=>{
+    
+    }
+
+
     render() {
         return (
             <div id="lesson-detail">
-                <div id="lesson-detail-banner">
-                    程序设计基础 - 吴振寰 - 2018年秋季
-                    {/* <img src={pic}/> */}
+                <div >
+                    <Card id="lesson-detail-banner">这个地方放些课程简要什么的</Card>
                 </div>
                 <div id="lesson-detail-container">
                     <div id="lesson-detail-mission-sidebar">
-                        <MissionSideBar column={this.state.column} onMissionChange={this.onMissionChange} />
+                        <LessonSideBar onSideBarChange={this.onMissionChange} />
                     </div>
                     <div id="lesson-detail-content">
                         <MissionGroupPage data={this.state.mission_data}/>

@@ -37,7 +37,8 @@ class LessonDetailPage extends React.Component{
     }
     componentDidMount() {
         let {match} = this.props;
-        this.get_mission_group(match.params.id);    
+        this.get_mission_group(match.params.id); 
+        this.get_mission(this.props.match.params.mission_id);   
     }
     _convert_mission_group_data = (v) => {
         let data = [];
@@ -73,25 +74,29 @@ class LessonDetailPage extends React.Component{
         }
     }
     render() {
+
+        console.log("MissionPage\n" + this.state.problem_data);
+
         return (
-            <div id="lesson-detail">
+            <div >
                 <div id="lesson-detail-banner">
                     {/* 程序设计基础 - 吴振寰 - 2018年秋季 */}
                     {/* <img src={pic}/> */}
                 </div>
-                <div id="lesson-detail-container">
-                    <div id="lesson-detail-mission-sidebar">
-                        <MissionSideBar column={this.state.column} onMissionChange={this.onSelectedChange} />
+                <div>
+                    <div>
+                        <MissionSideBar problemsData = {this.state.problem_data} />
                     </div>
-                    <div id="lesson-detail-content">
-                        <ProblemTable data={this.state.problem_data}/>
-                    </div>
-                    <div id="lesson-detail-info-sidebar">
-                        
-                    </div>
+
                 </div>
             </div>
         );
     }
 }
 export default withRouter(LessonDetailPage);
+
+/**
+ * <div id="lesson-detail-content">
+                        <ProblemTable data={this.state.problem_data}/>
+                    </div>
+ */
