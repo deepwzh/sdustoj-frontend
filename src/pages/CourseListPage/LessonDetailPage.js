@@ -2,24 +2,15 @@ import './index.css';
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import pic from "../../image/lesson_c.png";
-import LessonSideBar from './LessonSideBar';
 import MissionGroupPage from './MissionGroupPage';
 import {Card} from 'antd';
-// const data = [
-//     {
-//         key: 0,
-//         title: '课程概述',
-//         description: ''
-//     }, {
-//         key: 2,
-//         title: '实验',
-//         description: ''
-//     }, {
-//         key: 3,
-//         title: '作业',
-//         description: ''
-//     }
-// ];
+
+// 引入用户权限配置
+import userConf from "./../../userConf.js";
+import {sideBarItems, SideBar} from './../../utils'
+
+let items = sideBarItems('LessonPage');
+
 class LessonDetailPage extends React.Component{
     constructor(props) {
         super(props);
@@ -27,15 +18,12 @@ class LessonDetailPage extends React.Component{
             column : [],
             mission_id: 2,
             mission_data: [],
-            sideBarEntryID: 0
+            
+            sidebarItemIsRead : false,      // 选择的项是否可写的标记
         }
     }
     get_lesson_detail = () => {
-        // fetch('', {
-    
-        // }).then(
-            
-        // );
+      
     }
     componentDidMount() {
         let { match } = this.props;
@@ -69,9 +57,13 @@ class LessonDetailPage extends React.Component{
         this.get_mission(mission_id);
     }
 
-    onSideBarChange = (key) =>{
-        if(key != this.state.sideBarEntryID)
-            this.setState({sideBarEntryID : key});
+    onSideBarChange = (e) =>{
+        const flag = userConf.list[userConf.curUser]['LessonPage'][e.key][1]; // 获取写标记
+        if(flag == 1)   {   // 如果可写，设置 可写标记 
+            this.setState({sidebarItemIsRead : true});
+        }    else   {
+            this.setState({sidebarItemIsRead : false});    
+        }
     }
 
     changeLessonContentBy = (key)=>{
@@ -83,14 +75,14 @@ class LessonDetailPage extends React.Component{
         return (
             <div id="lesson-detail">
                 <div >
-                    <Card id="lesson-detail-banner">这个地方放些课程简要什么的</Card>
+                    <Card>这个地方放些课程简要什么的</Card>
                 </div>
                 <div id="lesson-detail-container">
                     <div id="lesson-detail-mission-sidebar">
-                        <LessonSideBar onSideBarChange={this.onMissionChange} />
+                        <SideBar onSelect={this.onSideBarChange} items = {items} />
                     </div>
                     <div id="lesson-detail-content">
-                        <MissionGroupPage data={this.state.mission_data}/>
+                        <MissionGroupPage data={this.state.mission_data} isRead = {this.state.sidebarItemIsRead}/>
                     </div>
                     <div id="lesson-detail-info-sidebar">
                         

@@ -1,67 +1,6 @@
 import React from 'react';
 import './mission-sidebar.css';
 // TODO:
-/*
-class MissionSideBar extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            'selected': 0
-        }
-    }
-    onSelect = (key) => {
-        this.setState({'selected': key});
-        this.props.onMissionChange(key);
-    }
-    render() {
-        let column = this.props.column;
-        column = [{
-            key: 0,
-            title: "概览"
-        }, {
-            key:1,
-            title: "题目"
-        }, {
-            key:2,
-            title: "排名"
-        }, {
-            key:3,
-            title: "统计"
-        }];
-        return (
-            <div id="mission-sidebar">
-                {
-                column.map((column, key) => (
-                    <div 
-                        key={column.key} 
-                        id={`mission-sidebar-item${this.state.selected == key? '-selected': ''}`}
-                        onClick={() => this.onSelect(column.key)}
-                        >
-                            {column.title}
-                    </div>
-                ))
-                }
-            </div>
-        );
-    }
-}
-*/
-
-
-
-// /**
-//  * @description 传入标签名，生成标签选项
-//  * @returns 标签项数组
-//  * <TabPane tab="Tab 1" key="1">Content of tab 1</TabPane>
-//  */
-// createTabPanes = (tabPanes)=>{
-//     let res = tabPanes.map(
-//         (value, index) => {
-//             return (<TabPane tab = {value} key = {index}>{value}</TabPane>);
-//         }
-//     );
-//     return res;
-// }
 
 /***
  * @description 模仿virtual judge 的侧边栏
@@ -79,33 +18,16 @@ import {Card, Menu, a} from 'antd';
 class MissionContentPage extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            route : 'null00'
-        };
-    }
-    getInitialState() {
-        return {
-          route: window.location.hash.substr(1)
         }
-      };
-    
-    componentDidMount() {
-        window.addEventListener('hashchange', () => {
-          this.setState({
-            route: window.location.hash.substr(1)
-          })
-          console.log("hashChange");
-        })
-    };
 
     render() {
         const data = this.props.problemsData;
         
         let content = null;
         
-        console.log("hashChange in render : " + this.state.route)
-
-        switch(this.state.route) {
+        
+////////////////////////////////warning
+        switch(1) {
             case '/overview' : 
                 content = (<Overview problemsData = {data}/>); 
                 break;
@@ -123,13 +45,6 @@ class MissionContentPage extends React.Component {
         const Item = Menu.Item;
         return (
             <Card>
-                
-                    <li><a href = '#/overview'>Overview</a></li>
-                    <li><a href = '#/problem'>Problem</a></li>
-                    <li><a href = '#/status'>Status</a></li>
-                    <li><a href = '#/rank'>Rank</a></li>
-                    <li><a href = '#/other'>Other</a></li>
-                
                 {content}
             </Card>
         );

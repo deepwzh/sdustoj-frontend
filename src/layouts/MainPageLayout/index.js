@@ -5,6 +5,8 @@ import './index.css';
 import { Dropdown, Icon } from 'antd';
 import AccountDropdown from "./AccountDropdown";
 
+
+
 const { Header, Content, Footer } = Layout;
 class Logo extends React.Component {
     render() {
@@ -15,6 +17,7 @@ class Logo extends React.Component {
         )
     }
 }
+
 class MainPageLayout extends React.Component {
     constructor(props) {
         super(props);
@@ -72,12 +75,6 @@ class MainPageLayout extends React.Component {
                 </Header>
                 <Content id="content">
                 {children}
-                {/* <Breadcrumb style={{ margin: '16px 0' }}>
-                    <Breadcrumb.Item>Home</Breadcrumb.Item>
-                    <Breadcrumb.Item>List</Breadcrumb.Item>
-                    <Breadcrumb.Item>App</Breadcrumb.Item>
-                </Breadcrumb>
-                <div style={{ background: '#fff', padding: 24, minHeight: 280 }}>Content</div> */}
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>
                 Ant Design ©2016 Created by Ant UED

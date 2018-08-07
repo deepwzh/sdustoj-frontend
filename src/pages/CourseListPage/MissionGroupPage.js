@@ -8,7 +8,7 @@ class  MissionGroupPage extends React.Component {
         let {data} = this.props;
         return (
             <div>
-                <TableComponent data={data}/>
+                <TableComponent data={data} isRead = {this.props.isRead}/>
             </div>
         );
     }
