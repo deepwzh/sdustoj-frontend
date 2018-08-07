@@ -1,0 +1,29 @@
+#menu-layout-content .logo {
+    width: 120px;
+    height: 31px;
+    font-size: 20px;
+    /* background: rgba(253, 158, 158, 0.2);   */
+    /*margin: 16px 24px 16px 0; */
+    float: left;
+}
+#menu-layout-content .ant-layout-header {
+    background: rgba(255, 255, 255, 1)
+}
+#menu-layout-content #content{
+    padding: 50px;
+    background: rgb(238, 238, 238);
+}
+#menu-layout-content #content {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    min-height: 40em;
+    /* height: 500px; */
+}
+#menu-layout-content #content {
+    display: flex;
+    flex-direction: row;
+}
+#menu-layout-content #content > :nth-child(1) {
+    flex:1
+}

@@ -1,39 +1,20 @@
 import React from 'react';
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
 import { withRouter } from "react-router-dom";
+import { connect } from 'react-redux';
+import { loginRequest } from '../../actions';
 const FormItem = Form.Item;
 
 class NormalLoginForm extends React.Component {
   static defaultProps = {
     redirect: '/'
   }
-  login = (token, values) => 
-    new Promise((resolve, reject) => { 
-      // let data = FormData();
-      // data.
-      fetch('http://192.168.130.249:8008/JudgeOnline/api/login/',{
-                method: 'post',
-                mode:'cors',
-                headers: {
-                  // 'X-CSRFTOKEN': token,
-                  "Content-Type": "application/json" 
-                },
-                credentials:'include',
-                body: JSON.stringify(values),
-            }).then((response) => {
-                if(response.status == 200)
-                  resolve("登录成功")
-                else
-                  reject("认证失败")
-                })
-              .catch((err) => reject(err))
-    }
-  );
+
   
   get_token = () => 
     new Promise((resolve, reject) => resolve("blablabla"))  
   // new Promise((resolve, reject) => {
-    //   fetch('http://192.168.130.249:8008/JudgeOnline/api/csrf_token/',{
+    //   fetch('http://www.92ac.cn:8008/JudgeOnline/api/csrf_token/',{
     //     method:'get',
     //     mode:'cors',
     //   }).then(
@@ -52,14 +33,15 @@ class NormalLoginForm extends React.Component {
         if (!err) {
         console.log('Received values of form: ', values);
         }
+        this.props.login(values.username, values.password);
         // let token_req  = this.get_token(); //获取token
-        let login_req = this.login("token", values);
-        login_req.then(
-          (data) => 
-            this.props.history.push(this.props.redirect)
-        )
-        .catch((err)=> alert(err)); //请求成功，调用login
-        values;
+        // let login_req = this.login("token", values);
+        // login_req.then(
+        //   (data) => 
+        //     this.props.history.push(this.props.redirect)
+        // )
+        // .catch((err)=> alert(err)); //请求成功，调用login
+        // values;
     });
   
 }
@@ -100,5 +82,12 @@ class NormalLoginForm extends React.Component {
 }
 
 const WrappedNormalLoginForm = Form.create()(NormalLoginForm);
-
-export default withRouter(WrappedNormalLoginForm);
+const mapStateToProps = (state) => {
+  return state;
+}
+const mapDispatchToProps = (dispatch) => {
+  return {
+    login: (username, password) => dispatch(loginRequest({username, password}))
+  }
+}
+export default connect(null, mapDispatchToProps)(WrappedNormalLoginForm);

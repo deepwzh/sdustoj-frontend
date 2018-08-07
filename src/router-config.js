@@ -1,5 +1,5 @@
 import React from 'react';
-import { BlankLayout, MainPageLayout } from "./layouts";
+import { BlankLayout, MainPageLayout, MenuSiderBarLayout } from "./layouts";
 import LoginPage from "./pages/LoginPage";
 import CourseList from './containers/CourseListContainer';
 import LessonDetailPage from './pages/CourseListPage/LessonDetailPage';
@@ -8,7 +8,6 @@ import MissionPage from './pages/MissionPage';
 import ProblemPage from './pages/ProblemPage';
 import SubmissionPage from './pages/SubmissionPage';
 import StatusPage from './pages/StatusPage';
-import Overview from './pages/MissionPage/Overview'
 const routers = [
     {
         path: '/',
@@ -25,38 +24,24 @@ const routers = [
     }, {
         path: '/lesson/:id',
         component: LessonDetailPage,
-        layout: MainPageLayout,
-        routers: []
+        layout: MenuSiderBarLayout,
     }, {
-        path: '/lesson/:id/mission/:mission_id',
+        path: '/lesson/:id/:mission_group_name',
+        component: LessonDetailPage,
+        layout: MenuSiderBarLayout,
+    }, {
+        path: '/lesson/:id/:mission_group_name/:mission_id',
         component: MissionPage,
-        layout: MainPageLayout
-    }, 
-
-    // //TODO: 添 加任务下 其余路由选项
-    // {   // overview
-    //     path: '/lesson/:id/mission/:mission_id/overview',
-    //     component: Overview,
-    //     layout: MissionPage
-    // }, {    // problem
-    //     path: '/lesson/:id/mission/:mission_id/problem',
-    //     component: null,
-    //     layout: null
-    // }, {    // status (想办法让其只展示自己的状态)
-    //     path: '/lesson/:id/mission/:mission_id/status',
-    //     component: null,
-    //     layout: null
-    // }, {    // rank
-    //     path: '/lesson/:id/mission/:mission_id/rank',
-    //     component: null,
-    //     layout: null    
-    // }, {
-    //     path: '/lesson/:id/mission/:mission_id/other',
-    //     component: null,
-    //     layout: null
-    // },
-
-    {
+        layout: MainPageLayout,
+        routers: [
+            {
+                path: '/lesson/:id',
+                component: LessonDetailPage,
+                layout: MainPageLayout,
+                routers: []
+            }
+        ]
+    }, {
         path: '/lesson/:id/mission/:mission_id/problem/:problem_id',
         component: ProblemPage,
         layout: MainPageLayout
@@ -69,6 +54,5 @@ const routers = [
         component: StatusPage,
         layout: MainPageLayout
     }
-
 ];
 export default routers;

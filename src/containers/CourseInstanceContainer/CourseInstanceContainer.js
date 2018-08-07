@@ -1,17 +1,17 @@
 import React from "react";
-import Page from "../../pages/CourseListPage";
+import Page from "../../pages/CourseInstancePage";
 import { connect } from 'react-redux';
 import { learningCoursesListRequest } from '../../actions';
-class CourseListContainer extends React.Component {
+class CourseInstanceContainer extends React.Component {
     constructor(props) {
         super(props);
     }
     componentDidMount() {
-        this.fetchCourseList();
+        // this.fetchCourseList();
     }
-    fetchCourseList = () => {
-        this.props.getCourseList();
-    }
+    // fetchCourseList = () => {
+    //     this.props.getCourseList();
+    // }
     render() {
         return (
             <Page {...this.props} 
@@ -23,9 +23,10 @@ class CourseListContainer extends React.Component {
 }
 const mapStateToProp = (state) => {
     return {
-        data: state.course.courseList,
-        loading: state.course.loading,
-        error: state.course.error
+        pathname: state.router.
+        // data: state.course.courseList,
+        // loading: state.course.loading,
+        // error: state.course.error
     }
 }
 const mapDispatchToProps = (dispatch) => {
@@ -33,4 +34,4 @@ const mapDispatchToProps = (dispatch) => {
         getCourseList: () => dispatch(learningCoursesListRequest())
     }
 }
-export default connect(mapStateToProp, mapDispatchToProps)(CourseListContainer);
+export default connect(mapStateToProp, mapDispatchToProps)(CourseInstanceContainer);
