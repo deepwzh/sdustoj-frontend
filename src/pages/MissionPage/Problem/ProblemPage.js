@@ -13,7 +13,7 @@ import './index.css';
 class ProblemPage extends React.Component {
     get_problem_info = () => {
         let url = 
-            `http://192.168.130.249:8008/JudgeOnline/api/missions/${this.props.mission_id}/problems/${this.props.problem_id}/`;
+            `http://www.92ac.cn:8008/JudgeOnline/api/missions/${this.props.mission_id}/problems/${this.props.problem_id}/`;
         fetch(url, {
             method: 'get',
             credentials: 'include'
@@ -32,7 +32,7 @@ class ProblemPage extends React.Component {
     }
     get_token = () => 
         new Promise((resolve, reject) => {
-            fetch('http://192.168.130.249:8008/JudgeOnline/api/csrf_token/',{
+            fetch('http://www.92ac.cn:8008/JudgeOnline/api/csrf_token/',{
                 method:'get',
                 mode:'cors',
                 credentials:'include'
@@ -55,7 +55,7 @@ class ProblemPage extends React.Component {
                 code:code
             }
         };
-        let url = `http://192.168.130.249:8008/JudgeOnline/api/missions/${this.props.mission_id}/submissions/`;
+        let url = `http://www.92ac.cn:8008/JudgeOnline/api/missions/${this.props.mission_id}/submissions/`;
         this.get_token().then((token) => {
             console.log(JSON.stringify(data) );
             fetch(url, {
@@ -124,7 +124,7 @@ class ProblemPage extends React.Component {
     get_problem_info = () => {
         let {match} = this.props;
         let url = 
-            `http://192.168.130.249:8008/JudgeOnline/api/missions/${match.params.mission_id}/problems/${match.params.problem_id}/`;
+            `http://www.92ac.cn:8008/JudgeOnline/api/missions/${match.params.mission_id}/problems/${match.params.problem_id}/`;
         fetch(url, {
             method: 'get',
             credentials: 'include'
@@ -143,7 +143,7 @@ class ProblemPage extends React.Component {
     }
     get_token = () => 
         new Promise((resolve, reject) => {
-            fetch('http://192.168.130.249:8008/JudgeOnline/api/csrf_token/',{
+            fetch('http://www.92ac.cn:8008/JudgeOnline/api/csrf_token/',{
                 method:'get',
                 mode:'cors',
                 credentials:'include'
@@ -167,7 +167,7 @@ class ProblemPage extends React.Component {
                 code:code
             }
         };
-        let url = `http://192.168.130.249:8008/JudgeOnline/api/missions/${match.params.mission_id}/submissions/`;
+        let url = `http://www.92ac.cn:8008/JudgeOnline/api/missions/${match.params.mission_id}/submissions/`;
         this.get_token().then((token) => {
             console.log(JSON.stringify(data) );
             fetch(url, {
