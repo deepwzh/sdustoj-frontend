@@ -23,7 +23,7 @@ class SiderBar extends React.Component {
                 key: "02",
                 title: "考试",
                 target:"/lesson/2/考试"
-            }]
+            }] 
         }]
     }
     // renderItem = (props) = {

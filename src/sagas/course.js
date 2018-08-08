@@ -20,7 +20,6 @@ export function * getCourseListFlow () {
   while (true) {
     // And we're listening for `LOGIN_REQUEST` actions and destructuring its payload
     yield take(LEARNING_COURSES_LIST_REQUEST);
-    LEARNING_COURSES_LIST_RECEIVE
     // A `LOGOUT` action may happen while the `authorize` effect is going on, which may
     // lead to a race condition. This is unlikely, but just in case, we call `race` which
     // returns the "winner", i.e. the one that finished first

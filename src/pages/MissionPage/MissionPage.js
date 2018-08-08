@@ -1,3 +1,11 @@
+/**
+ * @description 二重奏!(二次修改)这里貌似要存不少东西。
+ * 最重要的有两个 本课程的详细信息 和 所有题目的简单列表
+ * TODO:
+ */
+
+
+
 import './index.css';
 import React from 'react';
 import MissionContentPage from './MissionSideBar';
@@ -6,6 +14,9 @@ import { withRouter } from "react-router-dom";
 import {sideBarItems, SideBar} from './../../utils'
 
 let items = sideBarItems('MissionPage');
+
+
+
 
 class LessonDetailPage extends React.Component{
     constructor(props) {
@@ -64,8 +75,7 @@ class LessonDetailPage extends React.Component{
         return (
             <div >
                 <div id="lesson-detail-banner">
-                    {/* 程序设计基础 - 吴振寰 - 2018年秋季 */}
-                    {/* <img src={pic}/> */}
+                   
                 </div>
                 <div>
 

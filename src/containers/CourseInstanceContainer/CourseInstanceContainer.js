@@ -7,6 +7,10 @@ class CourseInstanceContainer extends React.Component {
         super(props);
     }
     componentDidMount() {
+        this.props.pathname
+        this.props.hash
+        this.props.role ['STUDENT', 'TEACHER']
+
         // this.fetchCourseList();
     }
     // fetchCourseList = () => {

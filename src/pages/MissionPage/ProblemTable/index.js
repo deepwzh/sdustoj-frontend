@@ -40,7 +40,17 @@ class TableComponent extends React.Component {
     let { sortedInfo, filteredInfo } = this.state;
     sortedInfo = sortedInfo || {};
     filteredInfo = filteredInfo || {};
-    const columns = [{
+    const columns = [
+      
+      {           //TODO: 我们需要一个用以判断当前题目状态的标记
+                  // √ 表示通过 ? 表示尝试但未通过 x 表示测试结束 但未提交过任何代码
+                  // 先放着，有空做
+          title: '状态',
+          dataIndex: 'problem_state',
+          key: 'problem_state',
+      },
+
+      {
       title: '题目ID',
       dataIndex: 'problem_id',
       key: 'problem_id',
@@ -54,10 +64,8 @@ class TableComponent extends React.Component {
       sortOrder: sortedInfo.columnKey === 'title' && sortedInfo.order,
       render: (text, record, index) => {
         console.log(record);
-        /**
-         * @description warning 这里有点乱，它的路由在 {MissionContentPage} 里
-         */
-        let to = this.props.location.pathname + "#/problem/" + record.id;
+        
+        let to = this.props.location.pathname + "/problem/" + record.id;
         return <Link to={to} >{text}</Link>
       }
     }, {
@@ -77,9 +85,7 @@ class TableComponent extends React.Component {
     return (
       <div>
         <div className="table-operations">
-          {/* <Button onClick={this.setAgeSort}>Sort age</Button> */}
-          {/* <Button onClick={this.clearFilters}>Clear filters</Button> */}
-          {/* <Button onClick={this.clearAll}>Clear filters and sorters</Button> */}
+         
         </div>
         <Table columns={columns} dataSource={this.props.data} onChange={this.handleChange} />
       </div>
