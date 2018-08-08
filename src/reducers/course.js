@@ -4,27 +4,23 @@ import React from 'react';
  */
 
 import {
-    LEARNING_COURSES_LIST_REQUEST,
-    LEARNING_COURSES_LIST_RECEIVE,
+  // RETRIEVE_COURSE_LIST_REQUEST,
+  RETRIEVE_COURSE_LIST_RECEIVE,
 } from '../actions/constants'
 
 // The initial application state
     let initialState = {
-    error: null,
-    loading: false,
-    courseList: []
+
     }
   // Takes care of changing the application state
   function courseReducer (state = initialState, action) {
     switch (action.type) {
-      case LEARNING_COURSES_LIST_RECEIVE:
+      case RETRIEVE_COURSE_LIST_RECEIVE:
         if (action.error) {
-            return Object.assign(state, {error: action.payload, loading: false});
+            //return Object.assign(state, {error: action.payload, loading: false});
         } else {
-            return Object.assign(state, {courseList: action.payload, loading: false});
+            return Object.assign(state, {...action.payload});
         }
-      case LEARNING_COURSES_LIST_REQUEST:
-        return {...state, loading: true}
       default:
         return state
     }

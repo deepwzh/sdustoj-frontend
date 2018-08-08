@@ -85,13 +85,13 @@ export function * loginFlow () {
   while (true) {
     // And we're listening for `LOGIN_REQUEST` actions and destructuring its payload
     const request = yield take(LOGIN_REQUEST)
-    const {username, password} = request.data
+    const {username, password, auth} = request.data
 
     // A `LOGOUT` action may happen while the `authorize` effect is going on, which may
     // lead to a race condition. This is unlikely, but just in case, we call `race` which
     // returns the "winner", i.e. the one that finished first
     const winner = yield race({
-      auth: call(authorize, {username, password, isRegistering: false}),
+      auth: call(authorize, {username, password, auth: auth, isRegistering: false}),
       logout: take(LOGOUT)
     })
 

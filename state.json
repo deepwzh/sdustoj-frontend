@@ -1,0 +1,141 @@
+{["course_id", "role", "mission_group_id", "mission_id", "problem_id"]}
+RETRIEVE_COURSE_LIST_REQUEST
+RETRIEVE_MISSION_GROUP_LIST_REQUEST
+RETRIEVE_PROBLEM_LIST_REQUEST
+RETRIEVE_MISSION_LIST_REQUEST
+RETRIEVE_SUBMISSION_LIST_REQUEST
+DELETE_COURSE_REQUEST
+UPDATE_COURSE_REQUEST
+CREATE_COURSE_REQUEST
+ADD_RELATION_REQUEST(1,1,1)
+GET_RELATION_REQUEST(1,1,1)
+SET_LOADING
+SET_ERROR
+{
+    "gloal":{
+        "loading": true,
+    },
+    "permission": {
+        "student": {
+            "COURSE": [0,1,0,0],
+            "PROBLEM": [0,1,0,0],
+            "MISSION": [0,1,0,0],
+            "MISSION_GROUP":[0,1,0,0],
+            "SUBMISSION": [0,1,0,0]
+        },
+        "teacher": {
+            "COURSE": [1,1,1,1],
+            "PROBLEM": [1,1,1,1],
+            "MISSION": [1,1,1,1],
+            "MISSION_GROUP":[1,1,1,1],
+            "SUBMISSION": [1,1,1,1],
+        }
+    },
+    "relation": {
+        "ids": [1,2,3],
+        "course": {
+            "1": {
+                "ids": [1,2,3],
+                "mission_group": {
+                    "1": {
+                        "ids": [1,2,3],
+                        "mission": {
+                            "1": {
+                                "ids": [1,2,3],
+                                "problem": {
+                                    "1": 1
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+    },
+    "ui": {
+        "modal": {},
+    },
+    "auth": {
+      "username" : "wzh",
+      "role" : "student"
+    },
+    "course":{
+        "1": {
+            "meta":2,
+            "meta_caption":"程序设计基础",
+            "creator":"admin",
+            "create_time":"2018-07-30T12:46:21.342881Z",
+            "updater":"admin",
+            "update_time":"2018-07-30T12:47:36.495717Z",
+            "available":true,
+            "deleted":false,
+            "cid":1,
+            "caption":"程序设计基础：软件17",
+            "introduction":null,
+            "start_time":"2017-09-01",
+            "end_time":"2018-01-31"
+            },
+        "2": {"meta":2,
+            "meta_caption":"程序设计基础",
+            "creator":"admin",
+            "create_time":"2018-07-30T12:50:56.231209Z",
+            "updater":"admin",
+            "update_time":"2018-07-30T12:50:56.231250Z",
+            "available":true,
+            "deleted":false,
+            "cid":2,
+            "caption":"程序设计基础：物联网17",
+            "introduction":null,
+            "start_time":"2017-09-01",
+            "end_time":"2018-01-31"
+        }
+    },
+    "mission_group": {
+        "1": {
+            "id":1,
+            "meta_caption":"程序设计基础",
+            "creator":"admin",
+            "create_time":"2018-07-30T13:01:20.018263Z",
+            "updater":"admin",
+            "update_time":"2018-07-30T13:01:20.018303Z",
+            "available":true,
+            "deleted":false,
+            "caption":"作业",
+            "weight":"1.0000000000",
+            "course_meta":2
+        },
+        "2": {
+            "id":2,
+            "meta_caption":"程序设计基础",
+            "creator":"admin",
+            "create_time":"2018-08-06T09:38:34.291592Z",
+            "updater":"admin",
+            "update_time":"2018-08-06T09:38:34.291633Z",
+            "available":true,
+            "deleted":false,
+            "caption":"实验",
+            "weight":"1.0000000000",
+            "course_meta":2
+        }
+    },
+    "mission": {
+        "3": {"id":3,
+            "mission_id":3,
+            "caption":"实验1",
+            "course_meta":3,
+            "meta_caption":"程序设计基础",
+            "start_time":"2018-08-06T09:35:00Z",
+            "end_time":"2018-08-07T09:50:00Z",
+            "creator":"admin",
+            "create_time":"2018-08-06T09:38:54.632968Z",
+            "updater":"admin",
+            "update_time":"2018-08-06T09:38:54.633005Z",
+            "available":true,
+            "deleted":false,
+            "weight":"1.0000000000"
+        }
+    },
+    "problem": {},
+    "submission": {},
+}

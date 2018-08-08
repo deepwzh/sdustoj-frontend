@@ -1,4 +1,4 @@
-import { Table as AntdTable, Spin, message } from "antd";
+import { Table as AntdTable } from "antd";
 import React from "react";
 class Table extends React.Component {
     componentWillReceiveProps(nextprops){
@@ -11,9 +11,7 @@ class Table extends React.Component {
     render() {
         return (
             <div>
-                <Spin tip="正在加载" spinning={this.props.loading} >
-                    <AntdTable dataSource={this.props.dataSource} columns={this.props.columns} />
-                </Spin>
+                <AntdTable {...this.props} />
             </div>
         );
     }
