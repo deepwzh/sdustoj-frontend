@@ -5,6 +5,8 @@ import './MainPageLayout.css';
 import { Dropdown, Icon } from 'antd';
 import Menu from '../../components/Menu';
 
+
+
 const { Header, Content, Footer } = Layout;
 class Logo extends React.Component {
     render() {
@@ -15,6 +17,7 @@ class Logo extends React.Component {
         )
     }
 }
+
 class MainPageLayout extends React.Component {
     constructor(props) {
         super(props);

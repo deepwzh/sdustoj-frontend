@@ -1,24 +1,12 @@
 import './index.css';
 import React from 'react';
-import MissionSideBar from './MissionSideBar';
-import ProblemTable from './ProblemTable';
+import MissionContentPage from './MissionSideBar';
 import { withRouter } from "react-router-dom";
-// import MissionGroupPage from './MissionGroupPage';
-// const data = [
-//     {
-//         key: 0,
-//         title: '课程概述',
-//         description: ''
-//     }, {
-//         key: 2,
-//         title: '实验',
-//         description: ''
-//     }, {
-//         key: 3,
-//         title: '作业',
-//         description: ''
-//     }
-// ];
+
+import {sideBarItems, SideBar} from './../../utils'
+
+let items = sideBarItems('MissionPage');
+
 class LessonDetailPage extends React.Component{
     constructor(props) {
         super(props);
@@ -29,11 +17,7 @@ class LessonDetailPage extends React.Component{
         }
     }
     get_lesson_detail = () => {
-        // fetch('', {
-    
-        // }).then(
-            
-        // );
+       
     }
     componentDidMount() {
         let {match} = this.props;
@@ -84,8 +68,10 @@ class LessonDetailPage extends React.Component{
                     {/* <img src={pic}/> */}
                 </div>
                 <div>
+
+                    <SideBar items = {items} />
                     <div>
-                        <MissionSideBar problemsData = {this.state.problem_data} />
+                        <MissionContentPage problemsData = {this.state.problem_data} />
                     </div>
 
                 </div>
@@ -94,9 +80,3 @@ class LessonDetailPage extends React.Component{
     }
 }
 export default withRouter(LessonDetailPage);
-
-/**
- * <div id="lesson-detail-content">
-                        <ProblemTable data={this.state.problem_data}/>
-                    </div>
- */
