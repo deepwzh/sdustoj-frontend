@@ -1,4 +1,5 @@
 import { API, getAPIUrl } from '../config';
+import { addIndexToArray } from '../common';
 const course = {
     /**
     * Logs a user in, returning a promise with `true` when done
@@ -15,7 +16,7 @@ const course = {
       return fetch(url, option)
         .then((response) => response.json())
         .then((data) => {
-            return Promise.resolve(data.results)
+            return Promise.resolve(addIndexToArray(data.results))
         })
       .catch((err) => Promise.reject(err))
     },

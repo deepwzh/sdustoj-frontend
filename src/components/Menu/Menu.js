@@ -39,19 +39,19 @@ class Menu extends React.Component {
         return selected;
     }
     render() {
-        const { pathname, search, hash } = this.props;
-        console.log(pathname);
-        console.log(search);
-        console.log(hash);
+        // const { pathname, search, hash } = this.props;
+        // console.log(pathname);
+        // console.log(search);
+        // console.log(hash);
         const items = this.props.dataSource || [];
-        let cur_item = this.getActiveItemKey(items, pathname);
-        console.log(cur_item);
+        // let cur_item = this.getActiveItemKey(items, pathname);
+        // console.log(cur_item);
         return (
             <AntdMenu
                 onSelect={this.onselect}
                 theme="light"
                 mode="horizontal"
-                defaultSelectedKeys={[cur_item]}
+                defaultSelectedKeys={[1]}
                 style={{ lineHeight: '64px' }}>
                 {
                     items.map((item) => (
@@ -65,9 +65,9 @@ class Menu extends React.Component {
 }
 function mapStateToProps(state) {
     return ({
-        pathname: state.router.location.pathname,
-        search: state.router.location.search,
-        hash: state.router.location.hash,
+    //     pathname: state.router.location.pathname,
+    //     search: state.router.location.search,
+    //     hash: state.router.location.hash,
         auth: state.auth
     });
     // console.log(state); // state

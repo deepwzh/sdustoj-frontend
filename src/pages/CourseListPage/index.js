@@ -8,27 +8,27 @@ class LessonPage extends React.Component {
         super(props);
         this.hide = null;
     }
-    componentDidUpdate(prevProps, prevState) {
-        if (!prevProps.loading && this.props.loading) {
-            this.showLoadingTip();
-        }
-        if (prevProps.loading && !this.props.loading) {
-            this.closeLoadingTip();
-        }
-        if (!prevProps.error && this.props.error) {
-            message.error('发生错误');
-        }
-    }
-    showLoadingTip = () => {
-        this.hide = message.loading('正在加载', 0);
-        // setTimeout(hide, 2500);
-    }
-    closeLoadingTip = () => {
-        message.destroy()
-    }
+    // componentDidUpdate(prevProps, prevState) {
+    //     if (!prevProps.loading && this.props.loading) {
+    //         this.showLoadingTip();
+    //     }
+    //     if (prevProps.loading && !this.props.loading) {
+    //         this.closeLoadingTip();
+    //     }
+    //     if (!prevProps.error && this.props.error) {
+    //         message.error('发生错误');
+    //     }
+    // }
+    // showLoadingTip = () => {
+    //     this.hide = message.loading('正在加载', 0);
+    //     // setTimeout(hide, 2500);
+    // }
+    // closeLoadingTip = () => {
+    //     message.destroy()
+    // }
 
     render() {
-        this.showLoadingTip();
+        // this.showLoadingTip();
         return (
             <Table data={this.props.data} error={this.props.error} loading={this.props.loading} />
         );

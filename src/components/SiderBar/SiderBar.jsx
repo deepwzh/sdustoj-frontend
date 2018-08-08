@@ -6,6 +6,7 @@ class SiderBar extends React.Component {
     constructor(props) {
         super(props);
     }
+<<<<<<< HEAD
     static defaultProps = {
         dataSource: [{
             key: "0",
@@ -26,6 +27,28 @@ class SiderBar extends React.Component {
             }] 
         }]
     }
+=======
+    // static defaultProps = {
+    //     dataSource: [{
+    //         key: "0",
+    //         title: "任务组",
+    //         target: "",
+    //         childrens: [{
+    //             key: "00",
+    //             title: "实验",
+    //             target: "/course/2/mission_group/2", 
+    //         }, {
+    //             key: "01",
+    //             title: "作业",
+    //             target:"/course/2/mission_group/1"
+    //         }, {
+    //             key: "02",
+    //             title: "考试",
+    //             target:"/lesson/2/考试"
+    //         }]
+    //     }]
+    // }
+>>>>>>> 0d64dc558088887db5b35a2cb84b745a45e0d416
     // renderItem = (props) = {
 
     // }
@@ -64,7 +87,6 @@ class SiderBar extends React.Component {
           defaultOpenKeys={['sub1']}
           mode="inline"
         >
-        <Menu.Item>Hello World</Menu.Item>
         {this.getMenuItemList(this.props.dataSource)}
         </Menu>
       );
@@ -72,11 +94,14 @@ class SiderBar extends React.Component {
 }
 function mapStateToProps(state) {
     return ({
-        pathname: state.router.location.pathname,
-        search: state.router.location.search,
-        hash: state.router.location.hash,
-        auth: state.auth
-    });
+        dataSource: state.ui.siderbar.dataSource
+    })
+    // return ({
+    //     // pathname: state.router.location.pathname,
+    //     // search: state.router.location.search,
+    //     // hash: state.router.location.hash,
+    //     // auth: state.auth
+    // });
     // console.log(state); // state
     // console.log(arguments[1]); // undefined
 }

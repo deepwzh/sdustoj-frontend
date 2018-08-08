@@ -1,9 +1,9 @@
 import React from "react";
-import Page from "../../pages/CourseInstancePage";
+import Page from "../../pages/MissionInstancePage";
 import { connect } from 'react-redux';
 import { getAPIUrl, API, ROLE, PERMISSION_TABLE, PERMISSION} from "../../utils/config";
 import { setSiderbarDataSource } from '../../actions';
-class CourseInstanceContainer extends React.Component {
+class MissionInstanceContainer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -14,24 +14,30 @@ class CourseInstanceContainer extends React.Component {
     }
     static defaultProps = {
         siderbar : [{
-            key: "0",
-            title: "任务组",
+            key:"0",
+            title: "概览",
+            target: "#overview"
+        },{
+            key: "1",
+            title: "题目",
             target: "",
             childrens: []
-        }]
+        }, {
+            key: "2",
+            title: "提交",
+            target: "#submission",
+        }, {
+            key: 3,
+            title: "成绩",
+            target: "#score"
+        }
+    ]
     }
     componentDidMount() {
-<<<<<<< HEAD
-        this.props.pathname
-        this.props.hash
-        this.props.role ['STUDENT', 'TEACHER']
-
-=======
         this.props.setSiderbarDataSource(this.props.siderbar);
         this.get_instance(this.props.course_id);
         this.get_mission_group(this.props.course_id);
         // alert("Hello World");
->>>>>>> 0d64dc558088887db5b35a2cb84b745a45e0d416
         // this.fetchCourseList();
     }
     // fetchCourseList = () => {
@@ -170,4 +176,4 @@ const mapDispatchToProps = (dispatch) => {
         setSiderbarDataSource: (dataSource) => dispatch(setSiderbarDataSource(dataSource))
     }
 }
-export default connect(mapStateToProp, mapDispatchToProps)(CourseInstanceContainer);
+export default connect(mapStateToProp, mapDispatchToProps)(MissionInstanceContainer);

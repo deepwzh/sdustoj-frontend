@@ -43,10 +43,10 @@ class TableComponent extends React.Component {
     filteredInfo = filteredInfo || {};
     const columns = [{
       title: '课程ID',
-      dataIndex: 'meta',
+      dataIndex: 'cid',
       key: 'id',
-      sorter: (a, b) => a.meta - b.meta,
-      sortOrder: sortedInfo.columnKey === 'id' && sortedInfo.order,
+      sorter: (a, b) => a.cid - b.cid,
+      sortOrder: sortedInfo.columnKey === 'cid' && sortedInfo.order,
     }, {
       title: '课程名称',
       dataIndex: 'caption',
@@ -55,7 +55,7 @@ class TableComponent extends React.Component {
       sortOrder: sortedInfo.columnKey === 'caption' && sortedInfo.order,
       render: (text, record, index) => {
         // console.log(record);
-        let to = "/lesson/" + record.meta; 
+        let to = "/course/" + record.cid; 
         return <Link to={to} >{text}</Link>
       }
     }, {

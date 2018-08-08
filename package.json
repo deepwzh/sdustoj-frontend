@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "antd": "^3.7.0",
+    "antd": "^3.8.0",
     "connected-react-router": "^4.3.0",
     "echarts": "^4.1.0",
     "echarts-for-react": "^2.0.13",

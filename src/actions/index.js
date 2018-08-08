@@ -6,8 +6,9 @@ import {
     LOGOUT,
     REQUEST_ERROR,
     CLEAR_ERROR,
-    LEARNING_COURSES_LIST_REQUEST,
-    LEARNING_COURSES_LIST_RECEIVE
+    RETRIEVE_COURSE_LIST_REQUEST,
+    RETRIEVE_COURSE_LIST_RECEIVE,
+    SET_SIDERBAR_DATASOURCE
   } from './constants'
   
   /**
@@ -69,9 +70,12 @@ import {
     return {type: CLEAR_ERROR}
   }
 
-  export function learningCoursesListRequest() {
-    return {type: LEARNING_COURSES_LIST_REQUEST}
+  export function RetrieveCourseListRequest() {
+    return {type: RETRIEVE_COURSE_LIST_REQUEST}
   }
-  export function learningCoursesListResponse(error, payload) {
-    return {type: LEARNING_COURSES_LIST_RECEIVE, error, payload}
+  export function RetrieveCourseListResponse(error, payload) {
+    return {type: RETRIEVE_COURSE_LIST_RECEIVE, error, payload}
+  }
+  export function setSiderbarDataSource(payload) {
+    return {type: SET_SIDERBAR_DATASOURCE, payload};
   }

@@ -8,8 +8,8 @@
 import {take, call, put, fork, race} from 'redux-saga/effects'
 import course from '../utils/course';
 import {
-  LEARNING_COURSES_LIST_REQUEST,
-  LEARNING_COURSES_LIST_RECEIVE
+  RETRIEVE_COURSE_LIST_REQUEST,
+  RETRIEVE_COURSE_LIST_RECEIVE
 } from '../actions/constants'
 
 
@@ -19,16 +19,20 @@ export function * getCourseListFlow () {
   // Basically here we say "this saga is always listening for actions"
   while (true) {
     // And we're listening for `LOGIN_REQUEST` actions and destructuring its payload
+<<<<<<< HEAD
     yield take(LEARNING_COURSES_LIST_REQUEST);
+=======
+    yield take(RETRIEVE_COURSE_LIST_REQUEST);
+>>>>>>> 0d64dc558088887db5b35a2cb84b745a45e0d416
     // A `LOGOUT` action may happen while the `authorize` effect is going on, which may
     // lead to a race condition. This is unlikely, but just in case, we call `race` which
     // returns the "winner", i.e. the one that finished first
     try {
         const data = yield call(course.getCourseList);
-        yield put({type: LEARNING_COURSES_LIST_RECEIVE, error:false, payload: data});
+        yield put({type: RETRIEVE_COURSE_LIST_RECEIVE, error:false, payload: data});
     }catch (error) {
         // If we get an error we send Redux the appropiate action and return
-        yield put({type: LEARNING_COURSES_LIST_RECEIVE, error: true, payload: error.message})               
+        yield put({type: RETRIEVE_COURSE_LIST_RECEIVE, error: true, payload: error.message})               
     }
   }
 }
