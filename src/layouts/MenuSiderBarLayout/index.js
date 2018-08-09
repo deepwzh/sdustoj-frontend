@@ -27,7 +27,7 @@ class MenuSiderBarLayout extends React.Component {
                 },{
                     key: 1,
                     title: "课程",
-                    target: "/lesson"
+                    target: "/course"
                 },{
                     key: 2,
                     title: "题库",

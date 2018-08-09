@@ -1,26 +1,10 @@
-#lesson-detail {
+#mission-instance {
     display: flex;
     height: 100%;
     flex-direction: column;
     align-items: stretch;
 }
-#lesson-detail #lesson-detail-banner {
-    /* align-self: center; */
-    /* margin-left: 300px; */
-    font-size: 2em;
-    text-align: center;
-    margin-left: 20px;
-    margin-top: 5px;
-    /* display: flex; */
-    /* height: 200px; */
-    /* background-image: url('../../image/lesson_c.png') */
-}
-#lesson-detail #lesson-detail-introduction   {
-    font-size: 1em;
-    margin-left: 20px;
-    margin-top: 5px;
-}
-#lesson-detail #lesson-detail-content {
+#mission-instance #mission-instance-content {
     flex:1;
     margin-left: 20px;
     margin-top: 5px;
@@ -28,7 +12,18 @@
     background: rgb(255, 255, 255);
     border: rgb(233, 234, 236) solid 1px;
 }
-#lesson-detail #lesson-detail-container {
+#mission-instance #mission-instance-process {
+    margin-left: 20px;
+    margin-top: 5px;
+}
+
+#mission-instance #mission-instance-process  #banner{
+    font-size: 2em;
+    text-align: center;
+    margin-left: 20px;
+    margin-top: 5px;
+}
+#mission-instance #mission-instance-container {
     flex:1;
     display: flex;
     flex-direction: row;

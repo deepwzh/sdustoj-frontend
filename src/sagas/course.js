@@ -19,11 +19,7 @@ export function * getCourseListFlow () {
   // Basically here we say "this saga is always listening for actions"
   while (true) {
     // And we're listening for `LOGIN_REQUEST` actions and destructuring its payload
-<<<<<<< HEAD
-    yield take(LEARNING_COURSES_LIST_REQUEST);
-=======
     yield take(RETRIEVE_COURSE_LIST_REQUEST);
->>>>>>> 0d64dc558088887db5b35a2cb84b745a45e0d416
     // A `LOGOUT` action may happen while the `authorize` effect is going on, which may
     // lead to a race condition. This is unlikely, but just in case, we call `race` which
     // returns the "winner", i.e. the one that finished first

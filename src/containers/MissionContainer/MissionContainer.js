@@ -1,5 +1,8 @@
 import React from "react";
 import Page from "../../pages/MissionInstancePage";
+import SubmissionPage from "../../pages/SubmissionPage";
+import ProblemInstancePage from "../../pages/MissionInstancePage/ProblemInstancePage";
+import SubmissionInstancePage from "../../pages/MissionInstancePage/SubmissionInstancePage";
 import { connect } from 'react-redux';
 import { getAPIUrl, API, ROLE, PERMISSION_TABLE, PERMISSION} from "../../utils/config";
 import { setSiderbarDataSource } from '../../actions';
@@ -7,9 +10,11 @@ class MissionInstanceContainer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            mission_data: [],
+            problem_data: [],
             submission: [],
-            last_mission_group_id: 0
+            last_mission_group_id: 0,
+            last_hash: '',
+            problem_detail_data: null
         }
     }
     static defaultProps = {
@@ -20,7 +25,7 @@ class MissionInstanceContainer extends React.Component {
         },{
             key: "1",
             title: "题目",
-            target: "",
+            target: "#problem",
             childrens: []
         }, {
             key: "2",
@@ -30,13 +35,12 @@ class MissionInstanceContainer extends React.Component {
             key: 3,
             title: "成绩",
             target: "#score"
-        }
-    ]
+        }]
     }
     componentDidMount() {
         this.props.setSiderbarDataSource(this.props.siderbar);
-        this.get_instance(this.props.course_id);
-        this.get_mission_group(this.props.course_id);
+        this.get_instance(this.props.mission_id);
+        this.get_problem(this.props.mission_id);
         // alert("Hello World");
         // this.fetchCourseList();
     }
@@ -51,31 +55,60 @@ class MissionInstanceContainer extends React.Component {
     //     })
     //     return data;
     // }
-    get_mission_group = (course_id) => {
-        let url = getAPIUrl(API.MISSION_GROUP_LIST(course_id));
+    /**
+     * 获取提交列表
+     * @param mission_id 任务ID
+     */
+    get_submission_list = (mission_id) => {
+        let url = getAPIUrl(API.SUBMISSION_LIST(mission_id));
+        fetch(url, {
+            method: 'get',
+            mode:'cors',
+            credentials: 'include',
+            headers: {  
+                // "X-CSRFTOKEN": Cookie.get('csrftoken')             
+            }
+        }).then((response) => response.json()).then((data) => this.setState({data: data.results}))
+    }
+    /**
+     * 获取指定id的题目信息
+     */
+    get_problem_instance = (mission_id, problem_id) => {
+        let url = getAPIUrl(API.PROBLEM_INSTANCE(mission_id, problem_id));
+        fetch(url, {
+            method: 'get',
+            credentials: 'include'  
+        }).then(res => res.json()).then((res)=> this.setState({problem_detail_data: res}));
+
+    }
+    get_problem = (mission_id) => {
+        let url = getAPIUrl(API.PROBLEM_LIST(mission_id));
         fetch(url, {
             method: 'get',
             credentials: 'include'    
         }).then(res => res.json())
         .then((v)=> {
+            this.setState({
+                problem_data: v.results
+            });
             let childrens = [];
             v.results.map((item, key) => {
                 childrens.push({
                     key: "0" + key,
-                    title: item.caption,
-                    target: `/course/${course_id}/mission_group/${item.id}`, 
+                    title: item.title,
+                    target: `#problem/${item.id}`, 
                 });
             });
-            this.props.siderbar[0].childrens = childrens;
+            this.props.siderbar[1].childrens = childrens;
             this.props.setSiderbarDataSource([...this.props.siderbar]);
         });
     }
-    get_instance = (course_id) => {
-        let url = getAPIUrl(API.COURSE_INSTANCE(course_id));
+    get_instance = (mission_id) => {
+        let url = getAPIUrl(API.MISSION_INSTANCE(mission_id));
         fetch(url, {
             method: 'get',
             credentials: 'include'  
-        }).then(res => res.json()).then((res)=> this.setState({introduction: res.introduction, caption: res.caption}));
+        }).then(res => res.json()).then((res)=> this.setState({introduction: res.introduction, caption: res.caption, start_time: res.start_time, end_time: res.end_time}));
     }
     get_mission = (mission_group_id) =>{
         let url = getAPIUrl(API.MISSION_LIST(mission_group_id));
@@ -84,7 +117,7 @@ class MissionInstanceContainer extends React.Component {
             credentials: 'include'    
         }).then(res => res.json()).then((res)=> this.setState({mission_data: res.results}));
     }
-    deleteMission = (mission_group_id, mission_id) => {
+    deleteProblem = (mission_group_id, mission_id) => {
         let url = getAPIUrl(API.DELETE_MISSION_INSTANCE(mission_group_id, mission_id));
         fetch(url, {
             method: 'delete',
@@ -99,7 +132,7 @@ class MissionInstanceContainer extends React.Component {
           }
         }).catch((err) => alert(err));
     }
-    createMission = (data, mission_group_id) => {
+    createProblem = (data, mission_group_id) => {
         let url = getAPIUrl(API.CREATE_MISSION_INSTANCE(mission_group_id));
         let option = {
           method: 'post',
@@ -144,28 +177,73 @@ class MissionInstanceContainer extends React.Component {
                 last_mission_group_id: this.props.mission_group_id
             });
         }
-        return (
-            <Page {...this.props} 
-            createMission ={this.createMission}
-            deleteMission = {this.deleteMission}
-            has_permission = {this.has_permission}
-             introduction={this.state.introduction}
-             caption={this.state.caption}
-             data={this.state.mission_data} 
-             />
-        );
+        let {hash} = this.props;
+        if (hash.startsWith("#problem/")) {
+            let problem_id = hash.split('/')[1];
+            if (this.state.last_hash !== hash) {
+                this.get_problem_instance(this.props.mission_id, problem_id);
+                this.setState({
+                    last_hash: hash
+                });
+            }
+            return (
+                <ProblemInstancePage  {...this.props}
+                introduction={this.state.introduction}
+                caption={this.state.caption}
+                start_time={this.state.start_time}
+                end_time={this.state.end_time}
+                data={this.state.problem_detail_data}
+                problem_id={problem_id}
+                />
+            );
+        } else if (hash.startsWith("#submission")) {
+            // let problem_id = hash.split('/')[1];
+            if (this.state.last_hash !== hash) {
+                this.get_submission_list(this.props.mission_id);
+                this.setState({
+                    last_hash: hash
+                });
+            }
+            return (
+                <SubmissionInstancePage  {...this.props}
+                introduction={this.state.introduction}
+                caption={this.state.caption}
+                start_time={this.state.start_time}
+                end_time={this.state.end_time}
+                data={this.state.data}
+                />
+            );
+        }else {
+            return (
+                <Page {...this.props} 
+                createProblem ={this.createProblem}
+                deleteProblem = {this.deleteProblem}
+                has_permission = {this.has_permission}
+                    introduction={this.state.introduction}
+                    caption={this.state.caption}
+                    start_time={this.state.start_time}
+                    end_time={this.state.end_time}
+                    data={this.state.problem_data} 
+                    />
+            );
+        }
+        
     }
 }
 const mapStateToProp = (state, ownProps) => {
-    let { course_id, mission_group_id} = ownProps.match.params;
+    let { course_id, mission_group_id, mission_id } = ownProps.match.params;
     console.log(ownProps.match.params);
+    // console.log(state.router.location.hash);
+    // console.log(state.router.location.search);
+    // console.log(state.router.location.hash);
     return {
         auth: state.auth,
         pathname: state.router.location.pathname,
         search: state.router.location.search,
         hash: state.router.location.hash,
         course_id,
-        mission_group_id
+        mission_group_id,
+        mission_id
         // data: state.course.courseList,
         // loading: state.course.loading,
         // error: state.course.error

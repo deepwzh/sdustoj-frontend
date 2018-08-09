@@ -1,6 +1,5 @@
 import React from 'react';
 import ProblemDetailPage from './ProblemDetailPage';
-import ProblemInfoPage from './ProblemInfoPage';
 import { withRouter } from "react-router-dom";
 import Editor from './Editor';
 import Cookie from 'js-cookie';
@@ -8,15 +7,6 @@ import NavMenu from './NavMenu';
 import './index.css';
 
 class ProblemPage extends React.Component {
-    get_problem_info = () => {
-        let {match} = this.props;
-        let url = 
-            `http://www.92ac.cn:8008/JudgeOnline/api/missions/${match.params.mission_id}/problems/${match.params.problem_id}/`;
-        fetch(url, {
-            method: 'get',
-            credentials: 'include'
-        }).then((response) => response.json()).then((res) => {console.log(res),this.setState({problem_data: res, id: res.id, problem_id: res.problem.id})});
-    }
     constructor(props) {
         super(props);
         this.state = {
@@ -26,11 +16,11 @@ class ProblemPage extends React.Component {
         }
     }
     componentDidMount() {
-        this.get_problem_info();      
+        
     }
     get_token = () => 
         new Promise((resolve, reject) => {
-            fetch('http://www.92ac.cn:8008/JudgeOnline/api/csrf_token/',{
+            fetch('http://127.0.0.1:80/JudgeOnline/api/csrf_token/',{
                 method:'get',
                 mode:'cors',
                 credentials:'include'
@@ -54,7 +44,7 @@ class ProblemPage extends React.Component {
                 code:code
             }
         };
-        let url = `http://www.92ac.cn:8008/JudgeOnline/api/missions/${match.params.mission_id}/submissions/`;
+        let url = `http://127.0.0.1:80/JudgeOnline/api/missions/${this.props.mission_id}/submissions/`;
         this.get_token().then((token) => {
             console.log(JSON.stringify(data) );
             fetch(url, {
@@ -71,18 +61,12 @@ class ProblemPage extends React.Component {
     }
     render() {
         
-        let {problem_data} = this.state;
+        let problem_data = this.props.data;
         // console.log(problem_data);
         let detail_data = {};
         let info_data = {};
         if (problem_data) {
             let problem = problem_data.problem;
-            detail_data= {
-                title: problem.title,
-                description: problem.description,
-                sample: problem.sample,
-                source: problem.source
-            }
             let limit = [];
             problem.limit.map((item, key) => {
                 limit.push({
@@ -92,10 +76,15 @@ class ProblemPage extends React.Component {
                     time_limit: item.time_limit,
                 });
             });
-            info_data = {
+            detail_data= {
+                title: problem.title,
+                description: problem.description,
+                sample: problem.sample,
+                source: problem.source,
                 limit: limit,
                 number_test_data: problem.number_test_data
-            };
+            }
+
         }
 
         return (
@@ -104,10 +93,10 @@ class ProblemPage extends React.Component {
                     <ProblemDetailPage data={detail_data}/>
                     <Editor submit={this.submit}/>
                 </div>
-                <div id="problem-info-container">
+                {/* <div id="problem-info-container">
                     <NavMenu/>
                     <ProblemInfoPage data={info_data}/>
-                </div>
+                </div> */}
             </div>           
         );
     }

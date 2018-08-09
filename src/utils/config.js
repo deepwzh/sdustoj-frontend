@@ -1,7 +1,12 @@
+const DEBUG = true;
 const protocol = 'http';
-const host = '192.168.130.249';
+const host = '127.0.0.1';
 const prefix = 'JudgeOnline'
-const port = '8008';
+const port = '80';
+if (DEBUG) {
+    //
+}
+
 const API = {
     LOGIN: '/api/login/',
     LEARNING_COURSES_LIST: '/api/learning-courses/',
@@ -11,11 +16,17 @@ const API = {
     MISSION_GROUP_INSTANCE: (mission_group_id) => ``,
     
     MISSION_LIST: (mission_group_id) => `/api/mission-groups/${mission_group_id}/missions/`,
-    MISSION_INSTANCE: () => ``,
+    MISSION_INSTANCE: (mission_id) => `/api/missions/${mission_id}/`,
     CREATE_MISSION_INSTANCE: (mission_group_id) => `/api/mission-groups/${mission_group_id}/missions-direct/`,
     DELETE_MISSION_INSTANCE: (mission_group_id, mission_id) => `/api/mission-groups/${mission_group_id}/missions/${mission_id}/`,
 
-    PROBLEM_INSTANCE: (mission_id) => `/api/missions/2/problems/`,
+    PROBLEM_LIST: (mission_id) => `/api/missions/${mission_id}/problems/`,
+    PROBLEM_INSTANCE: (mission_id, problem_id) => `/api/missions/${mission_id}/problems/${problem_id}/`,
+
+    SUBMISSION_LIST: (mission_id) => `/api/missions/${mission_id}/submissions/`,
+
+
+
 }
 const PERMISSION = {
     CREATE: "CREATE",
@@ -42,8 +53,8 @@ const PERMISSION_TABLE = {
     [RESOURCE.COURSE]: {
         [PERMISSION.CREATE]:[ROLE.TEACHER],
         [PERMISSION.RETRIEVE]: [ROLE.TEACHER, ROLE.STUDENT],
-        [PERMISSION.UPDATE]: [ROLE.STUDENT],
-        [PERMISSION.DELETE]: [ROLE.STUDENT],
+        [PERMISSION.UPDATE]: [ROLE.TEACHER],
+        [PERMISSION.DELETE]: [ROLE.TEACHER],
     },
     [RESOURCE.MISSION_GROUP]: {
         [PERMISSION.CREATE]: [ROLE.TEACHER],

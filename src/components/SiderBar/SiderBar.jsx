@@ -6,49 +6,6 @@ class SiderBar extends React.Component {
     constructor(props) {
         super(props);
     }
-<<<<<<< HEAD
-    static defaultProps = {
-        dataSource: [{
-            key: "0",
-            title: "任务组",
-            target: "",
-            childrens: [{
-                key: "00",
-                title: "实验",
-                target: "/lesson/2/2", 
-            }, {
-                key: "01",
-                title: "作业",
-                target:"/lesson/2/1"
-            }, {
-                key: "02",
-                title: "考试",
-                target:"/lesson/2/考试"
-            }] 
-        }]
-    }
-=======
-    // static defaultProps = {
-    //     dataSource: [{
-    //         key: "0",
-    //         title: "任务组",
-    //         target: "",
-    //         childrens: [{
-    //             key: "00",
-    //             title: "实验",
-    //             target: "/course/2/mission_group/2", 
-    //         }, {
-    //             key: "01",
-    //             title: "作业",
-    //             target:"/course/2/mission_group/1"
-    //         }, {
-    //             key: "02",
-    //             title: "考试",
-    //             target:"/lesson/2/考试"
-    //         }]
-    //     }]
-    // }
->>>>>>> 0d64dc558088887db5b35a2cb84b745a45e0d416
     // renderItem = (props) = {
 
     // }

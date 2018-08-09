@@ -1,2 +1,2 @@
-import LessonDetailPage from './LessonDetailPage';
-export default LessonDetailPage;
+import MissionInstancePage from './MissionInstancePage';
+export default MissionInstancePage;

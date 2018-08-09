@@ -21,17 +21,10 @@ class CourseInstanceContainer extends React.Component {
         }]
     }
     componentDidMount() {
-<<<<<<< HEAD
-        this.props.pathname
-        this.props.hash
-        this.props.role ['STUDENT', 'TEACHER']
-
-=======
         this.props.setSiderbarDataSource(this.props.siderbar);
         this.get_instance(this.props.course_id);
         this.get_mission_group(this.props.course_id);
         // alert("Hello World");
->>>>>>> 0d64dc558088887db5b35a2cb84b745a45e0d416
         // this.fetchCourseList();
     }
     // fetchCourseList = () => {

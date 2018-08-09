@@ -42,8 +42,8 @@ class DrawerForm extends React.Component {
     return (
       <div>
         <Drawer
-          title="创建新任务"
-          width={720}
+          title="添加新题目"
+          width={300}
           placement="right"
           onClose={this.props.onClose}
           maskClosable={false}

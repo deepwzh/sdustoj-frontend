@@ -7,11 +7,11 @@ import { RESOURCE, PERMISSION } from '../../utils/config';
 /**
  * @description 一个小按钮而已(添加按钮)
  */
-class CreateMission extends React.Component {
+class CreateProblem extends React.Component {
     render() {
         return (
             <Button onClick = {this.props.onCreate}>
-                Create
+                添加题目
             </Button>
         );
     }
@@ -50,7 +50,7 @@ class MissionGroupPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            createMissionFlag: false,
+            createProblemFlag: false,
             filteredInfo: {},
             sortedInfo: {},
         }
@@ -66,44 +66,48 @@ class MissionGroupPage extends React.Component {
         let { sortedInfo, filteredInfo } = this.state;
         let { has_permission } = this.props;
         let {data} = this.props;
-        let columns = [{
-            title: '任务ID',
-            dataIndex: 'id',
-            key: 'id',
-            sorter: (a, b) => a.id - b.id,
-            sortOrder: this.state.sortedInfo.columnKey === 'id' && this.state.sortedInfo.order,
-        }, {
-            title: '任务名称',
-            dataIndex: 'caption',
-            key: 'caption',
-            sorter: (a, b) => a.caption > b.caption, //从小到大
-            sortOrder: this.state.sortedInfo.columnKey === 'caption' && this.state.sortedInfo.order,
+        data = data || [];
+        let columns = [
+            // {
+            //     title: '状态',
+            //     dataIndex: 'problem_state',
+            //     key: 'problem_state',
+            // },
+      
+            {
+            title: '题目ID',
+            dataIndex: 'problem_id',
+            key: 'problem_id',
+            sorter: (a, b) => a.problem_id - b.problem_id,
+            sortOrder: sortedInfo.columnKey === 'problem_id' && sortedInfo.order,
+          }, {
+            title: '标题',
+            dataIndex: 'title',
+            key: 'title',
+            sorter: (a, b) => a.title > b.title, //从小到大
+            sortOrder: sortedInfo.columnKey === 'title' && sortedInfo.order,
             render: (text, record, index) => {
-                let to = this.props.pathname + "/mission/" + record.mission_id;
-                return <Link to={to} >{text}</Link>
+              console.log(record);
+              
+              let to = this.props.location.pathname + "/problem/" + record.id;
+              return <Link to={to} >{text}</Link>
             }
-        }, {
-            title: '任务开始时间',
-            dataIndex: 'start_time',
-            key: 'start_time',
-            sorter: (a, b) => a.start_time - b.start_time, //从小到大
-            sortOrder: this.state.sortedInfo.columnKey === 'start_time' && this.state.sortedInfo.order,
-        }, {
-            title: '任务结束时间',
-            dataIndex: 'end_time',
-            key: 'end_time',
-            sorter: (a, b) => a.end_time - b.end_time, //从小到大
-            sortOrder: this.state.sortedInfo.columnKey === 'end_time' && this.state.sortedInfo.order,
-        }, {
-            title: '状态',
-            dataIndex: 'available',
-            key : 'available',
-            render: (text, record, index) => {
-                return <span>{text?"可用":"废弃"}</span>
-            }
-        }];
-        let createMission = null;
-        if(has_permission(RESOURCE.MISSION, PERMISSION.DELETE))   { // 如果可写，添加删除列项描述， 并在每条数据后加一个可编辑项
+          }, {
+            title: '简介',
+            dataIndex: 'introduction',
+            key: 'introduction',
+            // sorter: (a, b) => a.start_time > b.start_time, //从小到大
+            // sortOrder: sortedInfo.columnKey === 'start_time' && sortedInfo.order,
+          }, {
+            title: '来源',
+            dataIndex: 'source',
+            key: 'source',
+            sorter: (a, b) => a.source > b.source, //从小到大
+            sortOrder: sortedInfo.columnKey === 'source' && sortedInfo.order,
+          }
+        ];
+        let createProblem = null;
+        if(has_permission(RESOURCE.PROBLEM, PERMISSION.DELETE))   { // 如果可写，添加删除列项描述， 并在每条数据后加一个可编辑项
             columns.push(
                 {
                     title: '删除',      // 名叫删除，索引编辑 cool :)
@@ -124,14 +128,14 @@ class MissionGroupPage extends React.Component {
             );
             console.log(data);
         }
-        if (has_permission(RESOURCE.MISSION, PERMISSION.CREATE)) {
-            createMission = <CreateMission onCreate = {()=>{this.setState({createMissionFlag : true})}}/>
+        if (has_permission(RESOURCE.PROBLEM, PERMISSION.CREATE)) {
+            createProblem = <CreateProblem onCreate = {()=>{this.setState({createProblemFlag : true})}}/>
         }
         return (
-            <Card extra = {createMission}>
+            <Card extra = {createProblem}>
                 <Table columns={columns} dataSource={data} onChange={this.handleChange} />
-                <DrawerForm visible = {this.state.createMissionFlag}  onSubmit={(data) => this.props.createMission(data, this.props.mission_group_id)}
-                    onClose = {() => {this.setState({createMissionFlag : false})}} />
+                <DrawerForm visible = {this.state.createProblemFlag}  onSubmit={(data) => this.props.createMission(data, this.props.mission_group_id)}
+                    onClose = {() => {this.setState({createProblemFlag : false})}} />
             </Card>
         );
     }

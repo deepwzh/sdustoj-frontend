@@ -1,0 +1,31 @@
+#header-block #banner {
+    font-size: 2em;
+    text-align: center;
+    margin-left: 20px;
+    margin-top: 5px;
+}
+#header-block #introduction {
+    font-size: 1em;
+    margin-left: 20px;
+    margin-top: 5px;
+}
+#processbar-header-block{
+    margin-left: 20px;
+    margin-top: 5px;
+}
+#processbar-header-block #banner {
+    text-align: center;
+    font-size: 2.5em;
+}
+#processbar-header-block #introduction {
+    font-size: 1em;
+}
+#processbar-header-block #processbar  #datetime-info {
+    display: flex;
+    justify-content: space-between;
+}
+#processbar-header-block #processbar  #datetime-info-unrunning {
+    /* display: flex; */
+    text-align: center
+    /* justify-content: space-between; */
+}
