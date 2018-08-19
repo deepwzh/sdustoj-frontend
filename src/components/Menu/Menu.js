@@ -3,7 +3,9 @@ import AccountDropdown from "./AccountDropdown";
 import { Menu as AntdMenu } from 'antd';
 import { connect } from "react-redux";
 import { bindActionCreators} from 'react';
-import { push } from 'connected-react-router'
+import { push } from 'connected-react-router';
+
+import {setMainMenuKey} from './../../actions';
 
 class Menu extends React.Component {
     constructor(props) {
@@ -13,21 +15,9 @@ class Menu extends React.Component {
         }
     }
     onselect = ({ item, key, selectedKeys }) => {
-        // console.log(pathname);
-        // console.log(search);
-        // console.log(hash);
         let selectedKey = selectedKeys[0];
         this.props.push(this.props.dataSource[selectedKey].target);
-        // this.setState({
-        //     cur_item: selectedKey + ""
-        // })
-        // if (selectedKeys[0] == 1) {
-        //     this.props.history.push('/');
-        // } else if (selectedKeys[0] == 2) {
-        //     this.props.history.push('/lesson');
-        // } else if (selectedKeys[0] == 4) {
-        //     this.props.history.push('/status');
-        // }
+       this.props.setMainMenuKey(key);
     }
     getActiveItemKey = (items, pathname) => {
         let selected = 0 + "";
@@ -51,7 +41,8 @@ class Menu extends React.Component {
                 onSelect={this.onselect}
                 theme="light"
                 mode="horizontal"
-                defaultSelectedKeys={[1]}
+                defaultSelectedKeys={this.props.mainMenuKey}
+                selectedKeys = {this.props.mainMenuKey}
                 style={{ lineHeight: '64px' }}>
                 {
                     items.map((item) => (
@@ -68,14 +59,16 @@ function mapStateToProps(state) {
     //     pathname: state.router.location.pathname,
     //     search: state.router.location.search,
     //     hash: state.router.location.hash,
-        auth: state.auth
+        auth: state.auth,
+        mainMenuKey: state.ui.mainMenuKey + '',
     });
     // console.log(state); // state
     // console.log(arguments[1]); // undefined
 }
 function mapDispatchToProps(dispatch) {
     return {
-        push: (path) => dispatch(push(path))
+        push: (path) => dispatch(push(path)),
+        setMainMenuKey: (key) => dispatch(setMainMenuKey(key))
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Menu);

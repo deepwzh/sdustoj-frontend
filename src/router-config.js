@@ -9,6 +9,11 @@ import SubmissionPage from './pages/SubmissionPage';
 import StatusPage from './pages/StatusPage';
 import CourseInstanceContainer from './containers/CourseInstanceContainer';
 import MissionContainer from './containers/MissionContainer/MissionContainer';
+import LessonInfo from './pages/CourseListPage/LessonInfo'
+
+import StudentTable from './pages/CourseInstancePage/StudentTable'
+import TeacherTable from './pages/CourseInstancePage/TeacherTable'
+import GroupInTable from './pages/CourseInstancePage/GroupInTable'
 const routers = [
     {
         path: '/',
@@ -25,6 +30,22 @@ const routers = [
     }, {
         path: '/course/:course_id',
         component: CourseInstanceContainer,
+        layout: MenuSiderBarLayout,
+    }, {
+        path: '/course/:course_id/course_info',
+        component: LessonInfo,
+        layout: MenuSiderBarLayout,
+    }, {    // 添加 student 表   18-08-16
+        path: '/course/:course_id/student',
+        component: StudentTable,
+        layout: MenuSiderBarLayout,
+    }, {    // 添加 teacher 表   18-08-16
+        path: '/course/:course_id/teacher',
+        component: TeacherTable,
+        layout: MenuSiderBarLayout,
+    }, {    // 添加 course_group 表   18-08-16
+        path: '/course/:course_id/course_group',
+        component: GroupInTable,
         layout: MenuSiderBarLayout,
     }, {
         path: '/course/:course_id/mission_group/:mission_group_id',

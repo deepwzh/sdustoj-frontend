@@ -1,8 +1,8 @@
 const DEBUG = true;
 const protocol = 'http';
-const host = '127.0.0.1';
+const host = '192.168.130.249';
 const prefix = 'JudgeOnline'
-const port = '80';
+const port = '8008';
 if (DEBUG) {
     //
 }

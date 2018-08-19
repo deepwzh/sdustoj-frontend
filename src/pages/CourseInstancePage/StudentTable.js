@@ -1,3 +1,9 @@
+/**
+ * @description student table 
+ * @time 18-08-16
+ * 有点太久了 emmm
+ */
+
 import React from 'react';
 import { Button, Card, Popconfirm, message, Drawer, Form, } from 'antd';
 import { Link } from 'react-router-dom'; 
@@ -5,15 +11,21 @@ import Table from '../../components/Table';
 import { DrawerForm }  from './Form';
 import { RESOURCE, PERMISSION, has_permission } from '../../utils/config';
 import {simpleTime} from './../../utils/simpleTime';
+
 /**
  * @description 一个小按钮而已(添加按钮)
  */
 class CreateMission extends React.Component {
     render() {
         return (
-            <Button onClick = {this.props.onCreate}>
-                Create
+        <div>
+            <Button>
+                添加
             </Button>
+            <Button>
+                批量添加
+            </Button>
+        </div>
         );
     }
 }
@@ -47,7 +59,7 @@ class DeleteItem extends React.Component {
 }
 // TODO: 不知道是不是这么写，有待商榷
 // const CompleteForm = WrappedTimeRelatedForm;
-class MissionGroupPage extends React.Component {
+class StudentTable extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -68,34 +80,34 @@ class MissionGroupPage extends React.Component {
         
         let {data} = this.props;
         let columns = [{
-            title: '任务ID',
-            dataIndex: 'id',
-            key: 'id',
-            sorter: (a, b) => a.id - b.id,
-            sortOrder: this.state.sortedInfo.columnKey === 'id' && this.state.sortedInfo.order,
+            title: '用户名',
+            dataIndex: 'username',
+            key: 'username',
+            sorter: (a, b) => a.username > b.username,
+        //    sortOrder: this.state.sortedInfo.columnKey === 'id' && this.state.sortedInfo.order,
         }, {
-            title: '任务名称',
-            dataIndex: 'caption',
-            key: 'caption',
-            sorter: (a, b) => a.caption > b.caption, //从小到大
-            sortOrder: this.state.sortedInfo.columnKey === 'caption' && this.state.sortedInfo.order,
+            title: '姓名',
+            dataIndex: 'name',
+            key: 'name',
+            sorter: (a, b) => a.name > b.name, //从小到大 (so, are you sure??)
+        //    sortOrder: this.state.sortedInfo.columnKey === 'caption' && this.state.sortedInfo.order,
             render: (text, record, index) => {
                 let to = this.props.pathname + "/mission/" + record.mission_id;
                 return <Link to={to} >{text}</Link>
             }
         }, {
-            title: '任务开始时间',
-            dataIndex: 'start_time',
-            key: 'start_time',
-            sorter: (a, b) => a.start_time - b.start_time, //从小到大
-            sortOrder: this.state.sortedInfo.columnKey === 'start_time' && this.state.sortedInfo.order,
+            title: '创建时间',
+            dataIndex: 'create_time',
+            key: 'create_time',
+            sorter: (a, b) => a.create_time - b.create_time, //从小到大
+        //    sortOrder: this.state.sortedInfo.columnKey === 'start_time' && this.state.sortedInfo.order,
             render: (text)=> {return simpleTime(text);}
         }, {
-            title: '任务结束时间',
-            dataIndex: 'end_time',
-            key: 'end_time',
-            sorter: (a, b) => a.end_time - b.end_time, //从小到大
-            sortOrder: this.state.sortedInfo.columnKey === 'end_time' && this.state.sortedInfo.order,
+            title: '更新时间',
+            dataIndex: 'update_time',
+            key: 'update_time',
+            sorter: (a, b) => a.update_time - b.update_time, //从小到大
+        //    sortOrder: this.state.sortedInfo.columnKey === 'end_time' && this.state.sortedInfo.order,
             render: (text)=> {return simpleTime(text);}
         }, {
             title: '状态',
@@ -104,35 +116,24 @@ class MissionGroupPage extends React.Component {
             render: (text, record, index) => {
                 return <span>{text?"可用":"废弃"}</span>
             }
-        }];
-        let createMission = null;
-        let role = this.props.auth.role;
-        if(has_permission(role, RESOURCE.MISSION, PERMISSION.DELETE))   { // 如果可写，添加删除列项描述， 并在每条数据后加一个可编辑项
-            columns.push(
-                {
-                    title: '删除',      // 名叫删除，索引编辑 cool :)
-                    dataIndex: 'edit',
-                    key: 'edit',
-                    render: (text, record, index)=>(
-                        <DeleteItem 
-                        mission_id={record.id} 
-                        mission_group_id={this.props.mission_group_id}
-                        deleteMission={this.props.deleteMission}
-                         />)
-                }
-            );
-            data = data.map(
-                (ele) => {
-                    return Object.assign({}, ele, {edit : true});
-                  }
-            );
+        }, {
+            title: '删除',      // 名叫删除，索引编辑 cool :)
+            dataIndex: 'edit',
+            key: 'edit',
+            render: (text, record, index)=>(
+                <DeleteItem 
+                mission_id={record.id} 
+                mission_group_id={this.props.mission_group_id}
+                deleteMission={this.props.deleteMission} />)
+        }
+            ];
+        let createMission = <CreateMission onCreate = {()=>{this.setState({createMissionFlag : true})}}/>;
+       
+            data = [];
             console.log(data);
-        }
-        if (has_permission(role, RESOURCE.MISSION, PERMISSION.CREATE)) {
-            createMission = <CreateMission onCreate = {()=>{this.setState({createMissionFlag : true})}}/>
-        }
+
         return (
-            <Card extra = {createMission}>
+            <Card extra = {createMission} title = '学生表'>
                 <Table columns={columns} dataSource={data} onChange={this.handleChange} />
                 <DrawerForm visible = {this.state.createMissionFlag}  onSubmit={(data) => this.props.createMission(data, this.props.mission_group_id)}
                     onClose = {() => {this.setState({createMissionFlag : false})}} />
@@ -140,4 +141,4 @@ class MissionGroupPage extends React.Component {
         );
     }
 }
-export default MissionGroupPage;
+export default StudentTable;

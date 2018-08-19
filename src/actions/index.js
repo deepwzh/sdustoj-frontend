@@ -8,7 +8,9 @@ import {
     CLEAR_ERROR,
     RETRIEVE_COURSE_LIST_REQUEST,
     RETRIEVE_COURSE_LIST_RECEIVE,
-    SET_SIDERBAR_DATASOURCE
+    SET_SIDERBAR_DATASOURCE,
+    SET_SIDERBAR_KEY,
+    SET_MAINMENU_KEY
   } from './constants'
   
   /**
@@ -78,4 +80,14 @@ import {
   }
   export function setSiderbarDataSource(payload) {
     return {type: SET_SIDERBAR_DATASOURCE, payload};
+  }
+
+  // @add 新增 传递siderbar被选中的key值
+  export function setSiderbarKey(key) {
+    return {type: SET_SIDERBAR_KEY, key}
+  }
+
+  // @add 新增 传递mainMenu被选中的key值
+  export function setMainMenuKey(key) {
+    return {type: SET_MAINMENU_KEY, key}
   }

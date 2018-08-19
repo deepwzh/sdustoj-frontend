@@ -2,6 +2,9 @@ import React from 'react';
 import { Menu } from "antd";
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router'
+
+import {setSiderbarKey} from './../../actions'
+
 class SiderBar extends React.Component {
     constructor(props) {
         super(props);
@@ -29,17 +32,16 @@ class SiderBar extends React.Component {
     handleClick = ({ item, key, selectedKeys }) => {
         // console.log(item);
         this.props.push(item.props.target);
+        this.props.setSiderbarKey(key);
         // let selectedKey = selectedKeys[0];
-        // console.log(selectedKeys);
         // this.props.push(this.props.dataSource[selectedKey].target);
     }
     render() {
-        console.log(this.props.dataSource);
       return (
         <Menu
-          onClick={this.handleClick}
-          style={{ width: 256 }}
-          defaultSelectedKeys={['1']}
+          onSelect={this.handleClick}
+          style={{ width: 256 }} 
+          defaultSelectedKeys={[this.props.siderbarKey]}
           defaultOpenKeys={['sub1']}
           mode="inline"
         >
@@ -49,8 +51,10 @@ class SiderBar extends React.Component {
     }
 }
 function mapStateToProps(state) {
+    console.log('before the render' + state.ui.siderbar.key);
     return ({
-        dataSource: state.ui.siderbar.dataSource
+        siderbarKey: state.ui.siderbar.key + '',
+        dataSource: state.ui.siderbar.dataSource,
     })
     // return ({
     //     // pathname: state.router.location.pathname,
@@ -63,7 +67,8 @@ function mapStateToProps(state) {
 }
 function mapDispatchToProps(dispatch) {
     return {
-        push: (path) => dispatch(push(path))
+        push: (path) => dispatch(push(path)),
+        setSiderbarKey: (key) => dispatch(setSiderbarKey(key))
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(SiderBar);

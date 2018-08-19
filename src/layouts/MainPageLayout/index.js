@@ -12,7 +12,7 @@ class Logo extends React.Component {
     render() {
         return (
             <div  className="logo">
-                <span>SDUSTOJ</span>
+                <span>某管理平台</span>
             </div>
         )
     }
@@ -24,19 +24,20 @@ class MainPageLayout extends React.Component {
         this.state = {
             menu: [{
                     key: 0,
-                    title: "主页",
-                    target: "/"
+                    title: <Icon type = 'home' style = {{fontSize: 25}} ></Icon>,
+                    target: "/",
                 },{
                     key: 1,
-                    title: "课程",
+                    title: <Icon type = 'book' style = {{fontSize: 25}}> </Icon>,
                     target: "/course"
                 },{
                     key: 2,
-                    title: "题库",
+                    title: <Icon type = 'database' style = {{fontSize: 25}}> </Icon>,
                     target: "/problemset"
+                    
                 }, {
                     key: 3,
-                    title: "提交",
+                    title: <Icon type = 'trophy' style = {{fontSize: 25}}> </Icon>,
                     target: "/submission"
                 }
             ]

@@ -2,8 +2,16 @@ import React from 'react';
 import { Card } from 'antd';
 import ReactMarkDown from 'react-markdown';
 import { runInDebugContext } from 'vm';
+import {message, Icon} from 'antd';
+import {CopyToClipboard} from 'react-copy-to-clipboard'
+
 class ProblemDetailPage extends React.Component {
     
+    onCopy = () => {
+        message.success('复制成功');
+    }
+
+
     render() {
         let {limit, number_test_data} = this.props.data;
         // console.log(limit);
@@ -30,10 +38,12 @@ class ProblemDetailPage extends React.Component {
                         <ReactMarkDown source={description} />
                     </Card>
                     <br/>
-                    <Card style = {{backgroundColor : '#fee'}} hoverable = {true}>
                         {/* <h3>样例</h3> */}
-                        <ReactMarkDown source={sample}/>
-                    </Card>
+                        <CopyToClipboard onCopy = {this.onCopy} text = {sample}>
+                            <Card style = {{backgroundColor : '#fee'}} hoverable = {true} extra = {<Icon type = 'copy' />}>
+                                <ReactMarkDown source={sample}/>
+                            </Card>
+                        </CopyToClipboard>
                     <br/>
                     <Card style = {{backgroundColor : '#fee'}} hoverable = {true}>
                         <h3>来源</h3>
@@ -47,3 +57,5 @@ class ProblemDetailPage extends React.Component {
     }
 }
 export default ProblemDetailPage;
+
+//

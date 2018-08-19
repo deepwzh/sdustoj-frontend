@@ -1,8 +1,15 @@
 import React from "react";
+/**
+ * @note Page 原名 LessDetailPage 位于"../../pages/CourseInstancePage"下
+ */
 import Page from "../../pages/CourseInstancePage";
 import { connect } from 'react-redux';
 import { getAPIUrl, API, ROLE, PERMISSION_TABLE, PERMISSION, has_permission, RESOURCE} from "../../utils/config";
 import { setSiderbarDataSource } from '../../actions';
+
+// 一个用以判断是否已经加载过的标记
+let isInitFlag = false;
+
 class CourseInstanceContainer extends React.Component {
     constructor(props) {
         super(props);
@@ -10,15 +17,21 @@ class CourseInstanceContainer extends React.Component {
             mission_data: [],
             submission: [],
             last_mission_group_id: 0,
-        }
+        };
+       
     }
     static defaultProps = {
+        
         siderbar : [{
+            key: '4',
+            title: '课程详细信息',
+            target: ''
+        }, {
             key: "0",
             title: "任务组",
             target: "",
             childrens: []
-        }],
+        } ],
     }
     componentDidMount() {
         this.props.setSiderbarDataSource(this.props.siderbar);
@@ -46,7 +59,11 @@ class CourseInstanceContainer extends React.Component {
      * @time 18-08-09
      */
     getSiderBarItems = (course_id) => {
-        this.get_mission_group = (course_id);
+        this.get_mission_group(course_id);
+
+        if(isInitFlag) return;
+        isInitFlag = true;
+        
         let role = this.props.auth.role;
         // 如果对该任务组具有create权限
         if(has_permission(role, RESOURCE.MISSION_GROUP, PERMISSION.CREATE))
@@ -55,20 +72,20 @@ class CourseInstanceContainer extends React.Component {
                 {
                     key: '1',
                     title: '教师',
-                    target: '/teacher',
+                    target: `/course/${this.props.course_id}/teacher`,
                 },{
                     key: '2',
                     title: '学生',
-                    target: '/student',
+                    target: `/course/${this.props.course_id}/student`,
                 },{
                     key: '3',
                     title: '所在课程组',
-                    target: '/course_group'
+                    target: `/course/${this.props.course_id}/course_group`
                 }
             ];
             this.props.siderbar.push(...otherSideBarItems);
         }
-        this.props.setSiderbarDataSource([...this.props.siderbar]);
+      //  this.props.setSiderbarDataSource([...this.props.siderbar]);
     }
 
     get_mission_group = (course_id) => {
@@ -86,7 +103,10 @@ class CourseInstanceContainer extends React.Component {
                     target: `/course/${course_id}/mission_group/${item.id}`, 
                 });
             });
-            this.props.siderbar[0].childrens = childrens;
+            this.props.siderbar[1].childrens = childrens;
+            ///////// 加几个bug :)
+            this.props.siderbar[0].target = `/course/${course_id}/course_info`;
+            //////////////////
             this.props.setSiderbarDataSource([...this.props.siderbar]);
         });
     }

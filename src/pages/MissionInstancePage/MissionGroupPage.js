@@ -106,7 +106,8 @@ class MissionGroupPage extends React.Component {
           }
         ];
         let createProblem = null;
-        if(has_permission(RESOURCE.PROBLEM, PERMISSION.DELETE))   { // 如果可写，添加删除列项描述， 并在每条数据后加一个可编辑项
+        let role = this.props.auth.role;
+        if(has_permission(role, RESOURCE.PROBLEM, PERMISSION.DELETE))   { // 如果可写，添加删除列项描述， 并在每条数据后加一个可编辑项
 
             columns.push(
                 {
@@ -130,7 +131,7 @@ class MissionGroupPage extends React.Component {
         }
 
         if (has_permission(role, RESOURCE.MISSION, PERMISSION.CREATE)) {
-            createMission = <CreateMission onCreate = {()=>{this.setState({createMissionFlag : true})}}/>
+            createProblem = <CreateProblem onCreate = {()=>{this.setState({createMissionFlag : true})}}/>
         }
         return (
             <Card extra = {createProblem}>
