@@ -6,9 +6,8 @@ class SiderBar extends React.Component {
     constructor(props) {
         super(props);
     }
-    // renderItem = (props) = {
 
-    // }
+
     getMenuItemList = (data) => {
         let items = [];
         for (let item of data) {

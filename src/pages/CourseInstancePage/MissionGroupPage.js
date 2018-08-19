@@ -3,7 +3,7 @@ import { Button, Card, Popconfirm, message, Drawer, Form, } from 'antd';
 import { Link } from 'react-router-dom'; 
 import Table from '../../components/Table';
 import { DrawerForm }  from './Form';
-import { RESOURCE, PERMISSION } from '../../utils/config';
+import { RESOURCE, PERMISSION, has_permission } from '../../utils/config';
 /**
  * @description 一个小按钮而已(添加按钮)
  */
@@ -64,7 +64,7 @@ class MissionGroupPage extends React.Component {
     }
     render() {
         let { sortedInfo, filteredInfo } = this.state;
-        let { has_permission } = this.props;
+        
         let {data} = this.props;
         let columns = [{
             title: '任务ID',
@@ -103,7 +103,8 @@ class MissionGroupPage extends React.Component {
             }
         }];
         let createMission = null;
-        if(has_permission(RESOURCE.MISSION, PERMISSION.DELETE))   { // 如果可写，添加删除列项描述， 并在每条数据后加一个可编辑项
+        let role = this.props.auth.role;
+        if(has_permission(role, RESOURCE.MISSION, PERMISSION.DELETE))   { // 如果可写，添加删除列项描述， 并在每条数据后加一个可编辑项
             columns.push(
                 {
                     title: '删除',      // 名叫删除，索引编辑 cool :)
@@ -124,7 +125,7 @@ class MissionGroupPage extends React.Component {
             );
             console.log(data);
         }
-        if (has_permission(RESOURCE.MISSION, PERMISSION.CREATE)) {
+        if (has_permission(role, RESOURCE.MISSION, PERMISSION.CREATE)) {
             createMission = <CreateMission onCreate = {()=>{this.setState({createMissionFlag : true})}}/>
         }
         return (

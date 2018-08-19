@@ -1,7 +1,7 @@
 import React from "react";
 import Page from "../../pages/CourseInstancePage";
 import { connect } from 'react-redux';
-import { getAPIUrl, API, ROLE, PERMISSION_TABLE, PERMISSION} from "../../utils/config";
+import { getAPIUrl, API, ROLE, PERMISSION_TABLE, PERMISSION, has_permission, RESOURCE} from "../../utils/config";
 import { setSiderbarDataSource } from '../../actions';
 class CourseInstanceContainer extends React.Component {
     constructor(props) {
@@ -9,7 +9,7 @@ class CourseInstanceContainer extends React.Component {
         this.state = {
             mission_data: [],
             submission: [],
-            last_mission_group_id: 0
+            last_mission_group_id: 0,
         }
     }
     static defaultProps = {
@@ -18,12 +18,12 @@ class CourseInstanceContainer extends React.Component {
             title: "任务组",
             target: "",
             childrens: []
-        }]
+        }],
     }
     componentDidMount() {
         this.props.setSiderbarDataSource(this.props.siderbar);
         this.get_instance(this.props.course_id);
-        this.get_mission_group(this.props.course_id);
+        this.getSiderBarItems(this.props.course_id);
         // alert("Hello World");
         // this.fetchCourseList();
     }
@@ -38,6 +38,39 @@ class CourseInstanceContainer extends React.Component {
     //     })
     //     return data;
     // }
+
+    /**
+     * @description <old> 获取当前课程任务组 并将其作为侧边栏项
+     * @description <new> 添加用户判断，以展示不同的侧边栏项. 这里有点小问题的是，
+     * 暂时我只能根据对该任务组具有create权限来判断是否应该添加其它侧边栏项。以后再改 :)
+     * @time 18-08-09
+     */
+    getSiderBarItems = (course_id) => {
+        this.get_mission_group = (course_id);
+        let role = this.props.auth.role;
+        // 如果对该任务组具有create权限
+        if(has_permission(role, RESOURCE.MISSION_GROUP, PERMISSION.CREATE))
+        {
+            let otherSideBarItems = [
+                {
+                    key: '1',
+                    title: '教师',
+                    target: '/teacher',
+                },{
+                    key: '2',
+                    title: '学生',
+                    target: '/student',
+                },{
+                    key: '3',
+                    title: '所在课程组',
+                    target: '/course_group'
+                }
+            ];
+            this.props.siderbar.push(...otherSideBarItems);
+        }
+        this.props.setSiderbarDataSource([...this.props.siderbar]);
+    }
+
     get_mission_group = (course_id) => {
         let url = getAPIUrl(API.MISSION_GROUP_LIST(course_id));
         fetch(url, {
@@ -116,14 +149,6 @@ class CourseInstanceContainer extends React.Component {
           })
         .catch((err) => alert(err));
     }
-    has_permission = (object, permission) => {
-        let role = this.props.auth.role;
-        if (PERMISSION_TABLE[object][permission].includes(role)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
     render() {
         if (this.props.mission_group_id && this.state.last_mission_group_id !== this.props.mission_group_id) {
             this.get_mission(this.props.mission_group_id);
@@ -135,7 +160,7 @@ class CourseInstanceContainer extends React.Component {
             <Page {...this.props} 
             createMission ={this.createMission}
             deleteMission = {this.deleteMission}
-            has_permission = {this.has_permission}
+            
              introduction={this.state.introduction}
              caption={this.state.caption}
              data={this.state.mission_data} 

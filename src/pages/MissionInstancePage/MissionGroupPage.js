@@ -3,7 +3,7 @@ import { Button, Card, Popconfirm, message, Drawer, Form, } from 'antd';
 import { Link } from 'react-router-dom'; 
 import Table from '../../components/Table';
 import { DrawerForm }  from './Form';
-import { RESOURCE, PERMISSION } from '../../utils/config';
+import { RESOURCE, PERMISSION, has_permission } from '../../utils/config';
 /**
  * @description 一个小按钮而已(添加按钮)
  */
@@ -44,8 +44,7 @@ class DeleteItem extends React.Component {
         )
     }
 }
-// TODO: 不知道是不是这么写，有待商榷
-// const CompleteForm = WrappedTimeRelatedForm;
+
 class MissionGroupPage extends React.Component {
     constructor(props) {
         super(props);
@@ -64,7 +63,7 @@ class MissionGroupPage extends React.Component {
     }
     render() {
         let { sortedInfo, filteredInfo } = this.state;
-        let { has_permission } = this.props;
+        
         let {data} = this.props;
         data = data || [];
         let columns = [
@@ -108,6 +107,7 @@ class MissionGroupPage extends React.Component {
         ];
         let createProblem = null;
         if(has_permission(RESOURCE.PROBLEM, PERMISSION.DELETE))   { // 如果可写，添加删除列项描述， 并在每条数据后加一个可编辑项
+
             columns.push(
                 {
                     title: '删除',      // 名叫删除，索引编辑 cool :)
@@ -128,8 +128,9 @@ class MissionGroupPage extends React.Component {
             );
             console.log(data);
         }
-        if (has_permission(RESOURCE.PROBLEM, PERMISSION.CREATE)) {
-            createProblem = <CreateProblem onCreate = {()=>{this.setState({createProblemFlag : true})}}/>
+
+        if (has_permission(role, RESOURCE.MISSION, PERMISSION.CREATE)) {
+            createMission = <CreateMission onCreate = {()=>{this.setState({createMissionFlag : true})}}/>
         }
         return (
             <Card extra = {createProblem}>

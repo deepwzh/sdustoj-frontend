@@ -81,7 +81,7 @@ class TableComponent extends React.Component {
   ];
     return (
       <Card hoverable = {true}>
-        <h1 id = "title-center">我学习的课程</h1>
+        <h1 id = "title-center">课程列表</h1>
         <Table columns={columns} dataSource={this.props.data} onChange={this.handleChange} error={this.props.error} loading={this.props.loading}/>
       </Card>
     );

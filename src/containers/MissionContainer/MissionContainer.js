@@ -162,14 +162,7 @@ class MissionInstanceContainer extends React.Component {
           })
         .catch((err) => alert(err));
     }
-    has_permission = (object, permission) => {
-        let role = this.props.auth.role;
-        if (PERMISSION_TABLE[object][permission].includes(role)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+    
     render() {
         if (this.props.mission_group_id && this.state.last_mission_group_id !== this.props.mission_group_id) {
             this.get_mission(this.props.mission_group_id);
@@ -228,6 +221,7 @@ class MissionInstanceContainer extends React.Component {
             );
         }
         
+
     }
 }
 const mapStateToProp = (state, ownProps) => {

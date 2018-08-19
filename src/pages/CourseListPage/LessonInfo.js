@@ -96,3 +96,5 @@ class LessonInfo extends React.Component {
     }
 
 }
+
+export default LessonInfo;

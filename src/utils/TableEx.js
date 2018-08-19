@@ -5,6 +5,8 @@
  * 还有最重要的表格。
  * 表格的 1列项描述(columns) 2数据(dataSource) 3是否可写(isRead) 4删除动作(handleDelete) 5表单(Form) 皆由上层提供（不提供默认选项）
  * @time 18-08-07 
+ * 因为某些BUG，（重复添加删除列项描述）
+ * （如果可写，添加删除列项描述， 并在每条数据后加一个可编辑项）交由上层处理吧
  */
 import React from "react";
 import { Table, Button, Card, Popconfirm, message, Drawer, Form, } from 'antd';
@@ -120,8 +122,6 @@ class TableEx extends React.Component {
 
     }
 
-   
-
     addItem = () => {   // 同步数据库添加
 
     }
@@ -132,32 +132,15 @@ class TableEx extends React.Component {
 
     render() {
         let createMission = null;
-        let columns = this.props.columns;
-        let dataSource = this.props.dataSource || [];
 
-
-        if(this.props.isRead)   { // 如果可写，添加删除列项描述， 并在每条数据后加一个可编辑项
+        if(this.props.isRead)   { 
             
-            columns.push(
-                {
-                    title: '删除',      // 名叫删除，索引编辑 cool :)
-                    dataIndex: 'edit',
-                    key: 'edit',
-                    render: ()=>{<DeleteItem />}
-                }
-            );
-            let newData = dataSource.map(
-                (ele) => {
-                    return Object.assign({}, ele, {edit : true});
-                  }
-            );
-            dataSource = newData;
             createMission = <CreateMission onCreate = {()=>{this.setState({createMissionFlag : true})}}/>
         }
 
         return (
             <Card extra = {createMission}>
-                <Table  columns = {columns} dataSource = {dataSource}/>
+                <Table  columns = {this.props.columns} dataSource = {this.props.dataSource}/>
                 <CompleteForm visible = {this.state.createMissionFlag} 
                     onClose = {() => {this.setState({createMissionFlag : false})}} />
             </Card>
@@ -181,4 +164,22 @@ const columns = [
         }
     }
 ]; 
+*/
+/*
+  columns.push(
+                {
+                    title: '删除',      // 名叫删除，索引编辑 cool :)
+                    dataIndex: 'edit',
+                    key: 'edit',
+                    render: ()=>{<DeleteItem />}
+                }
+            );
+            let newData = dataSource.map(
+                (ele) => {
+                    return Object.assign({}, ele, {edit : true});
+                  }
+            );
+            dataSource = newData;
+
+
 */

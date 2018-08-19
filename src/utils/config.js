@@ -90,11 +90,24 @@ const PERMISSION_TABLE = {
 function getAPIUrl(path) {
     return `${protocol}://${host}:${port}/${prefix}${path}`;
 }
+
+/**
+ * @description 判断某角色（role）对某资源（object）是否具有某权限（permission）
+ */
+let has_permission = (role, object, permission) => {
+    if (PERMISSION_TABLE[object][permission].includes(role)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 export {
     getAPIUrl,
     API,
     PERMISSION_TABLE,
     ROLE,
     PERMISSION,
-    RESOURCE
+    RESOURCE,
+    has_permission
 }

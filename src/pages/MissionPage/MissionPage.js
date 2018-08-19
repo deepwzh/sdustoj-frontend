@@ -11,11 +11,6 @@ import React from 'react';
 import MissionContentPage from './MissionSideBar';
 import { withRouter } from "react-router-dom";
 
-import {sideBarItems, SideBar} from './../../utils'
-
-let items = sideBarItems('MissionPage');
-
-
 
 
 class LessonDetailPage extends React.Component{
@@ -75,16 +70,10 @@ class LessonDetailPage extends React.Component{
         return (
             <div >
                 <div id="lesson-detail-banner">
-                   
                 </div>
-                <div>
-
-                    <SideBar items = {items} />
                     <div>
                         <MissionContentPage problemsData = {this.state.problem_data} />
                     </div>
-
-                </div>
             </div>
         );
     }
