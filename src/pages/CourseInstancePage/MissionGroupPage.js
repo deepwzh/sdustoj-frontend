@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import Table from '../../components/Table';
 import { DrawerForm }  from './Form';
 import { RESOURCE, PERMISSION } from '../../utils/config';
+import { getFormattedTime } from '../../utils/common';
 /**
  * @description 一个小按钮而已(添加按钮)
  */
@@ -88,12 +89,18 @@ class MissionGroupPage extends React.Component {
             key: 'start_time',
             sorter: (a, b) => a.start_time - b.start_time, //从小到大
             sortOrder: this.state.sortedInfo.columnKey === 'start_time' && this.state.sortedInfo.order,
+            render: (text, record, index) => {
+                return getFormattedTime(text);
+            },
         }, {
             title: '任务结束时间',
             dataIndex: 'end_time',
             key: 'end_time',
             sorter: (a, b) => a.end_time - b.end_time, //从小到大
             sortOrder: this.state.sortedInfo.columnKey === 'end_time' && this.state.sortedInfo.order,
+            render: (text, record, index) => {
+                return getFormattedTime(text);
+            },
         }, {
             title: '状态',
             dataIndex: 'available',

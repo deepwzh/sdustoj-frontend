@@ -10,8 +10,9 @@ if (DEBUG) {
 const API = {
     LOGIN: '/api/login/',
     LEARNING_COURSES_LIST: '/api/learning-courses/',
+    TEACHING_COURSES_LIST: '/api/teaching-courses/',
     COURSE_INSTANCE: (course_id) => `/api/courses/${course_id}/`,
-
+    
     MISSION_GROUP_LIST: (course_id) => `/api/courses/${course_id}/mission-groups/`,
     MISSION_GROUP_INSTANCE: (mission_group_id) => ``,
     
@@ -19,14 +20,15 @@ const API = {
     MISSION_INSTANCE: (mission_id) => `/api/missions/${mission_id}/`,
     CREATE_MISSION_INSTANCE: (mission_group_id) => `/api/mission-groups/${mission_group_id}/missions-direct/`,
     DELETE_MISSION_INSTANCE: (mission_group_id, mission_id) => `/api/mission-groups/${mission_group_id}/missions/${mission_id}/`,
-
+    
     PROBLEM_LIST: (mission_id) => `/api/missions/${mission_id}/problems/`,
     PROBLEM_INSTANCE: (mission_id, problem_id) => `/api/missions/${mission_id}/problems/${problem_id}/`,
+    CREATE_MISSION_PROBLEM_INSTANCE: (mission_id) => `/api/missions/${mission_id}/problems/`,
+    DELETE_MISSION_PROBLEM_INSTANCE: (mission_id, id) => `/api/missions/${mission_id}/problems/${id}/`,
+    SUBMISSION_LIST: (mission_id) => `/api/missions/${mission_id}/submissions/?limit=5`,
 
-    SUBMISSION_LIST: (mission_id) => `/api/missions/${mission_id}/submissions/`,
-
-
-
+    AVAILABLE_PROBLEM: (mission_id) => `/api/missions/${mission_id}/available-problems/`,
+    
 }
 const PERMISSION = {
     CREATE: "CREATE",

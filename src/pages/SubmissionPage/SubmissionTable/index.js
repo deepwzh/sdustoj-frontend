@@ -1,6 +1,7 @@
 import React from "react";
 import { Table, Button } from 'antd';
 import { Link, withRouter } from 'react-router-dom';
+import { getFormattedTime } from "../../../utils/common";
 class TableComponent extends React.Component {
   state = {
     filteredInfo: null,
@@ -75,7 +76,11 @@ class TableComponent extends React.Component {
       key: 'time',
       sorter: (a, b) => a.time > b.time, //从小到大
       sortOrder: sortedInfo.columnKey === 'time' && sortedInfo.order,
-    }, {
+      // render: (text, record, index) => {
+      //   return getFormattedTime(text);
+      // },
+    },
+     {
       title: '内存',
       dataIndex: 'memory',
       key: 'memory',
@@ -99,7 +104,10 @@ class TableComponent extends React.Component {
       key: 'submit_time',
       sorter: (a, b) => a.submit_time > b.submit_time, //从小到大
       sortOrder: sortedInfo.columnKey === 'submit_time' && sortedInfo.order,
-    }
+      render: (text, record, index) => {
+        return getFormattedTime(text);
+      },
+    },
   ];
     return (
       <div>

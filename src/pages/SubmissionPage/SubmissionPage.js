@@ -1,6 +1,6 @@
 import React from 'react';
 import Table from './SubmissionTable';
-import { Card } from 'antd';
+import { Card, Button } from 'antd';
 import './index.css';
 import Cookie from 'js-cookie';
 class SubmissionPage extends React.Component {
@@ -12,6 +12,7 @@ class SubmissionPage extends React.Component {
     render() {
         return (
             <Card id="submission-card">
+                <Button onClick={() => this.props.get_submission_list()}>刷新</Button>
                 <Table data={this.props.data}/>
             </Card>
         );

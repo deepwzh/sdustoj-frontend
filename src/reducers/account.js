@@ -17,8 +17,8 @@ let initialState = {
   error: null,
   loading: false,
   loggedIn: auth.loggedIn(),
-  username: null,
-  role: ROLE.TEACHER
+  username: localStorage.getItem('username'),
+  role: localStorage.getItem('role')
 }
   
   // Takes care of changing the application state

@@ -2,6 +2,7 @@ import React from 'react';
 import Table from "./LessonTable";
 import { message, Button } from 'antd';
 import memoize from "memoize-one";
+import { ROLE } from '../../utils/config';
 
 class LessonPage extends React.Component {
     constructor(props) {
@@ -30,7 +31,7 @@ class LessonPage extends React.Component {
     render() {
         // this.showLoadingTip();
         return (
-            <Table data={this.props.data} error={this.props.error} loading={this.props.loading} />
+            <Table title={this.props.auth.role === ROLE.TEACHER?"我教授的课程": "我学习的课程"} data={this.props.data} error={this.props.error} loading={this.props.loading} />
         );
     }
 }

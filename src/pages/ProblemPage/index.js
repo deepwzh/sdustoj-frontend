@@ -38,7 +38,7 @@ class ProblemPage extends React.Component {
         //TODO:这里environment设置了初始值
         let {match} = this.props;
         let data = {
-            problem: this.state.problem_id,
+            problem: this.props.data.problem.id,
             environment: 2,
             code: {
                 code:code
@@ -91,7 +91,7 @@ class ProblemPage extends React.Component {
             <div id="problem-container">
                 <div id="problem-detail-container">
                     <ProblemDetailPage data={detail_data}/>
-                    <Editor submit={this.submit}/>
+                    {!this.props.disableEditor?<Editor submit={this.submit}/>: null}
                 </div>
                 {/* <div id="problem-info-container">
                     <NavMenu/>

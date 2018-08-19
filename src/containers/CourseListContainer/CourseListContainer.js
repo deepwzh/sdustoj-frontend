@@ -2,7 +2,7 @@ import React from "react";
 import Page from "../../pages/CourseListPage";
 import { connect } from 'react-redux';
 import { learningCoursesListRequest } from '../../actions';
-import { API, getAPIUrl } from "../../utils/config";
+import { API, getAPIUrl, ROLE } from "../../utils/config";
 class CourseListContainer extends React.Component {
     constructor(props) {
         super(props);
@@ -14,7 +14,12 @@ class CourseListContainer extends React.Component {
         this.fetchCourseList();
     }
     fetchCourseList = () => {
-        let url = getAPIUrl(API.LEARNING_COURSES_LIST);
+        let url = null;
+        if (this.props.auth.role === ROLE.STUDENT) {
+            url = getAPIUrl(API.LEARNING_COURSES_LIST);
+        } else {
+            url = getAPIUrl(API.TEACHING_COURSES_LIST);
+        }
         fetch(url, {
             method: 'get',
             credentials: 'include'    
@@ -24,13 +29,14 @@ class CourseListContainer extends React.Component {
         return (
             <Page {...this.props} 
              data={this.state.data} 
-             loading={false}
-             error={this.props.error} />
+             role={this.props.role}
+              />
         );
     }
 }
 const mapStateToProp = (state) => {
     return {
+        auth: state.auth
         // data: state.course.courseList,
         // loading: state.course.loading,
         // error: state.course.error
@@ -42,4 +48,4 @@ const mapDispatchToProps = (dispatch) => {
     //     getCourseList: () => dispatch(RETRIEVE_COURSE_LIST_REQUEST())
     // }
 }
-export default connect(null, null)(CourseListContainer);
+export default connect(mapStateToProp, null)(CourseListContainer);
