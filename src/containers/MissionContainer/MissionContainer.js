@@ -14,7 +14,9 @@ class MissionInstanceContainer extends React.Component {
             submission: [],
             last_mission_group_id: 0,
             last_hash: '',
-            problem_detail_data: null
+            problem_detail_data: null,
+            available_problem_data: null,
+            problem_prev_data: null,
         }
     }
     static defaultProps = {
@@ -44,6 +46,95 @@ class MissionInstanceContainer extends React.Component {
         // alert("Hello World");
         // this.fetchCourseList();
     }
+    delete_mission_problem = (mission_id, problem_id) => {
+        let url = getAPIUrl(API.DELETE_MISSION_PROBLEM_INSTANCE(mission_id, problem_id));
+        let option = {
+            method: 'delete',
+            mode:'cors',
+            headers: {
+              // 'X-CSRFTOKEN': token,
+              "Content-Type": "application/json" 
+            },
+            credentials:'include',
+          };
+          // Post a fake request
+          return fetch(url, option)
+            .then((response) => {
+                if(response.status >= 201 && response.status < 300) {
+                  // localStorage.sessionid = response.token;
+                  alert("删除成功");
+                } else if (response.status >= 400 && response.status < 500){
+                  alert("客户端错误");
+                  // throw {message: "认证失败！"};
+                  // return Promise.reject(false);
+                } else if (response.status >= 500 ){
+                    alert("服务器端错误");
+                  // throw {message: "服务器错误！"};
+                  // // return Promise.reject(false);
+                }
+            })
+          .catch((err) => alert(err));
+    }
+    create_mission_problem = (mission_id, problem_id) => {
+        let url = getAPIUrl(API.CREATE_MISSION_PROBLEM_INSTANCE(mission_id));
+        let option = {
+            method: 'post',
+            mode:'cors',
+            headers: {
+              // 'X-CSRFTOKEN': token,
+              "Content-Type": "application/json" 
+            },
+            credentials:'include',
+            body: JSON.stringify({'problem': problem_id}),
+          };
+          // Post a fake request
+          return fetch(url, option)
+            .then((response) => {
+                if(response.status >= 201 && response.status < 300) {
+                  // localStorage.sessionid = response.token;
+                  alert("添加成功");
+                } else if (response.status >= 400 && response.status < 500){
+                  alert("客户端错误");
+                  // throw {message: "认证失败！"};
+                  // return Promise.reject(false);
+                } else if (response.status >= 500 ){
+                    alert("服务器端错误");
+                  // throw {message: "服务器错误！"};
+                  // // return Promise.reject(false);
+                }
+            })
+          .catch((err) => alert(err));
+    }
+    update_mission_problem = (mission_id, problem_id, data) => {
+        let url = getAPIUrl(API.PROBLEM_INSTANCE(mission_id, problem_id));
+        let option = {
+            method: 'put',
+            mode:'cors',
+            headers: {
+              // 'X-CSRFTOKEN': token,
+              "Content-Type": "application/json" 
+            },
+            credentials:'include',
+            body: JSON.stringify(data),
+          };
+          // Post a fake request
+          return fetch(url, option)
+            .then((response) => {
+                if(response.status >= 200 && response.status < 300) {
+                  // localStorage.sessionid = response.token;
+                  alert("修改成功");
+                } else if (response.status >= 400 && response.status < 500){
+                  alert("客户端错误");
+                  // throw {message: "认证失败！"};
+                  // return Promise.reject(false);
+                } else if (response.status >= 500 ){
+                    alert("服务器端错误");
+                  // throw {message: "服务器错误！"};
+                  // // return Promise.reject(false);
+                }
+            })
+          .catch((err) => alert(err));
+    }
     // fetchCourseList = () => {
     //     this.props.getCourseList();
     // }
@@ -70,6 +161,13 @@ class MissionInstanceContainer extends React.Component {
             }
         }).then((response) => response.json()).then((data) => this.setState({data: data.results}))
     }
+    get_available_problem = (mission_id) => {
+        let url = getAPIUrl(API.AVAILABLE_PROBLEM(mission_id));
+        fetch(url, {
+            method: 'get',
+            credentials: 'include'  
+        }).then(res => res.json()).then((res)=> this.setState({available_problem_data: res.results}));
+    }
     /**
      * 获取指定id的题目信息
      */
@@ -79,7 +177,6 @@ class MissionInstanceContainer extends React.Component {
             method: 'get',
             credentials: 'include'  
         }).then(res => res.json()).then((res)=> this.setState({problem_detail_data: res}));
-
     }
     get_problem = (mission_id) => {
         let url = getAPIUrl(API.PROBLEM_LIST(mission_id));
@@ -204,6 +301,7 @@ class MissionInstanceContainer extends React.Component {
                 start_time={this.state.start_time}
                 end_time={this.state.end_time}
                 data={this.state.data}
+                get_submission_list={(mission_id) => this.get_submission_list(this.props.mission_id)}
                 />
             );
         }else {
@@ -212,11 +310,16 @@ class MissionInstanceContainer extends React.Component {
                 createProblem ={this.createProblem}
                 deleteProblem = {this.deleteProblem}
                 has_permission = {this.has_permission}
+                get_available_problem={this.get_available_problem}
+                create_mission_problem={this.create_mission_problem}
+                delete_mission_problem={this.delete_mission_problem}
+                update_mission_problem={this.update_mission_problem}
                     introduction={this.state.introduction}
                     caption={this.state.caption}
                     start_time={this.state.start_time}
                     end_time={this.state.end_time}
-                    data={this.state.problem_data} 
+                    data={this.state.problem_data}
+                    available_problem_data={this.state.available_problem_data} 
                     />
             );
         }

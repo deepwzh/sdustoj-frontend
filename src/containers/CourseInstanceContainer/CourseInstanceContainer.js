@@ -64,9 +64,9 @@ class CourseInstanceContainer extends React.Component {
         if(isInitFlag) return;
         isInitFlag = true;
         
-        let role = this.props.auth.role;
+        
         // 如果对该任务组具有create权限
-        if(has_permission(role, RESOURCE.MISSION_GROUP, PERMISSION.CREATE))
+        if(has_permission(RESOURCE.MISSION_GROUP, PERMISSION.CREATE))
         {
             let otherSideBarItems = [
                 {

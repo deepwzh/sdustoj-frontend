@@ -3,6 +3,7 @@ import { Button, Card } from 'antd';
 import Table from "../../../components/Table";
 import { Link } from 'react-router-dom';
 import './index.css'
+import { getFormattedTime } from "../../../utils/common";
 class TableComponent extends React.Component {
   state = {
     filteredInfo: null,
@@ -64,12 +65,18 @@ class TableComponent extends React.Component {
       key: 'start_time',
       sorter: (a, b) => a.start_time - b.start_time, //从小到大
       sortOrder: sortedInfo.columnKey === 'start_time' && sortedInfo.order,
+      render: (text, record, index) => {
+        return getFormattedTime(text);
+      },
     }, {
       title: '结课时间',
       dataIndex: 'end_time',
       key: 'end_time',
       sorter: (a, b) => a.end_time - b.end_time, //从小到大
       sortOrder: sortedInfo.columnKey === 'end_time' && sortedInfo.order,
+      render: (text, record, index) => {
+        return getFormattedTime(text);
+      },
     }, {
       title: '状态',
       dataIndex: 'available',
@@ -81,7 +88,7 @@ class TableComponent extends React.Component {
   ];
     return (
       <Card hoverable = {true}>
-        <h1 id = "title-center">课程列表</h1>
+        <h1 id = "title-center">{this.props.title}</h1>
         <Table columns={columns} dataSource={this.props.data} onChange={this.handleChange} error={this.props.error} loading={this.props.loading}/>
       </Card>
     );

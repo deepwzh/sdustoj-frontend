@@ -31,7 +31,10 @@ const auth = {
       return fetch(url, option)
         .then((response) => {
             if(response.status == 200) {
-              // localStorage.sessionid = response.token;
+              response.json().then(json_data => {
+                localStorage.setItem('username', json_data.username);
+                localStorage.setItem('role', json_data.role);
+              });
               return Promise.resolve(true)
             } else if (response.status == 403){
               throw {message: "认证失败！"};

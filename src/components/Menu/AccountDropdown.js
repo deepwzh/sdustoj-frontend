@@ -36,9 +36,6 @@ const login_menu = (
 class AccountDropdown extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      username: null
-    }
   }
   componentDidMount() {
     session().then((data)=> {
@@ -48,7 +45,7 @@ class AccountDropdown extends React.Component {
     })
   }
   render() {
-    let {username} = this.state;
+    let {username, role} = this.props.auth;
     return (
       <div id="account-dropdown">
         <Dropdown overlay={username?login_menu:unlogin_menu}>

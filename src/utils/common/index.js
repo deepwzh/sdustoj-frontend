@@ -1,3 +1,6 @@
+import moment from "moment";
+import 'moment/locale/zh-cn';
+moment.locale('zh-cn');
 /**
  * 将数组改写为有索引的数组
  * @param {*} 数组
@@ -11,4 +14,8 @@ export function addIndexToArray(data, index_field) {
             [item[index_field]]: item
         })
     }
+}
+
+export function getFormattedTime(str) {
+    return moment(str).format('LLL');
 }

@@ -4,6 +4,9 @@ import { Link } from 'react-router-dom';
 import Table from '../../components/Table';
 import { DrawerForm }  from './Form';
 import { RESOURCE, PERMISSION, has_permission } from '../../utils/config';
+import { CreateDrawerForm, UpdateDrawerForm }  from './Form';
+
+
 /**
  * @description 一个小按钮而已(添加按钮)
  */
@@ -27,7 +30,7 @@ class DeleteItem extends React.Component {
     confirm = (e)=> {
         console.log(e);
         let {mission_group_id, mission_id} = this.props;
-        this.props.deleteMission(mission_group_id, mission_id);
+        this.props.delete_mission_problem(this.props.id);
         // message.success('删除成功');
     }
     
@@ -49,10 +52,21 @@ class MissionGroupPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            updateDrawerFormVisible: false,
+            editing_record: {}, //此ID为主键ID
             createProblemFlag: false,
             filteredInfo: {},
             sortedInfo: {},
+            data: []
         }
+    }
+    componentDidMount() {
+        
+    }
+    componentWillReceiveProps(newProps) {
+        this.setState({
+            data: newProps.data || []
+        });
     }
     handleChange = (pagination, filters, sorter) => {
         console.log('Various parameters', pagination, filters, sorter);
@@ -61,11 +75,31 @@ class MissionGroupPage extends React.Component {
           sortedInfo: sorter,
         });
     }
+    updateSelectedData(problems_id) {
+        let ids = [...problems_id];
+        this.setState({
+            data: [
+                ...this.state.data.filter(
+                        (item) => {
+                            let index = ids.indexOf(item.problem_id);
+                            if(index !== -1) {
+                                ids.splice(index, 1);
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        }
+                    ),
+                 ...this.props.available_problem_data.map((v) => v.problem).filter(
+                     (item) => ids.includes(item.problem_id)
+                    )
+                ]
+        })
+    }
     render() {
-        let { sortedInfo, filteredInfo } = this.state;
-        
-        let {data} = this.props;
-        data = data || [];
+
+        let { sortedInfo, filteredInfo, data } = this.state;
+
         let columns = [
             // {
             //     title: '状态',
@@ -75,10 +109,14 @@ class MissionGroupPage extends React.Component {
       
             {
             title: '题目ID',
-            dataIndex: 'problem_id',
-            key: 'problem_id',
-            sorter: (a, b) => a.problem_id - b.problem_id,
-            sortOrder: sortedInfo.columnKey === 'problem_id' && sortedInfo.order,
+            render: (text, record, index) => {
+                // 计算Problem ID
+                return `Problem ${String.fromCharCode('A'.charCodeAt(0) + index)}`;
+            }
+            // dataIndex: 'index',
+            // key: 'index',
+            // sorter: (a, b) => a.index - b.problem_id,
+            // sortOrder: sortedInfo.columnKey === 'problem_id' && sortedInfo.order,
           }, {
             title: '标题',
             dataIndex: 'title',
@@ -98,7 +136,7 @@ class MissionGroupPage extends React.Component {
             // sorter: (a, b) => a.start_time > b.start_time, //从小到大
             // sortOrder: sortedInfo.columnKey === 'start_time' && sortedInfo.order,
           }, {
-            title: '来源',
+            title: '来源', 
             dataIndex: 'source',
             key: 'source',
             sorter: (a, b) => a.source > b.source, //从小到大
@@ -106,19 +144,53 @@ class MissionGroupPage extends React.Component {
           }
         ];
         let createProblem = null;
-        let role = this.props.auth.role;
-        if(has_permission(role, RESOURCE.PROBLEM, PERMISSION.DELETE))   { // 如果可写，添加删除列项描述， 并在每条数据后加一个可编辑项
-
+        if(has_permission(RESOURCE.PROBLEM, PERMISSION.UPDATE))   { // 如果可写，添加删除列项描述， 并在每条数据后加一个可编辑项
             columns.push(
                 {
-                    title: '删除',      // 名叫删除，索引编辑 cool :)
+                    title: '权重',      // 名叫删除，索引编辑 cool :)
+                    dataIndex: 'weight',
+                    key: 'weight',
+                }
+            );
+            data = data.map(
+                (ele) => {
+                    return Object.assign({}, ele, {edit : true});
+                  }
+            );
+            console.log(data);
+        }
+        if(has_permission(RESOURCE.PROBLEM, PERMISSION.UPDATE))   { // 如果可写，添加删除列项描述， 并在每条数据后加一个可编辑项
+            columns.push(
+                {
+                    title: '修改',      // 名叫删除，索引编辑 cool :)
                     dataIndex: 'edit',
                     key: 'edit',
                     render: (text, record, index)=>(
+                        <Button onClick={() => this.setState({
+                            editing_record: record,
+                            updateDrawerFormVisible: true,
+                        })}>修改</Button> 
+                    )
+                }
+            );
+            data = data.map(
+                (ele) => {
+                    return Object.assign({}, ele, {edit : true});
+                  }
+            );
+            console.log(data);
+        }
+        if(has_permission(RESOURCE.PROBLEM, PERMISSION.DELETE))   { // 如果可写，添加删除列项描述， 并在每条数据后加一个可编辑项
+            columns.push(
+                {
+                    title: '删除',      // 名叫删除，索引编辑 cool :)
+                    dataIndex: 'delete',
+                    key: 'delete',
+                    render: (text, record, index)=>(
                         <DeleteItem 
                         mission_id={record.id} 
-                        mission_group_id={this.props.mission_group_id}
-                        deleteMission={this.props.deleteMission}
+                        id={record.id}
+                        delete_mission_problem={(problem_id) => this.props.delete_mission_problem(this.props.mission_id, problem_id)}
                          />)
                 }
             );
@@ -130,14 +202,31 @@ class MissionGroupPage extends React.Component {
             console.log(data);
         }
 
-        if (has_permission(role, RESOURCE.MISSION, PERMISSION.CREATE)) {
-            createProblem = <CreateProblem onCreate = {()=>{this.setState({createMissionFlag : true})}}/>
+        if (has_permission(RESOURCE.PROBLEM, PERMISSION.CREATE)) {
+            createProblem = <CreateProblem 
+            onCreate = {
+                () => {
+                    this.setState({createProblemFlag : true});
+                    this.props.get_available_problem(this.props.mission_id);
+                }
+            }/>
         }
         return (
             <Card extra = {createProblem}>
                 <Table columns={columns} dataSource={data} onChange={this.handleChange} />
-                <DrawerForm visible = {this.state.createProblemFlag}  onSubmit={(data) => this.props.createMission(data, this.props.mission_group_id)}
+                <CreateDrawerForm 
+                    visible = {this.state.createProblemFlag}
+                    data={this.props.available_problem_data}
+                    updateSelectedData={this.updateSelectedData.bind(this)}
+                    create_mission_problem={(problem_id) => this.props.create_mission_problem(this.props.mission_id, problem_id)}
+                    selectedData={this.state.data}
+                    onSubmit={(data) => this.props.createMission(data, this.props.mission_group_id)}
                     onClose = {() => {this.setState({createProblemFlag : false})}} />
+                <UpdateDrawerForm
+                    visible = {this.state.updateDrawerFormVisible}
+                    data = {this.state.editing_record}
+                    onSubmit={(data) => this.props.update_mission_problem(this.props.mission_id, this.state.editing_record.id, data)}
+                    onClose = {() => {this.setState({ updateDrawerFormVisible: false})}} />
             </Card>
         );
     }

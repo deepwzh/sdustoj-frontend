@@ -3,8 +3,10 @@ import { Button, Card, Popconfirm, message, Drawer, Form, } from 'antd';
 import { Link } from 'react-router-dom'; 
 import Table from '../../components/Table';
 import { DrawerForm }  from './Form';
+
 import { RESOURCE, PERMISSION, has_permission } from '../../utils/config';
-import {simpleTime} from './../../utils/simpleTime';
+import { getFormattedTime } from '../../utils/common';
+
 /**
  * @description 一个小按钮而已(添加按钮)
  */
@@ -89,14 +91,21 @@ class MissionGroupPage extends React.Component {
             key: 'start_time',
             sorter: (a, b) => a.start_time - b.start_time, //从小到大
             sortOrder: this.state.sortedInfo.columnKey === 'start_time' && this.state.sortedInfo.order,
-            render: (text)=> {return simpleTime(text);}
+
+            render: (text, record, index) => {
+                return getFormattedTime(text);
+            },
+
         }, {
             title: '任务结束时间',
             dataIndex: 'end_time',
             key: 'end_time',
             sorter: (a, b) => a.end_time - b.end_time, //从小到大
             sortOrder: this.state.sortedInfo.columnKey === 'end_time' && this.state.sortedInfo.order,
-            render: (text)=> {return simpleTime(text);}
+
+            render: (text, record, index) => {
+                return getFormattedTime(text);
+            },
         }, {
             title: '状态',
             dataIndex: 'available',
@@ -106,8 +115,8 @@ class MissionGroupPage extends React.Component {
             }
         }];
         let createMission = null;
-        let role = this.props.auth.role;
-        if(has_permission(role, RESOURCE.MISSION, PERMISSION.DELETE))   { // 如果可写，添加删除列项描述， 并在每条数据后加一个可编辑项
+        
+        if(has_permission(RESOURCE.MISSION, PERMISSION.DELETE))   { // 如果可写，添加删除列项描述， 并在每条数据后加一个可编辑项
             columns.push(
                 {
                     title: '删除',      // 名叫删除，索引编辑 cool :)
@@ -128,7 +137,7 @@ class MissionGroupPage extends React.Component {
             );
             console.log(data);
         }
-        if (has_permission(role, RESOURCE.MISSION, PERMISSION.CREATE)) {
+        if (has_permission(RESOURCE.MISSION, PERMISSION.CREATE)) {
             createMission = <CreateMission onCreate = {()=>{this.setState({createMissionFlag : true})}}/>
         }
         return (

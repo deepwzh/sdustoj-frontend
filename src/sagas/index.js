@@ -97,8 +97,7 @@ export function * loginFlow () {
 
     // If `authorize` was the winner...
     if (winner.auth) {
-      // ...we send Redux appropiate actions
-      yield put({type: SET_AUTH, newAuthState: true, username: username }) // User is logged in (authorized)
+      yield put({type: SET_AUTH, newAuthState: true, username: username, role: localStorage.getItem("role") }) // User is logged in (authorized)
       yield put(push('/'))
     }
   }

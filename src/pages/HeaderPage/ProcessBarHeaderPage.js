@@ -6,6 +6,7 @@ class TimeRender extends React.Component {
         super(props);
         this.state = {
             timer: null,
+            percent: 0,
         }
     }
     onTimerChange = () => {
@@ -19,9 +20,14 @@ class TimeRender extends React.Component {
         let remain_time_second = `${parseInt(duration_to_end.asSeconds()%60)}`;
         let elapsed_time = `${elapsed_time_hour.length<2?("0"+elapsed_time_hour):elapsed_time_hour}:${elapsed_time_minute.length<2?("0"+elapsed_time_minute):elapsed_time_minute}:${elapsed_time_second.length<2?("0"+elapsed_time_second):elapsed_time_second}`;
         let remain_time = `${remain_time_hour.length<2?("0"+remain_time_hour):remain_time_hour}:${remain_time_minute.length<2?("0"+remain_time_minute):remain_time_minute}:${remain_time_second.length<2?("0"+remain_time_second):remain_time_second}`;
+        let duration_to_start_milsec = duration_to_start.asMilliseconds();
+        let duration_milsec = Moment.duration(Moment(this.props.end_time) - Moment(this.props.start_time)).asMilliseconds();
+        let percent = (duration_to_start_milsec)/duration_milsec*100;
+        percent = Math.max(0, Math.min(percent, 100));
         this.setState({
             elapsed_time: elapsed_time,
-            remain_time: remain_time
+            remain_time: remain_time,
+            percent: percent
         });
     }
     componentDidMount() {
@@ -65,8 +71,11 @@ class TimeRender extends React.Component {
             //正在进行
         }
         return (
-            
-            is_running?(
+            <div>
+                <Tooltip title="3 done / 3 in progress / 4 to do">
+                    <Progress percent={100} successPercent={this.state.percent} showInfo={false}  status="active" />
+                </Tooltip>
+            {is_running?(
                 <div id="datetime-info">
                     <span>进行时间: {elapsed_time}</span>
                     <span>剩余时间: {remain_time}</span>
@@ -75,7 +84,8 @@ class TimeRender extends React.Component {
                 <div id="datetime-info-unrunning">
                     <span>{innnerText}</span>
                 </div>
-                )
+                )}
+            </div>
         );
     }
 }
@@ -84,6 +94,8 @@ export default class ProcessBarHeaderPage extends React.Component{
         super(props);
     }
     render() {
+        let start_time = Moment(this.props.start_time);
+        let end_time = Moment(this.props.end_time);
         return (
         <div id="processbar-header-block">
             <Card id="introduction">{this.props.introduction?this.props.introduction:"暂无通告"}</Card>
@@ -92,12 +104,9 @@ export default class ProcessBarHeaderPage extends React.Component{
                 {this.props.caption}
                 </div> 
                 <div id="datetime-info">
-                    <span>开始时间: {Moment(this.props.start_time).format('lll')}</span>
-                    <span>结束时间: {Moment(this.props.end_time).format('lll')}</span>
+                    <span>开始时间: {start_time.format('lll')}</span>
+                    <span>结束时间: {end_time.format('lll')}</span>
                 </div>
-                <Tooltip title="3 done / 3 in progress / 4 to do">
-                    <Progress percent={100} successPercent={30} showInfo={false}  status="active" />
-                </Tooltip>
                 <TimeRender start_time={this.props.start_time} end_time={this.props.end_time}/>
             </Card>
         </div>
