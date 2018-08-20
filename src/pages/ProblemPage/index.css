@@ -12,3 +12,8 @@
     margin: 20px;
     /* width:100%; */
 }
+
+/*问题页 标题居中*/
+#problem-title {
+    text-align: center;
+}

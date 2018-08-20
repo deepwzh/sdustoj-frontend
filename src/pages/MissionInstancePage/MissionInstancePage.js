@@ -2,7 +2,6 @@ import './index.css';
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import Moment from 'moment';
-import pic from "../../image/lesson_c.png";
 // import LessonSideBar from './LessonSideBar';
 import MissionGroupPage from './MissionGroupPage';
 import { ProcessBarHeaderPage } from '../HeaderPage';
@@ -13,7 +12,6 @@ class LessonDetailPage extends React.Component{
     componentDidMount() { 
     }
     render() {
-        //TODO: 此处应该采用服务器时间，暂时用客户端时间来代替吧
         return (
             <div id="mission-instance">
                 <ProcessBarHeaderPage 

@@ -304,7 +304,9 @@ class MissionInstanceContainer extends React.Component {
                 get_submission_list={(mission_id) => this.get_submission_list(this.props.mission_id)}
                 />
             );
-        }else {
+        } else if(hash.startsWith("#score")) {
+            return <h1>hello world</h1>;
+        } else {
             return (
                 <Page {...this.props} 
                 createProblem ={this.createProblem}
