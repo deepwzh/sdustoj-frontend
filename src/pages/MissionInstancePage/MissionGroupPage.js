@@ -126,7 +126,7 @@ class MissionGroupPage extends React.Component {
             render: (text, record, index) => {
               console.log(record);
               
-              let to = this.props.location.pathname + "/problem/" + record.id;
+              let to = this.props.location.pathname + "/#problem/" + record.id;
               return <Link to={to} >{text}</Link>
             }
           }, {

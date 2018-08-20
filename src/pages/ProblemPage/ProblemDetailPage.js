@@ -4,6 +4,7 @@ import ReactMarkDown from 'react-markdown';
 import { runInDebugContext } from 'vm';
 import {message, Icon} from 'antd';
 import {CopyToClipboard} from 'react-copy-to-clipboard'
+import './index.css'
 
 class ProblemDetailPage extends React.Component {
     
@@ -20,36 +21,33 @@ class ProblemDetailPage extends React.Component {
         }
         let {title, description, sample, source} = this.props.data;
         return (
-            <Card>
-                <h1>{title}</h1>
+            <Card style = {{backgroundColor : '#ffd'}}>
+                <h1 id = 'problem-title'>{title}</h1>
                 {limit?
                 (
-                <div>
-                        <div>编程环境：{limit.env_name}</div>
-                        <div>长度限制：{limit.length_limit}</div>
-                        <div>时间限制：{limit.time_limit}</div>
-                        <div>内存限制：{limit.memory_limit}</div>
-                    <div>数据组数：{number_test_data}</div>
-                </div>
+                <Card id = 'problem-title'>
+                    <div>编程环境：{limit.env_name}</div>
+                    <div>时间限制：{limit.time_limit} 内存限制：{limit.memory_limit}</div>
+                </Card>
                 )
                 :null
                 }
-
+                <br/>
                 <div>
+                    <h3>题目描述</h3>
                     <Card style = {{backgroundColor : '#fee'}} hoverable = {true}>
-                        {/* <h3>描述</h3> */}
                         <ReactMarkDown source={description} />
                     </Card>
                     <br/>
-                        {/* <h3>样例</h3> */}
-                        <CopyToClipboard onCopy = {this.onCopy} text = {sample}>
-                            <Card style = {{backgroundColor : '#fee'}} hoverable = {true} extra = {<Icon type = 'copy' />}>
-                                <ReactMarkDown source={sample}/>
-                            </Card>
-                        </CopyToClipboard>
+                    <h3>样例 <Icon type = 'copy' /></h3>
+                    <CopyToClipboard onCopy = {this.onCopy} text = {sample}>
+                        <Card style = {{backgroundColor : '#fee'}} hoverable = {true}>
+                            <ReactMarkDown source={sample}/>
+                        </Card>
+                    </CopyToClipboard>
                     <br/>
+                    <h3>来源</h3>
                     <Card style = {{backgroundColor : '#fee'}} hoverable = {true}>
-                        <h3>来源</h3>
                         <p>
                             {source}
                         </p>

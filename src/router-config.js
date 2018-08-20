@@ -67,6 +67,10 @@ const routers = [
         path: '/status',
         component: StatusPage,
         layout: MainPageLayout
+    }, {
+        path: 'account',
+        component: <h1>hello world</h1>,
+        layout: MainPageLayout
     }
 ];
 export default routers;

@@ -55,7 +55,7 @@ class TableComponent extends React.Component {
       sortOrder: sortedInfo.columnKey === 'problem_title' && sortedInfo.order,
       render: (text, record, index) => {
         console.log(record);
-        let to = this.props.location.pathname + "/problem/" + record.problem;
+        let to = this.props.location.pathname + "#problem/" + record.problem;
         return <Link to={to} >{text}</Link>
       }
     }, {

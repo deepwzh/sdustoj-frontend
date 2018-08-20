@@ -96,9 +96,14 @@ export default class ProcessBarHeaderPage extends React.Component{
     render() {
         let start_time = Moment(this.props.start_time);
         let end_time = Moment(this.props.end_time);
+        let introduction = null;
+        if(this.props.introduction)
+        {
+            introduction = <Card id="introduction">{this.props.introduction}</Card>
+        }
         return (
         <div id="processbar-header-block">
-            <Card id="introduction">{this.props.introduction?this.props.introduction:"暂无通告"}</Card>
+            {introduction}
             <Card id="processbar">
                 <div id="banner">
                 {this.props.caption}
