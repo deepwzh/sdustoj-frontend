@@ -8,7 +8,7 @@ import React from 'react';
 import { Button, Card, Popconfirm, message, Drawer, Form, } from 'antd';
 import { Link } from 'react-router-dom'; 
 import Table from '../../components/Table';
-import { DrawerForm }  from './Form';
+import { BatchCreateStudentDrawer }  from './Form';
 import { RESOURCE, PERMISSION, has_permission } from '../../utils/config';
 import {simpleTime} from './../../utils/simpleTime';
 
@@ -76,7 +76,7 @@ class GroupInTable extends React.Component {
         return (
             <Card title = '所在课程组'>
                 <Table columns={columns} dataSource={data} onChange={this.handleChange} />
-                <DrawerForm visible = {this.state.createMissionFlag}  onSubmit={(data) => this.props.createMission(data, this.props.mission_group_id)}
+                <BatchCreateStudentDrawer visible = {this.state.createMissionFlag}  onSubmit={(data) => this.props.createMission(data, this.props.mission_group_id)}
                     onClose = {() => {this.setState({createMissionFlag : false})}} />
             </Card>
         );

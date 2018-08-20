@@ -41,9 +41,6 @@ class LessonDetailPage extends React.Component{
             <div id="lesson-detail">
                 <HeaderPage {...this.props}/>
                 <div id="lesson-detail-container">
-                    <div id="lesson-detail-mission-sidebar">
-                        {/* <LessonSideBar onSideBarChange={this.onMissionChange} /> */}
-                    </div>
                     <div id="lesson-detail-content">
                         <MissionGroupPage {...this.props}/>
                     </div>

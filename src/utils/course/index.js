@@ -1,5 +1,6 @@
 import { API, getAPIUrl } from '../config';
 import { addIndexToArray } from '../common';
+import assert from 'assert';
 const course = {
     /**
     * Logs a user in, returning a promise with `true` when done
@@ -46,5 +47,42 @@ const course = {
     // },
     onChange () {}
   }
-  
+
+function getStudentItem(item) {
+    let raw_data = item.split(/[\s\t]+/);
+    console.log(raw_data);
+    return ({
+        username:raw_data[0],
+        available:true,
+        deleted:false,
+        password:raw_data[0],
+        student_id:raw_data[0],
+        name:raw_data[1],
+        major:null,
+        grade:null,
+        class_in:null,
+    });
+}
+
+/**
+ * 将用户输入的学生信息由csv格式的字符串转换成Object数组
+ * @param {String} data 学生信息的csv字符串表示
+ * @return {Array[Object]} 学生信息
+ */
+function studentDataParserFromCsv(data) {
+    let students = [];
+    // assert(data, "Input text must be not empty");
+    try {
+        data.split('\n').forEach((item)=> {
+            students.push(getStudentItem(item));
+        });
+    } catch (err) {
+        return [];
+        throw "文本输入格式有误!";
+    }
+    return students;
+}
 export default course;
+export {
+  studentDataParserFromCsv
+};

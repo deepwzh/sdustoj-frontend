@@ -2,8 +2,8 @@ import React from 'react';
 import { Button, Card, Popconfirm, message, Drawer, Form, } from 'antd';
 import { Link } from 'react-router-dom'; 
 import Table from '../../components/Table';
-import { DrawerForm }  from './Form';
-
+import { CreateMissionDrawer }  from './Form';
+import { HeaderPage } from '../HeaderPage';
 import { RESOURCE, PERMISSION, has_permission } from '../../utils/config';
 import { getFormattedTime } from '../../utils/common';
 
@@ -143,7 +143,7 @@ class MissionGroupPage extends React.Component {
         return (
             <Card extra = {createMission}>
                 <Table columns={columns} dataSource={data} onChange={this.handleChange} />
-                <DrawerForm visible = {this.state.createMissionFlag}  onSubmit={(data) => this.props.createMission(data, this.props.mission_group_id)}
+                <CreateMissionDrawer visible = {this.state.createMissionFlag}  onSubmit={(data) => this.props.createMission(data, this.props.mission_group_id)}
                     onClose = {() => {this.setState({createMissionFlag : false})}} />
             </Card>
         );

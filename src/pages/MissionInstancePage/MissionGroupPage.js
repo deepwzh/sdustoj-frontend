@@ -57,16 +57,16 @@ class MissionGroupPage extends React.Component {
             createProblemFlag: false,
             filteredInfo: {},
             sortedInfo: {},
-            data: []
+            // data: []
         }
     }
     componentDidMount() {
-        
+        // console.log("component lalallalalalla");
     }
     componentWillReceiveProps(newProps) {
-        this.setState({
-            data: newProps.data || []
-        });
+        // this.setState({
+        //     data: newProps.data || []
+        // });
     }
     handleChange = (pagination, filters, sorter) => {
         console.log('Various parameters', pagination, filters, sorter);
@@ -98,8 +98,8 @@ class MissionGroupPage extends React.Component {
     }
     render() {
 
-        let { sortedInfo, filteredInfo, data } = this.state;
-
+        let { sortedInfo, filteredInfo } = this.state;
+        let {data} = this.props;
         let columns = [
             // {
             //     title: '状态',
@@ -217,9 +217,8 @@ class MissionGroupPage extends React.Component {
                 <CreateDrawerForm 
                     visible = {this.state.createProblemFlag}
                     data={this.props.available_problem_data}
-                    updateSelectedData={this.updateSelectedData.bind(this)}
                     create_mission_problem={(problem_id) => this.props.create_mission_problem(this.props.mission_id, problem_id)}
-                    selectedData={this.state.data}
+                    selectedData={data}
                     onSubmit={(data) => this.props.createMission(data, this.props.mission_group_id)}
                     onClose = {() => {this.setState({createProblemFlag : false})}} />
                 <UpdateDrawerForm
