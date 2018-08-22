@@ -3,6 +3,7 @@ import { Button, Card, Popconfirm, message, Drawer, Form, } from 'antd';
 import { Link } from 'react-router-dom'; 
 import Table from '../../components/Table';
 import { CreateMissionDrawer }  from './Form';
+
 import { HeaderPage } from '../HeaderPage';
 import { RESOURCE, PERMISSION, has_permission } from '../../utils/config';
 import { getFormattedTime } from '../../utils/common';
@@ -56,6 +57,7 @@ class MissionGroupPage extends React.Component {
             createMissionFlag: false,
             filteredInfo: {},
             sortedInfo: {},
+            editing_record: null,
         }
     }
     handleChange = (pagination, filters, sorter) => {
@@ -82,7 +84,7 @@ class MissionGroupPage extends React.Component {
             sorter: (a, b) => a.caption > b.caption, //从小到大
             sortOrder: this.state.sortedInfo.columnKey === 'caption' && this.state.sortedInfo.order,
             render: (text, record, index) => {
-                let to = this.props.pathname + "/mission/" + record.mission_id;
+                let to = this.props.pathname  + "/mission/" + (record.mission_id || record.id);
                 return <Link to={to} >{text}</Link>
             }
         }, {
@@ -114,14 +116,44 @@ class MissionGroupPage extends React.Component {
                 return <span>{text?"可用":"废弃"}</span>
             }
         }];
+        if(has_permission(RESOURCE.MISSION, PERMISSION.UPDATE))   { // 如果可写，添加删除列项描述， 并在每条数据后加一个可编辑项
+            columns.push(
+                {
+                    title: '修改',      // 名叫删除，索引编辑 cool :)
+                    dataIndex: 'edit',
+                    key: 'edit',
+                    render: (text, record, index)=>(
+                        <Button onClick={() => {
+                            this.setState({
+                                editing_record: record,
+                                createMissionFlag: true,
+                            })
+                            // this.props.getMissionInstance(record.mission_id).then((data) => {
+                            //     this.setState({
+                            //         editing_record: data,
+                            //         createMissionFlag: true,
+                            //     });
+                            // })
+                        }
+                        }>修改</Button> 
+                    )
+                }
+            );
+            data = data.map(
+                (ele) => {
+                    return Object.assign({}, ele, {edit : true});
+                  }
+            );
+            console.log(data);
+        }
         let createMission = null;
         
         if(has_permission(RESOURCE.MISSION, PERMISSION.DELETE))   { // 如果可写，添加删除列项描述， 并在每条数据后加一个可编辑项
             columns.push(
                 {
                     title: '删除',      // 名叫删除，索引编辑 cool :)
-                    dataIndex: 'edit',
-                    key: 'edit',
+                    dataIndex: 'delete',
+                    key: 'delete',
                     render: (text, record, index)=>(
                         <DeleteItem 
                         mission_id={record.id} 
@@ -138,12 +170,15 @@ class MissionGroupPage extends React.Component {
             console.log(data);
         }
         if (has_permission(RESOURCE.MISSION, PERMISSION.CREATE)) {
-            createMission = <CreateMission onCreate = {()=>{this.setState({createMissionFlag : true})}}/>
+            createMission = <CreateMission onCreate = {()=>{this.setState({createMissionFlag : true, editing_record: null})}}/>
         }
         return (
             <Card extra = {createMission}>
                 <Table columns={columns} dataSource={data} onChange={this.handleChange} />
-                <CreateMissionDrawer visible = {this.state.createMissionFlag}  onSubmit={(data) => this.props.createMission(data, this.props.mission_group_id)}
+                <CreateMissionDrawer visible = {this.state.createMissionFlag}
+                    data={this.state.editing_record}
+                    onCreate={(data) => this.props.createMission(data, this.props.mission_group_id)}
+                    onUpdate={(data) => this.props.updateMission(data, this.props.mission_group_id, this.state.editing_record.id)}
                     onClose = {() => {this.setState({createMissionFlag : false})}} />
             </Card>
         );

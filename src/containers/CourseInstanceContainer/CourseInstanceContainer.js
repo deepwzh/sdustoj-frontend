@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { getAPIUrl, API, ROLE, PERMISSION_TABLE, PERMISSION, has_permission, RESOURCE} from "../../utils/config";
 import { setSiderbarDataSource } from '../../actions';
 import CourseStudentPage from '../../pages/CourseInstancePage/CourseStudentPage';
+import { push, replace } from "connected-react-router";
 // 一个用以判断是否已经加载过的标记
 let isInitFlag = false;
 
@@ -16,8 +17,8 @@ class CourseInstanceContainer extends React.Component {
         this.state = {
             mission_data: [],
             submission: [],
-            last_mission_group_id: 0,
-            studentData: []
+            studentData: [],
+            mission_group_id: null,
         };
        
     }
@@ -27,7 +28,11 @@ class CourseInstanceContainer extends React.Component {
             key: '4',
             title: '课程详细信息',
             target: ''
-        }, {
+        },{
+            key: '100',
+            title: '正在进行的任务',
+            target: '#running'
+        },{
             key: "0",
             title: "任务组",
             target: "",
@@ -39,8 +44,31 @@ class CourseInstanceContainer extends React.Component {
         this.get_mission_student(this.props.course_id);
         this.get_instance(this.props.course_id);
         this.getSiderBarItems(this.props.course_id);
+        if (this.props.hash === '') {
+            this.props.push({
+                hash:"#running"
+            });
+        }
         // alert("Hello World");
         // this.fetchCourseList();
+    }
+    componentWillReceiveProps(newProps) {
+        let new_hash = newProps.hash;
+        let old_hash = this.props.hash;
+        if (new_hash === old_hash) return;
+        if (new_hash.startsWith("#running")) {
+            this.get_running_mission(newProps.course_id);
+        } else if (new_hash.startsWith("#mission_group")) {
+            let mission_group_id = new_hash.split('/')[1];
+            if (mission_group_id === 'new') {
+                //保持原有的mission_group_id
+            } else {
+                this.get_mission(mission_group_id);
+                this.setState({
+                    mission_group_id:mission_group_id
+                })
+            }
+        }
     }
     // fetchCourseList = () => {
     //     this.props.getCourseList();
@@ -74,15 +102,15 @@ class CourseInstanceContainer extends React.Component {
                 {
                     key: '1',
                     title: '教师',
-                    target: `/course/${this.props.course_id}/teacher`,
+                    target: `teacher`,
                 },{
                     key: '2',
                     title: '学生',
-                    target: `/course/${this.props.course_id}#student`,
+                    target: `#student`,
                 },{
                     key: '3',
                     title: '所在课程组',
-                    target: `/course/${this.props.course_id}/course_group`
+                    target: `#course_group`
                 }
             ];
             this.props.siderbar.push(...otherSideBarItems);
@@ -98,16 +126,23 @@ class CourseInstanceContainer extends React.Component {
         }).then(res => res.json())
         .then((v)=> {
             let childrens = [];
+            if(has_permission(RESOURCE.MISSION_GROUP, PERMISSION.CREATE)){
+                childrens.push({
+                    key: "new",
+                    title: "新建任务组",
+                    target: `#mission_group/new`
+                });
+            }
             v.results.map((item, key) => {
                 childrens.push({
                     key: "0" + key,
                     title: item.caption,
-                    target: `/course/${course_id}/mission_group/${item.id}`, 
+                    target: `#mission_group/${item.id}`, 
                 });
             });
-            this.props.siderbar[1].childrens = childrens;
+            this.props.siderbar.find(({key}) => key === '0').childrens = childrens;
             ///////// 加几个bug :)
-            this.props.siderbar[0].target = `/course/${course_id}/course_info`;
+            this.props.siderbar[0].target = `#course_info`;
             //////////////////
             this.props.setSiderbarDataSource([...this.props.siderbar]);
         });
@@ -121,6 +156,13 @@ class CourseInstanceContainer extends React.Component {
     }
     get_mission = (mission_group_id) =>{
         let url = getAPIUrl(API.MISSION_LIST(mission_group_id));
+        fetch(url, {
+            method: 'get',
+            credentials: 'include'    
+        }).then(res => res.json()).then((res)=> this.setState({mission_data: res.results}));
+    }
+    get_running_mission = (mission_group_id) => {
+        let url = getAPIUrl(API.RUNNING_MISSION_LIST(mission_group_id));
         fetch(url, {
             method: 'get',
             credentials: 'include'    
@@ -218,6 +260,32 @@ class CourseInstanceContainer extends React.Component {
           }
         }).catch((err) => alert(err));
     }
+    updateMission = (data, mission_group_id, mission_id) => {
+        let url = getAPIUrl(API.UPDATE_MISSION_INSTANCE(mission_group_id, mission_id));
+        fetch(url, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            // credentials: 'include',
+            body: data
+        }).then(response => {
+            if(response.status >= 200 && response.status < 300) {
+            alert("更新成功");
+          } else if (response.status >= 400 && response.status < 500){
+            alert("客户端错误");
+          } else if (response.status >= 500 ){
+              alert("服务器端错误");
+          }
+        }).catch((err) => alert(err));
+    }
+    getMissionInstance = (mission_id) => {
+        let url = getAPIUrl(API.MISSION_INSTANCE(mission_id));
+        return fetch(url, {
+            method: 'get',
+            // credentials: 'include'  
+        }).then(res => res.json());
+    }
     createMission = (data, mission_group_id) => {
         let url = getAPIUrl(API.CREATE_MISSION_INSTANCE(mission_group_id));
         let option = {
@@ -248,13 +316,31 @@ class CourseInstanceContainer extends React.Component {
           })
         .catch((err) => alert(err));
     }
-    render() {
-        if (this.props.mission_group_id && this.state.last_mission_group_id !== this.props.mission_group_id) {
-            this.get_mission(this.props.mission_group_id);
-            this.setState({
-                last_mission_group_id: this.props.mission_group_id
-            });
+    createMissionGroup = (data, course_id) => {
+        let url = getAPIUrl(API.MISSION_GROUP_LIST(course_id));
+        fetch(url, {
+            methd: 'post',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        }).then(response => {
+            if(response.status >= 200 && response.status < 300) {
+            // localStorage.sessionid = response.token;
+            alert("添加成功");
+          } else if (response.status >= 400 && response.status < 500){
+            alert("客户端错误");
+            // throw {message: "认证失败！"};
+            // return Promise.reject(false);
+          } else if (response.status >= 500 ){
+              alert("服务器端错误");
+            // throw {message: "服务器错误！"};
+            // // return Promise.reject(false);
+          }
         }
+        );
+    }
+    render() {
         let {hash} = this.props;
         if (hash.startsWith("#student")) {
             return <CourseStudentPage
@@ -268,8 +354,12 @@ class CourseInstanceContainer extends React.Component {
         }
         return (
             <Page {...this.props} 
+            createMissionGroup={this.createMissionGroup}
             createMission ={this.createMission}
             deleteMission = {this.deleteMission}
+            updateMission={this.updateMission}
+            getMissionInstance={this.getMissionInstance}
+            mission_group_id={this.state.mission_group_id}
              introduction={this.state.introduction}
              caption={this.state.caption}
              data={this.state.mission_data} 
@@ -286,7 +376,6 @@ const mapStateToProp = (state, ownProps) => {
         search: state.router.location.search,
         hash: state.router.location.hash,
         course_id,
-        mission_group_id
         // data: state.course.courseList,
         // loading: state.course.loading,
         // error: state.course.error
@@ -294,7 +383,8 @@ const mapStateToProp = (state, ownProps) => {
 }
 const mapDispatchToProps = (dispatch) => {
     return {
-        setSiderbarDataSource: (dataSource) => dispatch(setSiderbarDataSource(dataSource))
+        setSiderbarDataSource: (dataSource) => dispatch(setSiderbarDataSource(dataSource)),
+        push: (path) => dispatch(replace(path))
     }
 }
 export default connect(mapStateToProp, mapDispatchToProps)(CourseInstanceContainer);

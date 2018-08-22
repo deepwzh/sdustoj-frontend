@@ -9,17 +9,22 @@ if (DEBUG) {
 
 const API = {
     LOGIN: '/api/login/',
+    ACCOUNT_PROFILE: '/api/account/profile/',
+    ACCOUNT_PASSWORD: '/api/account/password/',
     LEARNING_COURSES_LIST: '/api/learning-courses/',
+
     TEACHING_COURSES_LIST: '/api/teaching-courses/',
     COURSE_INSTANCE: (course_id) => `/api/courses/${course_id}/`,
     
     MISSION_GROUP_LIST: (course_id) => `/api/courses/${course_id}/mission-groups/`,
-    MISSION_GROUP_INSTANCE: (mission_group_id) => ``,
-    
+    MISSION_GROUP_INSTANCE: (course_id, mission_group_id) => `/api/courses/${course_id}/mission-groups/${mission_group_id}/`,
+
     MISSION_LIST: (mission_group_id) => `/api/mission-groups/${mission_group_id}/missions/`,
+    RUNNING_MISSION_LIST: (course_id) => `/api/courses/${course_id}/running-missions/`,
     MISSION_INSTANCE: (mission_id) => `/api/missions/${mission_id}/`,
     CREATE_MISSION_INSTANCE: (mission_group_id) => `/api/mission-groups/${mission_group_id}/missions-direct/`,
     DELETE_MISSION_INSTANCE: (mission_group_id, mission_id) => `/api/mission-groups/${mission_group_id}/missions/${mission_id}/`,
+    UPDATE_MISSION_INSTANCE: (mission_group_id, mission_id) => `/api/mission-groups/${mission_group_id}/missions/${mission_id}/`,
     MISSION_STUDENT_LIST: (course_id) => `/api/courses/${course_id}/students/`,
     MISSION_STUDENT_INSTANCE: (course_id, id) => `/api/courses/${course_id}/students/${id}/`,
     PROBLEM_LIST: (mission_id) => `/api/missions/${mission_id}/problems/`,

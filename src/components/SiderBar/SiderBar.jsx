@@ -6,12 +6,30 @@ import { push } from 'connected-react-router'
 import {setSiderbarKey} from './../../actions'
 
 class SiderBar extends React.Component {
+    hash2KeyMapping = null;
     constructor(props) {
         super(props);
+        this.state = {
+            selectedKey: null
+        }
     }
-
-
+    componentWillReceiveProps(newProps) {
+        if (newProps.dataSource && newProps.dataSource !== this.props.dataSource) {
+            let hash2KeyMapping = new Map();    
+            for (let item of newProps.dataSource) {
+                if (item.childrens) {
+                    this.getMenuItemList(item.childrens);
+                } else {
+                    hash2KeyMapping.set(item.target, item.key);
+                }
+            }
+            this.setState({
+                selectedKey: hash2KeyMapping.get(newProps.hash)
+            })
+        }
+    }
     getMenuItemList = (data) => {
+        this.hash2KeyMapping = new Map();
         let items = [];
         for (let item of data) {
             if (item.childrens) {
@@ -25,34 +43,42 @@ class SiderBar extends React.Component {
                 items.push(
                     <Menu.Item target={item.target} key={item.key}>{item.title}</Menu.Item>
                 )
+                this.hash2KeyMapping.set(item.target, item.key);
             }
         }
+
         return items;
     }
     handleClick = ({ item, key, selectedKeys }) => {
         // console.log(item);
         this.props.push(item.props.target);
-        this.props.setSiderbarKey(key);
+        // this.props.setSiderbarKey(key);
         // let selectedKey = selectedKeys[0];
         // this.props.push(this.props.dataSource[selectedKey].target);
     }
     render() {
-      return (
-        <Menu
-          onSelect={this.handleClick}
-          style={{ width: 256 }} 
-          defaultSelectedKeys={[this.props.siderbarKey]}
-          defaultOpenKeys={['sub1']}
-          mode="inline"
-        >
-        {this.getMenuItemList(this.props.dataSource)}
-        </Menu>
-      );
+        let { dataSource } = this.props;
+        let menu = <div>Hello </div>;
+        if (dataSource.length > 0) {
+            return (<Menu
+            onSelect={this.handleClick}
+            style={{ width: 256 }} 
+            defaultSelectedKeys={[this.state.selectedKey]}
+            defaultOpenKeys={['sub1']}
+            mode="inline"
+          >
+          {this.getMenuItemList(this.props.dataSource)}
+          </Menu>);
+        } else {
+            return (<div></div>);
+        }
+
     }
 }
 function mapStateToProps(state) {
     console.log('before the render' + state.ui.siderbar.key);
     return ({
+        hash: state.router.location.hash,
         siderbarKey: state.ui.siderbar.key + '',
         dataSource: state.ui.siderbar.dataSource,
     })

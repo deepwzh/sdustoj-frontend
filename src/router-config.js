@@ -13,6 +13,7 @@ import LessonInfo from './pages/CourseListPage/LessonInfo'
 
 import TeacherTable from './pages/CourseInstancePage/TeacherTable'
 import GroupInTable from './pages/CourseInstancePage/GroupInTable'
+import AccountContainer from './containers/AccountContainer';
 const routers = [
     {
         path: '/',
@@ -22,6 +23,10 @@ const routers = [
         path: '/login',
         component: LoginPage,
         layout: BlankLayout
+    }, {
+        path: '/account',
+        component: AccountContainer,
+        layout: MenuSiderBarLayout
     }, {
         path: '/course',
         component: CourseList,
@@ -47,7 +52,7 @@ const routers = [
         component: CourseInstanceContainer,
         layout: MenuSiderBarLayout,
     }, {
-        path: '/course/:course_id/mission_group/:mission_group_id/mission/:mission_id',
+        path: '/course/:course_id/mission/:mission_id',
         component: MissionContainer,
         layout: MenuSiderBarLayout,
     }, {
