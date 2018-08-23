@@ -13,12 +13,25 @@ class ProblemPage extends React.Component {
             problem_id: null,
             problem_data: null,
             id: null,
-
+            dataSource: null,
             limitKey: 0     // 一方面用以判断选中了哪一个语言，另一方面，用以展示哪一个环境限制
         }
     }
     componentDidMount() {
-        
+        this.fetchDataSource();
+    }
+    fetchDataSource = (data) => {
+        let {problem_id } = data || {};
+        this.props.retrieveMissionProblem(this.props.mission_id, problem_id || this.props.problem_id)
+            .then((data) => {
+                this.setState({dataSource: data})
+                console.log("Hello World"); 
+                console.log(data);
+        }
+        );
+    }
+    componentWillReceiveProps(newProps) {
+        this.fetchDataSource({problem_id: newProps.problem_id});
     }
 
     // 提供给下层(Editor)的语言选择函数
@@ -44,53 +57,37 @@ class ProblemPage extends React.Component {
         })
   
     submit = (code) => {
-        //TODO:这里environment设置了初始值
         let {match} = this.props;
-
+        let { dataSource } = this.state;
         let data = {
-            problem: this.props.data.problem.id,
-            environment: this.props.data.problem.limit[this.state.limitKey].environment ,
+            problem: dataSource.problem.id,
+            environment: dataSource.problem.limit[this.state.limitKey].environment ,
             code: {
                 code:code
             }
         };
-        console.log(data);
-
-        let url = `http://127.0.0.1:80/JudgeOnline/api/missions/${this.props.mission_id}/submissions/`;
-        this.get_token().then((token) => {
-            console.log(JSON.stringify(data) );
-            fetch(url, {
-                method:'post',
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRFTOKEN": token
-                },
-                mode:'cors',
-                credentials:'include',
-                body: JSON.stringify(data) 
-            }).then((response) => console.log(response.status));
-        }); 
+        this.props.createSubmission(data, this.props.mission_id);
     }
     render() {
-        
-        let problem_data = this.props.data;
+        let problem_data = this.state.dataSource;
         // console.log(problem_data);
         let detail_data = {};
         let info_data = {};
         let envs = [];
         if (problem_data) {
             let problem = problem_data.problem;
-            let limitp = problem_data.problem.limit[this.state.limitKey];
-            let limit = [];
-            limit.push({
-                env_name: limitp.env_name,
-                length_limit: limitp.length_limit,
-                memory_limit: limitp.memory_limit,
-                time_limit: limitp.time_limit,
-            });
+            let limit = null;
+            if (problem_data.problem.limit.length) {
+                let limitp = problem_data.problem.limit[this.state.limitKey];
+                limit = {
+                    env_name: limitp.env_name,
+                    length_limit: limitp.length_limit,
+                    memory_limit: limitp.memory_limit,
+                    time_limit: limitp.time_limit,
+                }
+            };
 
-            for(let key in problem_data.problem.limit)
-            {
+            for(let key in problem_data.problem.limit){
                 envs.push(problem_data.problem.limit[key].env_name);
             }
 

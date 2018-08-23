@@ -12,6 +12,7 @@ import { BatchCreateStudentDrawer }  from './Form';
 import { RESOURCE, PERMISSION, has_permission } from '../../utils/config';
 import {simpleTime} from './../../utils/simpleTime';
 import { HeaderPage } from '../HeaderPage';
+import { callbackDecorator } from '../../utils/message';
 
 /**
  * @description 一个小按钮而已(添加按钮)
@@ -67,6 +68,7 @@ class StudentTable extends React.Component {
             filteredInfo: {},
             sortedInfo: {},
             batchCreateStudentDrawerVisible: false,
+            dataSource: []
         }
     }
     handleChange = (pagination, filters, sorter) => {
@@ -77,12 +79,19 @@ class StudentTable extends React.Component {
         });
     }
     componentDidMount() {
-        // this.props.RetrieveMissionStudent();
+        this.fetchDataSource();
+    }
+    fetchDataSource = () => {
+        this.props.listMissionStudent().then((data) => {
+            this.setState({
+                dataSource: data.results
+            });
+        });
     }
     render() {
         let { sortedInfo, filteredInfo } = this.state;
         
-        let {data} = this.props;
+        let {dataSource} = this.state;
         let columns = [{
             title: '用户名',
             dataIndex: 'username',
@@ -122,19 +131,18 @@ class StudentTable extends React.Component {
             render: (text, record, index)=>(
                 <DeleteItem 
                 // id={record.id} 
-                onSubmit={() => this.props.deleteMissionStudent(record.id)} />)
+                onSubmit={() => callbackDecorator(this.fetchDataSource)(this.props.deleteMissionStudent)(record.id)} />)
         }
             ];
         let createMission = <CreateMission onBatchCreate = {()=>{this.setState({batchCreateStudentDrawerVisible : true})}}/>;
-        console.log(data);
 
         return (
             <div  id="lesson-detail">
                 <HeaderPage {...this.props}/>
                 <Card id='lesson-detail-content' extra = {createMission}>
-                    <Table columns={columns} dataSource={data} onChange={this.handleChange} />
+                    <Table columns={columns} dataSource={dataSource} onChange={this.handleChange} />
                     <BatchCreateStudentDrawer visible = {this.state.batchCreateStudentDrawerVisible}
-                        onSubmit={(data) => this.props.createMission(data, this.props.mission_group_id)}
+                        onSubmit={(data) => callbackDecorator(this.fetchDataSource)(this.props.createMissionStudent)(data, this.props.mission_group_id)}
                         onClose = {() => {this.setState({batchCreateStudentDrawerVisible : false})}} />
                 </Card>
             </div>

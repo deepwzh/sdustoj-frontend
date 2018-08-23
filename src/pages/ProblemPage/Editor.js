@@ -74,7 +74,6 @@ class Editor extends React.Component {
             // editorDidMount={this.editorDidMount}
           />
           <Button type="primary" onClick={() => {
-            alert(this.state.code);
             this.props.submit(this.state.code);
             }
           }>提交</Button>

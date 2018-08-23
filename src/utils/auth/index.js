@@ -1,4 +1,5 @@
 import { API, getAPIUrl } from '../config';
+import { error, success } from '../message';
 // let localStorage; 
 
 // // If we're testing, use a local storage polyfill
@@ -14,14 +15,13 @@ const auth = {
     * @param  {string} username The username of the user
     * @param  {string} password The password of the user
     */
-    login (username, password) {
+    login: (username, password) => {
       if (auth.loggedIn()) return Promise.resolve(true)
       let url = getAPIUrl(API.LOGIN);
       let option = {
         method: 'post',
         mode:'cors',
         headers: {
-          // 'X-CSRFTOKEN': token,
           "Content-Type": "application/json" 
         },
         credentials:'include',
@@ -31,12 +31,15 @@ const auth = {
       return fetch(url, option)
         .then((response) => {
             if(response.status == 200) {
+              
               response.json().then(json_data => {
                 localStorage.setItem('username', json_data.username);
                 localStorage.setItem('role', json_data.role);
+                success('登录成功');
               });
               return Promise.resolve(true)
             } else if (response.status == 403){
+              error('用户名或密码错误');
               throw {message: "认证失败！"};
               return Promise.reject(false);
             } else if (response.status >= 500 ){

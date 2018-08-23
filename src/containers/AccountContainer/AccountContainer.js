@@ -3,6 +3,7 @@ import { ProfilePage, ModifyPasswordPage } from '../../pages/AccountPage';
 import { setSiderbarDataSource } from '../../actions';
 import { connect } from 'react-redux';
 import { getAPIUrl, API } from '../../utils/config';
+import { infoRequest } from '../../utils/message';
 class AccountContainer extends React.Component {
     state = {
         data: {}
@@ -21,50 +22,49 @@ class AccountContainer extends React.Component {
     componentDidMount() {
         this.props.setSiderbarDataSource(this.props.siderbar);
     }
-    getProfileData = () => {
-        let url = getAPIUrl(API.ACCOUNT_PROFILE);
-        fetch(url, {
+    getProfileData = infoRequest({
+        loading_text: '正在获取个人信息',
+        callback: (data) => {
+            this.setState({
+                data: data
+            })
+        }
+    })(() => {
+        const url = getAPIUrl(API.ACCOUNT_PROFILE);
+        const config = {
             method: 'get',
-            credentials: 'include'  
-        }).then(res => res.json()).then((res)=> this.setState({data: res}));
-    }
-    modifyUserPassword = (data) => {
-        let url = getAPIUrl(API.ACCOUNT_PASSWORD);
-        fetch(url, {
+
+        }
+        return fetch(url, config);
+    })
+    modifyUserPassword = infoRequest({
+        loading_text: '正在修改密码',
+        success_text: '修改成功'
+    })((data) => {
+        const url = getAPIUrl(API.ACCOUNT_PASSWORD);
+        const config = {
             method: 'put',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(data)
-            // credentials: 'include'  
-        }).then(res => {
-            if (res.status >= 200 && res.status < 300) {
-                alert("更新成功");
-            } else if(res.status >= 400 && res.status < 500) {
-                alert("客户端错误");
-            } else {
-                alert("服务器端错误");
-            }
-        });
-    }
-    updateProfileData = (data) => {
-        let url = getAPIUrl(API.ACCOUNT_PROFILE);
-        fetch(url, {
+        }
+        return fetch(url, config);
+    })
+    updateProfileData = infoRequest({
+        loading_text: '正在更新个人信息',
+        success_text: '更新成功'
+    })((data) => {
+        const url = getAPIUrl(API.ACCOUNT_PROFILE);
+        const config = {
             headers: {
                 "Content-Type": "application/json" 
             },
             method: 'PATCH',
             body: JSON.stringify(data)
-        }).then(res => {
-            if (res.status >= 200 && res.status < 300) {
-                res.json().then((res) => this.setState({data: res}))
-            } else if (res.status >= 400 && res.status < 500) {
-                alert("客户端错误");
-            } else if (res.status >= 500 && res.status < 600) {
-                alert("服务器端错误");
-            }
-        });
-    }
+        }
+        return fetch(url, config);
+    })
     render() {
         let { hash } = this.props;
         if (hash.startsWith('#password')) {
@@ -76,9 +76,9 @@ class AccountContainer extends React.Component {
         }
         return (
             <ProfilePage 
-            onSubmit={this.updateProfileData}
+            updateProfileData={this.updateProfileData}
             getProfileData={this.getProfileData}
-            data = {this.state.data}
+            data={this.state.data}
             />
         );
     }

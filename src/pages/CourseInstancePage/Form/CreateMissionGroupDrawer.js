@@ -20,12 +20,12 @@ class DrawerForm extends React.Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
         if (!err) {
-          values = {...values, start_time: values.start_time[0], end_time: values.start_time[1]};
+          // values = {...values, start_time: values.start_time[0], end_time: values.start_time[1]};
           console.log('Received values of form: ', JSON.stringify(values));
           if (this.props.data) {
-            this.props.onUpdate(JSON.stringify(values));
+            this.props.onUpdate(values).then(() => this.props.onClose());
           } else {
-            this.props.onCreate(JSON.stringify(values));
+            this.props.onCreate(values).then(() => this.props.onClose());
           }
         }
 
@@ -60,7 +60,7 @@ class DrawerForm extends React.Component {
           <Form  onSubmit={this.handleSubmit} layout="vertical" hideRequiredMark>
             <Row gutter={16}>
               <Col span={12}>
-                <Form.Item label="任务名称">
+                <Form.Item label="任务组名称">
                   {getFieldDecorator('caption', {
                     rules: [{ required: true, message: 'please enter user name' }],
                   })(<Input placeholder="请输入任务名称" />)}
@@ -83,6 +83,7 @@ class DrawerForm extends React.Component {
               <Col span={12}>
                 <Form.Item label="可用">
                   {getFieldDecorator('available', {
+                    initialValue: "true",
                     rules: [{ required: true, message: 'Please select an owner' }],
                   })(
                     <Select placeholder="请选择是否可用" defaultValue="true">
@@ -95,6 +96,7 @@ class DrawerForm extends React.Component {
               <Col span={12}>
                 <Form.Item label="废弃">
                   {getFieldDecorator('deleted', {
+                    initialValue: "false",
                     rules: [{ required: true, message: 'Please choose the type' }],
                   })(
                     <Select placeholder="请选择是否废弃"  defaultValue="false">
@@ -106,39 +108,12 @@ class DrawerForm extends React.Component {
               </Col>
             </Row>
             <Row gutter={16}>
-              <Col span={12}>
-                <Form.Item label="模式">
-                  {getFieldDecorator('mode', {
-                    rules: [{ required: true, message: '请选择模式' }],
-                  })(
-                    <Select placeholder="请选择模式" defaultValue="ACM">
-                      <Option value="ACM">ACM</Option>
-                    </Select>
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item label="起止时间">
-                  {getFieldDecorator('start_time', {
-                    rules: [{ required: true, message: '请选择任务的起止时间' }],
-                  })(
-                    <DatePicker.RangePicker
-                      showTime={{ format: 'HH:mm' }}
-                      format="YYYY-MM-DD HH:mm"
-                      style={{ width: '100%' }}
-                      getPopupContainer={trigger => trigger.parentNode}
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={16}>
               <Col span={24}>
-                <Form.Item label="任务介绍">
+                <Form.Item label="任务组介绍">
                   {getFieldDecorator('introduction', {
                     rules: [
                       {
-                        required: true,
+                        required: false,
                         message: 'please enter url description',
                       },
                     ],
@@ -192,15 +167,14 @@ const CreateMissionDrawer = Form.create({
         if (!data) {
           return {};
         }
-        const {caption, introduction, weight, start_time, end_time, mode, available, deleted} = data;
+        const {caption, introduction, weight,  available, deleted} = data;
         return {
+            caption: Form.createFormField({value: caption}),
             weight: Form.createFormField({value: weight}),
             available: Form.createFormField({value: available + ""}),
             deleted: Form.createFormField({value: deleted + ""}),
-            caption: Form.createFormField({value: caption}),
             introduction: Form.createFormField({value: introduction }),
-            mode: Form.createFormField({value: mode}),
-            start_time: Form.createFormField({value: [moment(start_time), moment(end_time)]}),
+
         };
   }}
 )(DrawerForm);

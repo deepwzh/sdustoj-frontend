@@ -6,6 +6,7 @@ import SubmissionInstancePage from "../../pages/MissionInstancePage/SubmissionIn
 import { connect } from 'react-redux';
 import { getAPIUrl, API, ROLE, PERMISSION_TABLE, PERMISSION} from "../../utils/config";
 import { setSiderbarDataSource } from '../../actions';
+import { infoRequest } from "../../utils/message";
 class MissionInstanceContainer extends React.Component {
     constructor(props) {
         super(props);
@@ -14,6 +15,7 @@ class MissionInstanceContainer extends React.Component {
             submission: [],
             last_mission_group_id: 0,
             last_hash: '',
+            problem_id: null,
             problem_detail_data: null,
             available_problem_data: null,
             problem_prev_data: null,
@@ -40,151 +42,62 @@ class MissionInstanceContainer extends React.Component {
         }]
     }
     componentDidMount() {
+        // this.setProblemId(this.props.hash);
         this.props.setSiderbarDataSource(this.props.siderbar);
-        this.get_instance(this.props.mission_id);
-        this.get_problem(this.props.mission_id);
-        // alert("Hello World");
-        // this.fetchCourseList();
+        this.listMissionProblem(this.props.mission_id);
+        this.retrieveMission(this.props.mission_id);
+        // this.get_instance(this.props.mission_id);
+        // this.get_problem(this.props.mission_id);
     }
-    delete_mission_problem = (mission_id, problem_id) => {
-        let url = getAPIUrl(API.DELETE_MISSION_PROBLEM_INSTANCE(mission_id, problem_id));
-        let option = {
-            method: 'delete',
-            mode:'cors',
-            headers: {
-              // 'X-CSRFTOKEN': token,
-              "Content-Type": "application/json" 
-            },
-            credentials:'include',
-          };
-          // Post a fake request
-          return fetch(url, option)
-            .then((response) => {
-                if(response.status >= 201 && response.status < 300) {
-                  // localStorage.sessionid = response.token;
-                  alert("删除成功");
-                } else if (response.status >= 400 && response.status < 500){
-                  alert("客户端错误");
-                  // throw {message: "认证失败！"};
-                  // return Promise.reject(false);
-                } else if (response.status >= 500 ){
-                    alert("服务器端错误");
-                  // throw {message: "服务器错误！"};
-                  // // return Promise.reject(false);
-                }
-            })
-          .catch((err) => alert(err));
+    componentWillReceiveProps(newProps) {
+        // let new_hash = newProps.hash;
+        // let old_hash = this.props.hash;
+        // if (new_hash != old_hash) {
+        //     this.setProblemId(new_hash);
+        // }
     }
-    create_mission_problem = (mission_id, problem_id) => {
-        let url = getAPIUrl(API.CREATE_MISSION_PROBLEM_INSTANCE(mission_id));
-        let option = {
-            method: 'post',
-            mode:'cors',
-            headers: {
-              // 'X-CSRFTOKEN': token,
-              "Content-Type": "application/json" 
-            },
-            credentials:'include',
-            body: JSON.stringify({'problem': problem_id}),
-          };
-          // Post a fake request
-          return fetch(url, option)
-            .then((response) => {
-                if(response.status >= 201 && response.status < 300) {
-                  // localStorage.sessionid = response.token;
-                  alert("添加成功");
-                } else if (response.status >= 400 && response.status < 500){
-                  alert("客户端错误");
-                  // throw {message: "认证失败！"};
-                  // return Promise.reject(false);
-                } else if (response.status >= 500 ){
-                    alert("服务器端错误");
-                  // throw {message: "服务器错误！"};
-                  // // return Promise.reject(false);
-                }
-            })
-          .catch((err) => alert(err));
-    }
-    update_mission_problem = (mission_id, problem_id, data) => {
-        let url = getAPIUrl(API.PROBLEM_INSTANCE(mission_id, problem_id));
-        let option = {
-            method: 'put',
-            mode:'cors',
-            headers: {
-              // 'X-CSRFTOKEN': token,
-              "Content-Type": "application/json" 
-            },
-            credentials:'include',
-            body: JSON.stringify(data),
-          };
-          // Post a fake request
-          return fetch(url, option)
-            .then((response) => {
-                if(response.status >= 200 && response.status < 300) {
-                  // localStorage.sessionid = response.token;
-                  alert("修改成功");
-                } else if (response.status >= 400 && response.status < 500){
-                  alert("客户端错误");
-                  // throw {message: "认证失败！"};
-                  // return Promise.reject(false);
-                } else if (response.status >= 500 ){
-                    alert("服务器端错误");
-                  // throw {message: "服务器错误！"};
-                  // // return Promise.reject(false);
-                }
-            })
-          .catch((err) => alert(err));
-    }
-    // fetchCourseList = () => {
-    //     this.props.getCourseList();
-    // }
-    // _convert_mission_group_data = (v) => {
-    //     let data = [];
-    //     v.results.map((item, key) => {
-    //         data.push({mission_group_id: item.id, title: item.caption})
-    //         // console.log(data);
-    //     })
-    //     return data;
-    // }
     /**
      * 获取提交列表
      * @param mission_id 任务ID
      */
-    get_submission_list = (mission_id) => {
-        let url = getAPIUrl(API.SUBMISSION_LIST(mission_id));
-        fetch(url, {
+    listSubmissionList = infoRequest({
+        loading_text: '正在获取提交记录',
+    })((mission_id) => {
+        const url = getAPIUrl(API.SUBMISSION_LIST(mission_id));
+        const config = {
             method: 'get',
-            mode:'cors',
-            credentials: 'include',
-            headers: {  
-                // "X-CSRFTOKEN": Cookie.get('csrftoken')             
-            }
-        }).then((response) => response.json()).then((data) => this.setState({data: data.results}))
-    }
-    get_available_problem = (mission_id) => {
-        let url = getAPIUrl(API.AVAILABLE_PROBLEM(mission_id));
-        fetch(url, {
+        }
+        return fetch(url, config);
+    })
+
+    createSubmission = infoRequest({
+        loading_text: '正在提交',
+        success_text: '提交成功',
+    })((data, mission_id)=> {
+        const url = getAPIUrl(API.SUBMISSION_LIST(mission_id));
+        const config = {
+            method:'post',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data) 
+        };
+        return fetch(url, config);
+    });
+    
+    // ####################################### Problem START
+    retrieveAvailableProblem = infoRequest({
+        loading_text: '正在获取题库信息'
+    })((mission_id) => {
+        const url = getAPIUrl(API.AVAILABLE_PROBLEM(mission_id));
+        const config = {
             method: 'get',
-            credentials: 'include'  
-        }).then(res => res.json()).then((res)=> this.setState({available_problem_data: res.results}));
-    }
-    /**
-     * 获取指定id的题目信息
-     */
-    get_problem_instance = (mission_id, problem_id) => {
-        let url = getAPIUrl(API.PROBLEM_INSTANCE(mission_id, problem_id));
-        fetch(url, {
-            method: 'get',
-            credentials: 'include'  
-        }).then(res => res.json()).then((res)=> this.setState({problem_detail_data: res}));
-    }
-    get_problem = (mission_id) => {
-        let url = getAPIUrl(API.PROBLEM_LIST(mission_id));
-        fetch(url, {
-            method: 'get',
-            credentials: 'include'    
-        }).then(res => res.json())
-        .then((v)=> {
+        };
+        return fetch(url, config);
+    })
+    listMissionProblem = infoRequest({
+        loading_text: '正在获取题目列表',
+        callback: (v) =>{
             this.setState({
                 problem_data: v.results
             });
@@ -198,130 +111,181 @@ class MissionInstanceContainer extends React.Component {
             });
             this.props.siderbar[1].childrens = childrens;
             this.props.setSiderbarDataSource([...this.props.siderbar]);
-        });
-    }
-    get_instance = (mission_id) => {
-        let url = getAPIUrl(API.MISSION_INSTANCE(mission_id));
-        fetch(url, {
+        }
+    })((mission_id) => {
+        const url = getAPIUrl(API.PROBLEM_LIST(mission_id));
+        const config = {
             method: 'get',
-            credentials: 'include'  
-        }).then(res => res.json()).then((res)=> this.setState({introduction: res.introduction, caption: res.caption, start_time: res.start_time, end_time: res.end_time}));
-    }
-    get_mission = (mission_group_id) =>{
-        let url = getAPIUrl(API.MISSION_LIST(mission_group_id));
-        fetch(url, {
+        };
+        return fetch(url, config);
+    })
+    createMissionProblem = infoRequest({
+        loading_text: '正在创建题目',
+        success_text: '创建成功',
+    })((data, mission_id) => {
+        //{'problem': problem_id}
+        const url = getAPIUrl(API.CREATE_MISSION_PROBLEM_INSTANCE(mission_id));
+        const option = {
+            method: 'post',
+            headers: {
+              "Content-Type": "application/json" 
+            },
+            body: JSON.stringify(data),
+          };
+          return fetch(url, option);
+    })
+        /**
+     * 获取指定id的题目信息
+     */
+    retrieveMissionProblem = infoRequest({
+        loading_text: '正在获取题目信息',
+        default_value: null // 保证题目页面不出现异常
+    })((mission_id, problem_id) => {
+        const url = getAPIUrl(API.PROBLEM_INSTANCE(mission_id, problem_id));
+        const config = {
             method: 'get',
-            credentials: 'include'    
-        }).then(res => res.json()).then((res)=> this.setState({mission_data: res.results}));
-    }
-    deleteProblem = (mission_group_id, mission_id) => {
-        let url = getAPIUrl(API.DELETE_MISSION_INSTANCE(mission_group_id, mission_id));
-        fetch(url, {
-            method: 'delete',
-            credentials: 'include'    
-        }).then(response => {
-            if(response.status >= 201 && response.status < 300) {
-            alert("删除成功");
-          } else if (response.status >= 400 && response.status < 500){
-            alert("客户端错误");
-          } else if (response.status >= 500 ){
-              alert("服务器端错误");
-          }
-        }).catch((err) => alert(err));
-    }
-    createProblem = (data, mission_group_id) => {
-        let url = getAPIUrl(API.CREATE_MISSION_INSTANCE(mission_group_id));
+        }
+        return fetch(url, config);
+    })
+    updateMissionProblem = infoRequest({
+        loading_text: '正在更新题目信息',
+        success_text: '更新成功'
+    })((data, mission_id, problem_id) => {
+        let url = getAPIUrl(API.PROBLEM_INSTANCE(mission_id, problem_id));
         let option = {
+            method: 'put',
+            headers: {
+              "Content-Type": "application/json" 
+            },
+            body: JSON.stringify(data),
+          };
+          return fetch(url, option);
+    })
+    deleteMissionProblem = infoRequest({
+        loading_text: '正在删除题目',
+        success_text: '删除成功'
+    })((mission_id, problem_id) => {
+        let url = getAPIUrl(API.DELETE_MISSION_PROBLEM_INSTANCE(mission_id, problem_id));
+        let option = {
+            method: 'delete',
+            headers: {
+              "Content-Type": "application/json" 
+            },
+          };
+          return fetch(url, option);
+    })
+    
+    //################################ Problem End
+
+    //################################ Mission START
+    listMission = infoRequest({
+        loading_text: '正在获取任务列表',
+    })((mission_group_id) =>{
+        const url = getAPIUrl(API.MISSION_LIST(mission_group_id));
+        const config = {
+            method: 'get',
+        };
+        return fetch(url, config);
+    })
+    createMission = infoRequest({
+        loading_text: '正在创建任务',
+        success_text: '创建成功',
+    })((data, mission_group_id) => {
+        const url = getAPIUrl(API.CREATE_MISSION_INSTANCE(mission_group_id));
+        const option = {
           method: 'post',
-          mode:'cors',
           headers: {
-            // 'X-CSRFTOKEN': token,
             "Content-Type": "application/json" 
           },
-          credentials:'include',
           body: data,
         };
-        // Post a fake request
-        return fetch(url, option)
-          .then((response) => {
-              if(response.status >= 201 && response.status < 300) {
-                // localStorage.sessionid = response.token;
-                alert("添加成功");
-              } else if (response.status >= 400 && response.status < 500){
-                alert("客户端错误");
-                // throw {message: "认证失败！"};
-                // return Promise.reject(false);
-              } else if (response.status >= 500 ){
-                  alert("服务器端错误");
-                // throw {message: "服务器错误！"};
-                // // return Promise.reject(false);
-              }
-          })
-        .catch((err) => alert(err));
-    }
-    
-    render() {
-        if (this.props.mission_group_id && this.state.last_mission_group_id !== this.props.mission_group_id) {
-            this.get_mission(this.props.mission_group_id);
+        return fetch(url, option);
+    })
+    retrieveMission = infoRequest({
+        loading_text: '正在获取任务',
+        callback: (data) => {
             this.setState({
-                last_mission_group_id: this.props.mission_group_id
-            });
+                caption: data.caption,
+                introduction: data.introduction,
+                start_time: data.start_time,
+                end_time: data.end_time
+            })
         }
+    })((mission_id) => {
+        let url = getAPIUrl(API.MISSION_INSTANCE(mission_id));
+        let config = {
+            method: 'get',
+        }
+        return fetch(url, config);
+    })
+    updateMission = infoRequest({
+        loading_text: '正在更新任务',
+        success_text: '更新成功'
+    })((mission_id) => {
+        let url = getAPIUrl(API.MISSION_INSTANCE(mission_id));
+        let config = {
+            method: 'PATCH',
+        }
+        return fetch(url, config);
+    })
+    deleteMission = infoRequest({
+        loading_text: '正在删除任务',
+        success_text: '删除成功',
+    })((mission_group_id, mission_id) => {
+        const url = getAPIUrl(API.DELETE_MISSION_INSTANCE(mission_group_id, mission_id));
+        const config = {
+            method: 'delete',
+        }
+        return fetch(url, config);
+    })
+
+
+    //################################ Mission END
+
+
+    render() {
         let {hash} = this.props;
         if (hash.startsWith("#problem/")) {
-            let problem_id = hash.split('/')[1];
-            if (this.state.last_hash !== hash) {
-                this.get_problem_instance(this.props.mission_id, problem_id);
-                this.setState({
-                    last_hash: hash
-                });
-            }
+            let {problem_id} = this.props;
             return (
-                <ProblemInstancePage  {...this.props}
-                introduction={this.state.introduction}
-                caption={this.state.caption}
-                start_time={this.state.start_time}
-                end_time={this.state.end_time}
-                data={this.state.problem_detail_data}
-                problem_id={problem_id}
+                <ProblemInstancePage 
+                    problem_id={problem_id}
+                    mission_id={this.props.mission_id}
+                    introduction={this.state.introduction}
+                    caption={this.state.caption}
+                    start_time={this.state.start_time}
+                    end_time={this.state.end_time}
+                    retrieveMissionProblem={this.retrieveMissionProblem}
+                    createSubmission={this.createSubmission}
                 />
             );
         } else if (hash.startsWith("#submission")) {
-            // let problem_id = hash.split('/')[1];
-            if (this.state.last_hash !== hash) {
-                this.get_submission_list(this.props.mission_id);
-                this.setState({
-                    last_hash: hash
-                });
-            }
             return (
-                <SubmissionInstancePage  {...this.props}
-                introduction={this.state.introduction}
-                caption={this.state.caption}
-                start_time={this.state.start_time}
-                end_time={this.state.end_time}
-                data={this.state.data}
-                get_submission_list={(mission_id) => this.get_submission_list(this.props.mission_id)}
+                <SubmissionInstancePage 
+                    mission_id = {this.props.mission_id}
+                    introduction={this.state.introduction}
+                    caption={this.state.caption}
+                    start_time={this.state.start_time}
+                    end_time={this.state.end_time}
+                    listSubmissionList={this.listSubmissionList}
                 />
             );
         } else if(hash.startsWith("#score")) {
             return <h1>hello world</h1>;
         } else {
             return (
-                <Page {...this.props} 
-                createProblem ={this.createProblem}
-                deleteProblem = {this.deleteProblem}
-                has_permission = {this.has_permission}
-                get_available_problem={this.get_available_problem}
-                create_mission_problem={this.create_mission_problem}
-                delete_mission_problem={this.delete_mission_problem}
-                update_mission_problem={this.update_mission_problem}
+                <Page
+                    mission_id={this.props.mission_id}
                     introduction={this.state.introduction}
                     caption={this.state.caption}
                     start_time={this.state.start_time}
                     end_time={this.state.end_time}
-                    data={this.state.problem_data}
-                    available_problem_data={this.state.available_problem_data} 
+                    has_permission = {this.has_permission}
+                    retrieveAvailableProblem={this.retrieveAvailableProblem}
+                    listMissionProblem={this.listMissionProblem}
+                    createMissionProblem={this.createMissionProblem}
+                    deleteMissionProblem={this.deleteMissionProblem}
+                    updateMissionProblem={this.updateMissionProblem}
                     />
             );
         }
@@ -335,14 +299,31 @@ const mapStateToProp = (state, ownProps) => {
     // console.log(state.router.location.hash);
     // console.log(state.router.location.search);
     // console.log(state.router.location.hash);
+    let problem_id = null;
+    const setProblemId = (hash) => {
+        function isNumber(v){
+            return (/^[0-9]+.?[0-9]*/).test(v);
+        }
+        if (hash.startsWith('#problem')) {
+            let tmp = hash.split('/');
+            if (tmp.length == 2) {
+                if (isNumber(tmp[1])) {
+                    problem_id = tmp[1];
+                }
+            }
+        }
+    }
+    let hash = state.router.location.hash;
+    setProblemId(state.router.location.hash)
     return {
         auth: state.auth,
         pathname: state.router.location.pathname,
         search: state.router.location.search,
-        hash: state.router.location.hash,
+        hash,
         course_id,
         mission_group_id,
-        mission_id
+        mission_id,
+        problem_id
         // data: state.course.courseList,
         // loading: state.course.loading,
         // error: state.course.error

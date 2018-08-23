@@ -60,7 +60,7 @@ class DrawerForm extends React.Component {
           }
           console.log("submiting problem ids " + problems_id);
           problems_id.forEach(
-            (problem_id) => this.props.create_mission_problem(problem_id)
+            (problem_id) => this.props.onCreate({ problem: problem_id})
           );
          // this.props.onSubmit(JSON.stringify(values));
         }

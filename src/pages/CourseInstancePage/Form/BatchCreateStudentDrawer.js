@@ -23,19 +23,8 @@ class DrawerForm extends React.Component {
         if (!err) {
           console.log('Received values of form: ', JSON.stringify(values));
           let data = studentDataParserFromCsv(values.data);
-          alert(data);
-          this.props.onSubmit(JSON.stringify(data));
+          this.props.onSubmit(data).then(() => this.props.onClose());
         }
-
-        // this.props.login(values.username, values.password);
-        // let token_req  = this.get_token(); //获取token
-        // let login_req = this.login("token", values);
-        // login_req.then(
-        //   (data) => 
-        //     this.props.history.push(this.props.redirect)
-        // )
-        // .catch((err)=> alert(err)); //请求成功，调用login
-        // values;
     });
 }
   render() {
@@ -74,9 +63,10 @@ class DrawerForm extends React.Component {
               <Col span={12}>
                 <Form.Item label="需要添加的数据">
                   {getFieldDecorator('data', {
+                    initialValue: "201601060928  wzh\n201601060928 wzh",
                     rules: [{ required: true, message: '请输入数据' }],
-                  })(<TextArea rows={6} placeholder="201601060928 \
-                        201601060928 魏仲华"
+                  })(<TextArea rows={6} placeholder="请输入学生信息                
+                  "
                         // value={this.state.data}
                         onChange={(e)=>this.setState({
                           data:  studentDataParserFromCsv(e.target.value)

@@ -5,6 +5,7 @@ import Table from '../../components/Table';
 import { DrawerForm }  from './Form';
 import { RESOURCE, PERMISSION, has_permission } from '../../utils/config';
 import { CreateDrawerForm, UpdateDrawerForm }  from './Form';
+import { callbackDecorator } from '../../utils/message';
 
 
 /**
@@ -26,23 +27,18 @@ class DeleteItem extends React.Component {
     constructor(props) {
         super(props);
     }
-    
     confirm = (e)=> {
         console.log(e);
-        let {mission_group_id, mission_id} = this.props;
-        this.props.delete_mission_problem(this.props.id);
-        // message.success('删除成功');
+        this.props.onDelete();
     }
-    
     cancel = (e)=> {
         console.log(e);
         message.error('取消成功');
     }
-    
-    render() {  //TODO: 这个地方需要修改，原因是 现在还没有按钮动作 甚至更换按钮
+    render() {
         return (
           <Popconfirm title="确定要删除该项?" onConfirm={this.confirm} onCancel={this.cancel} okText="Yes" cancelText="No">
-           <Button>Delete</Button>
+           <Button>删除</Button>
           </Popconfirm>
         )
     }
@@ -57,11 +53,20 @@ class MissionGroupPage extends React.Component {
             createProblemFlag: false,
             filteredInfo: {},
             sortedInfo: {},
+            dataSource: [],
+            available_problem_data: []
             // data: []
         }
     }
+    fetchDataSource = () => {
+        this.props.listMissionProblem(this.props.mission_id).then(data => {
+            this.setState({
+                dataSource: data.results
+            });
+        });
+    }
     componentDidMount() {
-        // console.log("component lalallalalalla");
+        this.fetchDataSource();
     }
     componentWillReceiveProps(newProps) {
         // this.setState({
@@ -99,7 +104,7 @@ class MissionGroupPage extends React.Component {
     render() {
 
         let { sortedInfo, filteredInfo } = this.state;
-        let {data} = this.props;
+        let {dataSource} = this.state;
         let columns = [
             // {
             //     title: '状态',
@@ -126,7 +131,7 @@ class MissionGroupPage extends React.Component {
             render: (text, record, index) => {
               console.log(record);
                 
-              let to = this.props.location.pathname + "/#problem/" + record.id;
+              let to = this.props.location.pathname + "#problem/" + record.id;
               return <Link to={to} >{text}</Link>
             }
           }, {
@@ -144,20 +149,14 @@ class MissionGroupPage extends React.Component {
           }
         ];
         let createProblem = null;
-        if(has_permission(RESOURCE.PROBLEM, PERMISSION.UPDATE))   { // 如果可写，添加删除列项描述， 并在每条数据后加一个可编辑项
+        if(has_permission(RESOURCE.PROBLEM, PERMISSION.UPDATE))   { 
             columns.push(
                 {
-                    title: '权重',      // 名叫删除，索引编辑 cool :)
+                    title: '权重',     
                     dataIndex: 'weight',
                     key: 'weight',
                 }
             );
-            data = data.map(
-                (ele) => {
-                    return Object.assign({}, ele, {edit : true});
-                  }
-            );
-            console.log(data);
         }
         if(has_permission(RESOURCE.PROBLEM, PERMISSION.UPDATE))   { // 如果可写，添加删除列项描述， 并在每条数据后加一个可编辑项
             columns.push(
@@ -173,12 +172,11 @@ class MissionGroupPage extends React.Component {
                     )
                 }
             );
-            data = data.map(
+            dataSource = dataSource.map(
                 (ele) => {
                     return Object.assign({}, ele, {edit : true});
                   }
             );
-            console.log(data);
         }
         if(has_permission(RESOURCE.PROBLEM, PERMISSION.DELETE))   { // 如果可写，添加删除列项描述， 并在每条数据后加一个可编辑项
             columns.push(
@@ -188,18 +186,15 @@ class MissionGroupPage extends React.Component {
                     key: 'delete',
                     render: (text, record, index)=>(
                         <DeleteItem 
-                        mission_id={record.id} 
-                        id={record.id}
-                        delete_mission_problem={(problem_id) => this.props.delete_mission_problem(this.props.mission_id, problem_id)}
+                            onDelete={() =>  callbackDecorator(this.fetchDataSource)(this.props.deleteMissionProblem)(this.props.mission_id, record.id)}
                          />)
                 }
             );
-            data = data.map(
+            dataSource = dataSource.map(
                 (ele) => {
                     return Object.assign({}, ele, {edit : true});
                   }
             );
-            console.log(data);
         }
 
         if (has_permission(RESOURCE.PROBLEM, PERMISSION.CREATE)) {
@@ -207,24 +202,28 @@ class MissionGroupPage extends React.Component {
             onCreate = {
                 () => {
                     this.setState({createProblemFlag : true});
-                    this.props.get_available_problem(this.props.mission_id);
+                    this.props.retrieveAvailableProblem(this.props.mission_id)
+                        .then((res) => {
+                            this.setState({
+                                available_problem_data: res.results
+                            })
+                        })
                 }
             }/>
         }
         return (
             <Card extra = {createProblem}>
-                <Table columns={columns} dataSource={data} onChange={this.handleChange} />
+                <Table columns={columns} dataSource={dataSource} onChange={this.handleChange} />
                 <CreateDrawerForm 
                     visible = {this.state.createProblemFlag}
-                    data={this.props.available_problem_data}
-                    create_mission_problem={(problem_id) => this.props.create_mission_problem(this.props.mission_id, problem_id)}
-                    selectedData={data}
-                    onSubmit={(data) => this.props.createMission(data, this.props.mission_group_id)}
+                    data={this.state.available_problem_data}
+                    onCreate={(data) => callbackDecorator(this.fetchDataSource)(this.props.createMissionProblem)(data, this.props.mission_id)}
+                    selectedData={dataSource}
                     onClose = {() => {this.setState({createProblemFlag : false})}} />
                 <UpdateDrawerForm
                     visible = {this.state.updateDrawerFormVisible}
                     data = {this.state.editing_record}
-                    onSubmit={(data) => this.props.update_mission_problem(this.props.mission_id, this.state.editing_record.id, data)}
+                    onSubmit={(data) => callbackDecorator(this.fetchDataSource)(this.props.updateMissionProblem)(data, this.props.mission_id, this.state.editing_record.id)}
                     onClose = {() => {this.setState({ updateDrawerFormVisible: false})}} />
             </Card>
         );

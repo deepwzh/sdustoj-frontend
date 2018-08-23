@@ -45,7 +45,7 @@ class DrawerForm extends React.Component {
     return (
       <div>
         <Drawer
-          title="新建任务"
+          title="新建课程"
           width={720}
           placement="right"
           onClose={this.props.onClose}
@@ -60,22 +60,10 @@ class DrawerForm extends React.Component {
           <Form  onSubmit={this.handleSubmit} layout="vertical" hideRequiredMark>
             <Row gutter={16}>
               <Col span={12}>
-                <Form.Item label="任务名称">
+                <Form.Item label="课程名称">
                   {getFieldDecorator('caption', {
                     rules: [{ required: true, message: 'please enter user name' }],
                   })(<Input placeholder="请输入任务名称" />)}
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item label="权重">
-                  {getFieldDecorator('weight', {
-                    rules: [{ required: true, message: 'please enter url' }],
-                  })(
-                    <Input
-                      style={{ width: '100%' }}
-                      placeholder="请输入权重"
-                    />
-                  )}
                 </Form.Item>
               </Col>
             </Row>
@@ -109,17 +97,6 @@ class DrawerForm extends React.Component {
             </Row>
             <Row gutter={16}>
               <Col span={12}>
-                <Form.Item label="模式">
-                  {getFieldDecorator('mode', {
-                    rules: [{ required: true, message: '请选择模式' }],
-                  })(
-                    <Select placeholder="请选择模式" defaultValue="ACM">
-                      <Option value="ACM">ACM</Option>
-                    </Select>
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={12}>
                 <Form.Item label="起止时间">
                   {getFieldDecorator('start_time', {
                     rules: [{ required: true, message: '请选择任务的起止时间' }],
@@ -136,7 +113,7 @@ class DrawerForm extends React.Component {
             </Row>
             <Row gutter={16}>
               <Col span={24}>
-                <Form.Item label="任务介绍">
+                <Form.Item label="课程介绍">
                   {getFieldDecorator('introduction', {
                     rules: [
                       {
@@ -196,12 +173,10 @@ const CreateMissionDrawer = Form.create({
         }
         const {caption, introduction, weight, start_time, end_time, mode, available, deleted} = data;
         return {
-            weight: Form.createFormField({value: weight}),
             available: Form.createFormField({value: available + ""}),
             deleted: Form.createFormField({value: deleted + ""}),
             caption: Form.createFormField({value: caption}),
             introduction: Form.createFormField({value: introduction }),
-            mode: Form.createFormField({value: mode}),
             start_time: Form.createFormField({value: [moment(start_time), moment(end_time)]}),
         };
   }}

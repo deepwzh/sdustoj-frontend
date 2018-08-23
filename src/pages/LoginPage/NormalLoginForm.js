@@ -31,7 +31,6 @@ class NormalLoginForm extends React.Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
         if (!err) {
-        console.log('Received values of form: ', values);
         }
         this.props.login(values.username, values.password);
         // let token_req  = this.get_token(); //获取token
@@ -74,7 +73,6 @@ class NormalLoginForm extends React.Component {
           <Button type="primary" htmlType="submit" className="login-form-button">
             登录
           </Button>
-          Or <a href="">现在注册</a>
         </FormItem>
       </Form>
     );

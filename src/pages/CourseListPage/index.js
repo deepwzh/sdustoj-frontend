@@ -31,7 +31,7 @@ class LessonPage extends React.Component {
     render() {
         // this.showLoadingTip();
         return (
-            <Table title={this.props.auth.role === ROLE.TEACHER?"我教授的课程": "我学习的课程"} data={this.props.data} error={this.props.error} loading={this.props.loading} />
+            <Table {...this.props} title={this.props.auth.role === ROLE.TEACHER?"我教授的课程": "我学习的课程"} data={this.props.data} error={this.props.error} loading={this.props.loading} />
         );
     }
 }

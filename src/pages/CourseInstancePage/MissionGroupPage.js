@@ -7,6 +7,7 @@ import { CreateMissionDrawer }  from './Form';
 import { HeaderPage } from '../HeaderPage';
 import { RESOURCE, PERMISSION, has_permission } from '../../utils/config';
 import { getFormattedTime } from '../../utils/common';
+import { callbackDecorator } from '../../utils/message';
 
 /**
  * @description 一个小按钮而已(添加按钮)
@@ -30,8 +31,7 @@ class DeleteItem extends React.Component {
     
     confirm = (e)=> {
         console.log(e);
-        let {mission_group_id, mission_id} = this.props;
-        this.props.deleteMission(mission_group_id, mission_id);
+        this.props.onDelete();
         // message.success('删除成功');
     }
     
@@ -43,7 +43,7 @@ class DeleteItem extends React.Component {
     render() {  //TODO: 这个地方需要修改，原因是 现在还没有按钮动作 甚至更换按钮
         return (
           <Popconfirm title="确定要删除该项?" onConfirm={this.confirm} onCancel={this.cancel} okText="Yes" cancelText="No">
-           <Button>Delete</Button>
+           <Button>删除</Button>
           </Popconfirm>
         )
     }
@@ -55,9 +55,38 @@ class MissionGroupPage extends React.Component {
         super(props);
         this.state = {
             createMissionFlag: false,
+            createMissionGroupFlag: false,
             filteredInfo: {},
             sortedInfo: {},
             editing_record: null,
+            dataSource: []
+        }
+    }
+    componentDidMount() {
+        this.fetchDataSource();
+    }
+    componentWillReceiveProps(newProps) {
+        this.fetchDataSource({mission_group_id: newProps.mission_group_id});
+    }
+    fetchDataSource = (data) => {
+        let { mission_group_id } = data || {};
+        mission_group_id = mission_group_id || this.props.mission_group_id;
+        if (!mission_group_id) return;
+        if (mission_group_id == '0') {
+            this.props.listRunningMission()
+            .then(data => 
+                this.setState({
+                    dataSource: data.results
+                })
+            ); 
+        } else {
+            this.props.listMission(mission_group_id)
+                .then(data => 
+                    this.setState({
+                        dataSource: data.results
+                    })
+                ); 
+
         }
     }
     handleChange = (pagination, filters, sorter) => {
@@ -70,7 +99,7 @@ class MissionGroupPage extends React.Component {
     render() {
         let { sortedInfo, filteredInfo } = this.state;
         
-        let {data} = this.props;
+        let {dataSource} = this.state;
         let columns = [{
             title: '任务ID',
             dataIndex: 'id',
@@ -139,12 +168,11 @@ class MissionGroupPage extends React.Component {
                     )
                 }
             );
-            data = data.map(
+            dataSource = dataSource.map(
                 (ele) => {
                     return Object.assign({}, ele, {edit : true});
                   }
             );
-            console.log(data);
         }
         let createMission = null;
         
@@ -156,29 +184,26 @@ class MissionGroupPage extends React.Component {
                     key: 'delete',
                     render: (text, record, index)=>(
                         <DeleteItem 
-                        mission_id={record.id} 
-                        mission_group_id={this.props.mission_group_id}
-                        deleteMission={this.props.deleteMission}
+                            onDelete={() => callbackDecorator(this.props.deleteMission)((record.id, this.props.mission_group_id))}
                          />)
                 }
             );
-            data = data.map(
+            dataSource = dataSource.map(
                 (ele) => {
-                    return Object.assign({}, ele, {edit : true});
+                    return Object.assign({}, ele, {delete : true});
                   }
             );
-            console.log(data);
         }
         if (has_permission(RESOURCE.MISSION, PERMISSION.CREATE)) {
             createMission = <CreateMission onCreate = {()=>{this.setState({createMissionFlag : true, editing_record: null})}}/>
         }
         return (
             <Card extra = {createMission}>
-                <Table columns={columns} dataSource={data} onChange={this.handleChange} />
+                <Table columns={columns} dataSource={dataSource} onChange={this.handleChange} />
                 <CreateMissionDrawer visible = {this.state.createMissionFlag}
                     data={this.state.editing_record}
-                    onCreate={(data) => this.props.createMission(data, this.props.mission_group_id)}
-                    onUpdate={(data) => this.props.updateMission(data, this.props.mission_group_id, this.state.editing_record.id)}
+                    onCreate={(data) => callbackDecorator(this.fetchDataSource)(this.props.createMission)(data, this.props.mission_group_id)}
+                    onUpdate={(data) => callbackDecorator(this.fetchDataSource)(this.props.updateMission)(data, this.props.mission_group_id, this.state.editing_record.id)}
                     onClose = {() => {this.setState({createMissionFlag : false})}} />
             </Card>
         );

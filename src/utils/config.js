@@ -9,15 +9,16 @@ if (DEBUG) {
 
 const API = {
     LOGIN: '/api/login/',
+    LOGOUT: '/api/logout',
     ACCOUNT_PROFILE: '/api/account/profile/',
     ACCOUNT_PASSWORD: '/api/account/password/',
     LEARNING_COURSES_LIST: '/api/learning-courses/',
 
     TEACHING_COURSES_LIST: '/api/teaching-courses/',
     COURSE_INSTANCE: (course_id) => `/api/courses/${course_id}/`,
-    
+    COURSE_LIST: (course_meta_id) => `/api/course-metas/${course_meta_id}/courses/`,
     MISSION_GROUP_LIST: (course_id) => `/api/courses/${course_id}/mission-groups/`,
-    MISSION_GROUP_INSTANCE: (course_id, mission_group_id) => `/api/courses/${course_id}/mission-groups/${mission_group_id}/`,
+    MISSION_GROUP_INSTANCE: (mission_group_id) => `/api/mission-groups/${mission_group_id}/`,
 
     MISSION_LIST: (mission_group_id) => `/api/mission-groups/${mission_group_id}/missions/`,
     RUNNING_MISSION_LIST: (course_id) => `/api/courses/${course_id}/running-missions/`,
@@ -31,7 +32,7 @@ const API = {
     PROBLEM_INSTANCE: (mission_id, problem_id) => `/api/missions/${mission_id}/problems/${problem_id}/`,
     CREATE_MISSION_PROBLEM_INSTANCE: (mission_id) => `/api/missions/${mission_id}/problems/`,
     DELETE_MISSION_PROBLEM_INSTANCE: (mission_id, id) => `/api/missions/${mission_id}/problems/${id}/`,
-    SUBMISSION_LIST: (mission_id) => `/api/missions/${mission_id}/submissions/?limit=5`,
+    SUBMISSION_LIST: (mission_id) => `/api/missions/${mission_id}/submissions/`,
 
     AVAILABLE_PROBLEM: (mission_id) => `/api/missions/${mission_id}/available-problems/`,
     

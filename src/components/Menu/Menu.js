@@ -49,7 +49,7 @@ class Menu extends React.Component {
                     <AntdMenu.Item key={item.key}>{item.title}</AntdMenu.Item>
                     ))
                 }
-                <AccountDropdown auth={this.props.auth}/>
+                <AccountDropdown auth={this.props.auth} push={this.props.push}/>
             </AntdMenu>
         );
     }

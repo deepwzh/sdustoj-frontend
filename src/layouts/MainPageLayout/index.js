@@ -12,7 +12,7 @@ class Logo extends React.Component {
     render() {
         return (
             <div  className="logo">
-                <span>某管理平台</span>
+                <span>课程管理平台</span>
             </div>
         )
     }

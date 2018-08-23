@@ -39,7 +39,7 @@ class DrawerForm extends React.Component {
         if (!err) {
           // values = {...values, start_time: values.start_time[0], end_time: values.start_time[1]};
           // console.log('Received values of form: ', JSON.stringify(values));
-         this.props.onSubmit(values);
+         this.props.onSubmit(values).then(() => this.props.onClose());
         }
     });
     }
