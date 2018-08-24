@@ -6,7 +6,7 @@ import Page from "../../pages/CourseInstancePage";
 import { connect } from 'react-redux';
 import { getAPIUrl, API, ROLE, PERMISSION_TABLE, PERMISSION, has_permission, RESOURCE} from "../../utils/config";
 import { setSiderbarDataSource } from '../../actions';
-
+import CourseStudentPage from '../../pages/CourseInstancePage/CourseStudentPage';
 // 一个用以判断是否已经加载过的标记
 let isInitFlag = false;
 
@@ -17,6 +17,7 @@ class CourseInstanceContainer extends React.Component {
             mission_data: [],
             submission: [],
             last_mission_group_id: 0,
+            studentData: []
         };
        
     }
@@ -35,6 +36,7 @@ class CourseInstanceContainer extends React.Component {
     }
     componentDidMount() {
         this.props.setSiderbarDataSource(this.props.siderbar);
+        this.get_mission_student(this.props.course_id);
         this.get_instance(this.props.course_id);
         this.getSiderBarItems(this.props.course_id);
         // alert("Hello World");
@@ -76,7 +78,7 @@ class CourseInstanceContainer extends React.Component {
                 },{
                     key: '2',
                     title: '学生',
-                    target: `/course/${this.props.course_id}/student`,
+                    target: `/course/${this.props.course_id}#student`,
                 },{
                     key: '3',
                     title: '所在课程组',
@@ -123,6 +125,83 @@ class CourseInstanceContainer extends React.Component {
             method: 'get',
             credentials: 'include'    
         }).then(res => res.json()).then((res)=> this.setState({mission_data: res.results}));
+    }
+    get_mission_student = (course_id) => {
+        let url = getAPIUrl(API.MISSION_STUDENT_LIST(course_id));
+        let option = {
+          method: 'get',
+          mode:'cors',
+          headers: {
+            // 'X-CSRFTOKEN': token,
+            "Content-Type": "application/json" 
+          },
+          credentials:'include',
+        };
+        // Post a fake request
+        return fetch(url, option)
+          .then((response) => {
+              if(response.status >= 200 && response.status < 300) {
+                response.json().then((data) => {
+                    this.setState({
+                        studentData: data.results
+                    })
+                })
+              } else if (response.status >= 400 && response.status < 500){
+                alert("客户端错误");
+                // throw {message: "认证失败！"};
+                // return Promise.reject(false);
+              } else if (response.status >= 500 ){
+                  alert("服务器端错误");
+                // throw {message: "服务器错误！"};
+                // // return Promise.reject(false);
+              }
+          })
+        .catch((err) => alert(err));
+    }
+    add_mission_student = (course_id, data) => {
+        let url = getAPIUrl(API.MISSION_STUDENT_LIST(course_id));
+        let option = {
+          method: 'post',
+          mode:'cors',
+          headers: {
+            // 'X-CSRFTOKEN': token,
+            "Content-Type": "application/json" 
+          },
+          credentials:'include',
+          body: data,
+        };
+        // Post a fake request
+        return fetch(url, option)
+          .then((response) => {
+              if(response.status >= 201 && response.status < 300) {
+                // localStorage.sessionid = response.token;
+                alert("添加成功");
+              } else if (response.status >= 400 && response.status < 500){
+                alert("客户端错误");
+                // throw {message: "认证失败！"};
+                // return Promise.reject(false);
+              } else if (response.status >= 500 ){
+                  alert("服务器端错误");
+                // throw {message: "服务器错误！"};
+                // // return Promise.reject(false);
+              }
+          })
+        .catch((err) => alert(err));
+    }
+    delete_mission_student = (course_id, id) => {
+        let url = getAPIUrl(API.MISSION_STUDENT_INSTANCE(course_id, id));
+        fetch(url, {
+            method: 'delete',
+            credentials: 'include'    
+        }).then(response => {
+            if(response.status >= 200 && response.status < 300) {
+            alert("删除成功");
+          } else if (response.status >= 400 && response.status < 500){
+            alert("客户端错误");
+          } else if (response.status >= 500 ){
+              alert("服务器端错误");
+          }
+        }).catch((err) => alert(err));
     }
     deleteMission = (mission_group_id, mission_id) => {
         let url = getAPIUrl(API.DELETE_MISSION_INSTANCE(mission_group_id, mission_id));
@@ -176,11 +255,21 @@ class CourseInstanceContainer extends React.Component {
                 last_mission_group_id: this.props.mission_group_id
             });
         }
+        let {hash} = this.props;
+        if (hash.startsWith("#student")) {
+            return <CourseStudentPage
+                data={this.state.studentData}
+                introduction={this.state.introduction}
+                caption={this.state.caption}
+                createMissionStudent={(data) => this.add_mission_student(this.props.course_id, data)}
+                retrieveMissionStudent={() => this.get_mission_student(this.props.course_id)}
+                deleteMissionStudent={(id) => this.delete_mission_student(this.props.course_id, id)}
+                />
+        }
         return (
             <Page {...this.props} 
             createMission ={this.createMission}
             deleteMission = {this.deleteMission}
-            
              introduction={this.state.introduction}
              caption={this.state.caption}
              data={this.state.mission_data} 

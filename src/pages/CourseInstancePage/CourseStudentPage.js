@@ -8,9 +8,10 @@ import React from 'react';
 import { Button, Card, Popconfirm, message, Drawer, Form, } from 'antd';
 import { Link } from 'react-router-dom'; 
 import Table from '../../components/Table';
-import { DrawerForm }  from './Form';
+import { BatchCreateStudentDrawer }  from './Form';
 import { RESOURCE, PERMISSION, has_permission } from '../../utils/config';
 import {simpleTime} from './../../utils/simpleTime';
+import { HeaderPage } from '../HeaderPage';
 
 /**
  * @description 一个小按钮而已(添加按钮)
@@ -22,7 +23,7 @@ class CreateMission extends React.Component {
             <Button>
                 添加
             </Button>
-            <Button>
+            <Button onClick={this.props.onBatchCreate}>
                 批量添加
             </Button>
         </div>
@@ -39,8 +40,7 @@ class DeleteItem extends React.Component {
     
     confirm = (e)=> {
         console.log(e);
-        let {mission_group_id, mission_id} = this.props;
-        this.props.deleteMission(mission_group_id, mission_id);
+        this.props.onSubmit();
         // message.success('删除成功');
     }
     
@@ -66,6 +66,7 @@ class StudentTable extends React.Component {
             createMissionFlag: false,
             filteredInfo: {},
             sortedInfo: {},
+            batchCreateStudentDrawerVisible: false,
         }
     }
     handleChange = (pagination, filters, sorter) => {
@@ -74,6 +75,9 @@ class StudentTable extends React.Component {
           filteredInfo: filters,
           sortedInfo: sorter,
         });
+    }
+    componentDidMount() {
+        // this.props.RetrieveMissionStudent();
     }
     render() {
         let { sortedInfo, filteredInfo } = this.state;
@@ -96,48 +100,44 @@ class StudentTable extends React.Component {
                 return <Link to={to} >{text}</Link>
             }
         }, {
-            title: '创建时间',
-            dataIndex: 'create_time',
-            key: 'create_time',
-            sorter: (a, b) => a.create_time - b.create_time, //从小到大
+            title: '学号',
+            dataIndex: 'student_id',
+            key: 'student_id',
+            sorter: (a, b) => a.student_id - b.student_id, //从小到大
         //    sortOrder: this.state.sortedInfo.columnKey === 'start_time' && this.state.sortedInfo.order,
-            render: (text)=> {return simpleTime(text);}
         }, {
-            title: '更新时间',
-            dataIndex: 'update_time',
-            key: 'update_time',
+            title: '专业',
+            dataIndex: 'major',
+            key: 'major',
             sorter: (a, b) => a.update_time - b.update_time, //从小到大
         //    sortOrder: this.state.sortedInfo.columnKey === 'end_time' && this.state.sortedInfo.order,
-            render: (text)=> {return simpleTime(text);}
         }, {
-            title: '状态',
-            dataIndex: 'available',
-            key : 'available',
-            render: (text, record, index) => {
-                return <span>{text?"可用":"废弃"}</span>
-            }
+            title: '性别',
+            dataIndex: 'sex',
+            key : 'sex',
         }, {
             title: '删除',      // 名叫删除，索引编辑 cool :)
             dataIndex: 'edit',
             key: 'edit',
             render: (text, record, index)=>(
                 <DeleteItem 
-                mission_id={record.id} 
-                mission_group_id={this.props.mission_group_id}
-                deleteMission={this.props.deleteMission} />)
+                // id={record.id} 
+                onSubmit={() => this.props.deleteMissionStudent(record.id)} />)
         }
             ];
-        let createMission = <CreateMission onCreate = {()=>{this.setState({createMissionFlag : true})}}/>;
-       
-            data = [];
-            console.log(data);
+        let createMission = <CreateMission onBatchCreate = {()=>{this.setState({batchCreateStudentDrawerVisible : true})}}/>;
+        console.log(data);
 
         return (
-            <Card extra = {createMission} title = '学生表'>
-                <Table columns={columns} dataSource={data} onChange={this.handleChange} />
-                <DrawerForm visible = {this.state.createMissionFlag}  onSubmit={(data) => this.props.createMission(data, this.props.mission_group_id)}
-                    onClose = {() => {this.setState({createMissionFlag : false})}} />
-            </Card>
+            <div  id="lesson-detail">
+                <HeaderPage {...this.props}/>
+                <Card id='lesson-detail-content' extra = {createMission}>
+                    <Table columns={columns} dataSource={data} onChange={this.handleChange} />
+                    <BatchCreateStudentDrawer visible = {this.state.batchCreateStudentDrawerVisible}
+                        onSubmit={(data) => this.props.createMission(data, this.props.mission_group_id)}
+                        onClose = {() => {this.setState({batchCreateStudentDrawerVisible : false})}} />
+                </Card>
+            </div>
         );
     }
 }

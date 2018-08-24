@@ -11,7 +11,6 @@ import CourseInstanceContainer from './containers/CourseInstanceContainer';
 import MissionContainer from './containers/MissionContainer/MissionContainer';
 import LessonInfo from './pages/CourseListPage/LessonInfo'
 
-import StudentTable from './pages/CourseInstancePage/StudentTable'
 import TeacherTable from './pages/CourseInstancePage/TeacherTable'
 import GroupInTable from './pages/CourseInstancePage/GroupInTable'
 
@@ -36,10 +35,6 @@ const routers = [
     }, {
         path: '/course/:course_id/course_info',
         component: LessonInfo,
-        layout: MenuSiderBarLayout,
-    }, {    // 添加 student 表   18-08-16
-        path: '/course/:course_id/student',
-        component: StudentTable,
         layout: MenuSiderBarLayout,
     }, {    // 添加 teacher 表   18-08-16
         path: '/course/:course_id/teacher',

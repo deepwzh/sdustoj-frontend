@@ -20,7 +20,8 @@ const API = {
     MISSION_INSTANCE: (mission_id) => `/api/missions/${mission_id}/`,
     CREATE_MISSION_INSTANCE: (mission_group_id) => `/api/mission-groups/${mission_group_id}/missions-direct/`,
     DELETE_MISSION_INSTANCE: (mission_group_id, mission_id) => `/api/mission-groups/${mission_group_id}/missions/${mission_id}/`,
-    
+    MISSION_STUDENT_LIST: (course_id) => `/api/courses/${course_id}/students/`,
+    MISSION_STUDENT_INSTANCE: (course_id, id) => `/api/courses/${course_id}/students/${id}/`,
     PROBLEM_LIST: (mission_id) => `/api/missions/${mission_id}/problems/`,
     PROBLEM_INSTANCE: (mission_id, problem_id) => `/api/missions/${mission_id}/problems/${problem_id}/`,
     CREATE_MISSION_PROBLEM_INSTANCE: (mission_id) => `/api/missions/${mission_id}/problems/`,
