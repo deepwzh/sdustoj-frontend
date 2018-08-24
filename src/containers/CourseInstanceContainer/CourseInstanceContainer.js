@@ -10,6 +10,7 @@ import { setSiderbarDataSource } from '../../actions';
 import CourseStudentPage from '../../pages/CourseInstancePage/CourseStudentPage';
 import MissionGroupPage from "../../pages/CourseInstancePage/TrueMissionGroupPage";
 import { push, replace } from "connected-react-router";
+import CourseInfoPage from '../../pages/CourseInstancePage/CourseInfo';
 // 一个用以判断是否已经加载过的标记
 let isInitFlag = false;
 
@@ -22,7 +23,6 @@ class CourseInstanceContainer extends React.Component {
             studentData: [],
             mission_group_id: null,
         };
-       
     }
     static defaultProps = {
         
@@ -329,6 +329,10 @@ class CourseInstanceContainer extends React.Component {
                 updateMissionGroup={(data, mission_group_id) => this.updateMissionGroup(data, mission_group_id)}
                 deleteMissionGroup={(mission_group_id) => this.deleteMissionGroup(mission_group_id)}
             />
+        }  else if (hash.startsWith('#info')) {
+            return <CourseInfoPage
+                    course_id={this.props.course_id}
+                />
         }
         return (
             <Page {...this.props} 

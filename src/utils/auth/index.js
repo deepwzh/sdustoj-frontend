@@ -35,6 +35,7 @@ const auth = {
               response.json().then(json_data => {
                 localStorage.setItem('username', json_data.username);
                 localStorage.setItem('role', json_data.role);
+                localStorage.setItem('organization_name', json_data.organization);
                 success('登录成功');
               });
               return Promise.resolve(true)

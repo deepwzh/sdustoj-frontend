@@ -60,11 +60,18 @@ function infoRequest(user_config) {
 
             // } 
             else if (response.status >= 400 && response.status < 500) {
-                // if (response.status === 403) {
-                return Promise.reject(response.json().then((data) => ({message: data.detail})));
-                    // goForward('/login');
-                // }
-                //return response.json();
+                if (response.status === 400) { //校验类错误，返回格式是一个数组
+                    return response.json().then(data => new Promise((resolve, reject) => {
+                        reject({
+                            message: '输入数据有误, 请检查是否有数据格式有误或者重复', 
+                            data});
+                    }));
+                }
+                return response.json().then(data => new Promise((resolve, reject) => {
+                    reject({
+                        message: data.detail
+                    });
+                }));
             } else if (response.status >= 500 && response.status < 600) {
                 return Promise.reject({ message: '服务不可用'})
             } else {
@@ -79,12 +86,19 @@ function infoRequest(user_config) {
             }
             return Promise.resolve(res);
         }).catch(err => {
-            if (err instanceof Promise) {
-                err.then(v => error(v.message));
+            // if (err instanceof Promise) {
+            //     err.then(v => {
+            //         error(v.message)
+                
+            //     });
+            // } else {
+            error(err.message);
+            if (err.data) {
+                return Promise.reject(err.data); //带有data字段的是验证错误，需要在前端展示
             } else {
-                error(err.message);
+                return Promise.resolve(default_value); //因为已经截获了错误并展示了，之后展示默认值就好了
             }
-            return Promise.resolve(default_value);
+            // }
         }).finally(data => {
             closeTip();
             return data;

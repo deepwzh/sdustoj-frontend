@@ -8,10 +8,15 @@ import { getFormattedTime } from "../../../utils/common";
 import { has_permission, RESOURCE, PERMISSION } from "../../../utils/config";
 import { infoRequest, callbackDecorator } from "../../../utils/message";
 class TableComponent extends React.Component {
+  componentDidMount() {
+    this.fetchDataSource();
+  }
   state = {
     filteredInfo: null,
     sortedInfo: null,
     createCourseDrawerVisible: false,
+    editing_record: null,
+    dataSource: []
   };
 
   handleChange = (pagination, filters, sorter) => {
@@ -42,17 +47,22 @@ class TableComponent extends React.Component {
     });
   }
   fetchDataSource = () => {
-    this.props.listCourse();
+    this.props.listCourse().then((data) => {
+      this.setState({
+        dataSource: data.results,
+        createCourseDrawerVisible: false
+      })
+    })
   }
   render() {
-    let { data } = this.props;
+    let data = this.state.dataSource;
     let { sortedInfo, filteredInfo } = this.state;
     sortedInfo = sortedInfo || {};
     filteredInfo = filteredInfo || {};
     const columns = [{
       title: '课程ID',
       dataIndex: 'cid',
-      key: 'id',
+      key: 'cid',
       sorter: (a, b) => a.cid - b.cid,
       sortOrder: sortedInfo.columnKey === 'cid' && sortedInfo.order,
     }, {
@@ -101,48 +111,50 @@ class TableComponent extends React.Component {
         </div>
       );
     }
-    // if (has_permission(RESOURCE.COURSE, PERMISSION.UPDATE)) {
-    //   columns.push({
-    //       title: '修改',
-    //       dataIndex: 'edit',
-    //       key: 'edit',
-    //       render: (text, record, index) => {
-    //         return (
-    //           <Button onClick={this.setState({createCourseDrawerVisible: true, editing_record: record})}></Button>
-    //         )
-    //       }
-    //   });
-    //   data = data.map((item) => (
-    //     {...item,
-    //       edit: true
-    //     }
-    //   ))
-    // }
-    // if (has_permission(RESOURCE.COURSE, PERMISSION.DELETE)) {
-    //   columns.push({
-    //       title: '删除',
-    //       dataIndex: 'delete',
-    //       key: 'delete',
-    //       render: (text, record, index) => {
-    //         return (
-    //           <Popconfirm title="确定要删除该项?" 
-    //             onConfirm={(e) => {
-    //             callbackDecorator(this.fetchDataSource)(this.props.deleteCourse)(record.id) 
-    //             }}
-    //             onCancel={(e) => message.error('取消成功')} 
-    //             okText="Yes"
-    //             cancelText="No">
-    //           <Button>删除</Button>
-    //           </Popconfirm>
-    //         )
-    //       }
-    //   });
-    //   data = data.map((item) => (
-    //     {...item,
-    //       delete: true
-    //     }
-    //   ))
-    // }
+    if (has_permission(RESOURCE.COURSE, PERMISSION.UPDATE)) {
+      columns.push({
+          title: '修改',
+          dataIndex: 'edit',
+          key: 'edit',
+          render: (text, record, index) => {
+            return (
+              <Button onClick={() => this.setState({createCourseDrawerVisible: true, editing_record: record})}>
+              修改
+              </Button>
+            )
+          }
+      });
+      data = data.map((item) => (
+        {...item,
+          edit: true
+        }
+      ))
+    }
+    if (has_permission(RESOURCE.COURSE, PERMISSION.DELETE)) {
+      columns.push({
+          title: '删除',
+          dataIndex: 'delete',
+          key: 'delete',
+          render: (text, record, index) => {
+            return (
+              <Popconfirm title="确定要删除该项?" 
+                onConfirm={(e) => {
+                callbackDecorator(this.fetchDataSource)(this.props.deleteCourse)(record.cid) 
+                }}
+                onCancel={(e) => message.error('取消成功')} 
+                okText="Yes"
+                cancelText="No">
+              <Button>删除</Button>
+              </Popconfirm>
+            )
+          }
+      });
+      data = data.map((item) => (
+        {...item,
+          delete: true
+        }
+      ))
+    }
     return (
       <Card extra={extra}>
         <h1 id = "title-center">{this.props.title}</h1>
@@ -150,8 +162,9 @@ class TableComponent extends React.Component {
         <CreateCourseDrawer 
           visible = {this.state.createCourseDrawerVisible}
           data={this.state.editing_record}
-          onCreate={(data) => callbackDecorator(this.fetchDataSource)(this.props.createCourse)(data)}
-          onUpdate={(data) => callbackDecorator(this.fetchDataSource)(this.props.updateCourse)(data, this.state.editing_record.id)}
+          listCourseMeta={() => this.props.listCourseMeta(this.props.organization_name)}
+          onCreate={(data, course_meta_id) => callbackDecorator(this.fetchDataSource)(this.props.createCourse)(data, course_meta_id)}
+          onUpdate={(data) => callbackDecorator(this.fetchDataSource)(this.props.updateCourse)(data, this.state.editing_record.cid)}
           onClose = {() => {this.setState({createCourseDrawerVisible : false})}} />
       </Card>
     );

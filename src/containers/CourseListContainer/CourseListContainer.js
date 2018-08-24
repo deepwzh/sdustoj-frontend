@@ -31,10 +31,14 @@ class CourseListContainer extends React.Component {
     updateCourse = infoRequest({
         loading_text: '正在更新',
         success_text: '更新成功'
-    })((course_id) => {
+    })((data, course_id) => {
         const url = getAPIUrl(API.COURSE_INSTANCE(course_id));
         const option = {
             method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
         }
         return fetch(url, option);
     })
@@ -44,7 +48,7 @@ class CourseListContainer extends React.Component {
     })((course_id) => {
         const url = getAPIUrl(API.COURSE_INSTANCE(course_id));
         const option = {
-            method: 'get',
+            method: 'delete',
         }
         return fetch(url, option);
     })
@@ -62,13 +66,26 @@ class CourseListContainer extends React.Component {
         }
         return fetch(url, option);
     })
+    listCourseMeta = infoRequest({
+        loading_text: '正在获取课元信息'
+    })((organization_id) => {
+        const url = getAPIUrl(API.COURSE_META_LIST(organization_id));
+        const config = {
+            method: 'get',
+        };
+        return fetch(url, config);
+    })
     render() {
         return (
-            <Page {...this.props} 
+            <Page
+
+             auth = {this.props.auth}
+             organization_name={this.props.auth.organization_name}
              listCourse={this.listCourse}
              createCourse={this.createCourse}
              deleteCourse={this.deleteCourse}
              updateCourse={this.updateCourse}
+             listCourseMeta={this.listCourseMeta}
              data={this.state.data} 
              role={this.props.role}
               />

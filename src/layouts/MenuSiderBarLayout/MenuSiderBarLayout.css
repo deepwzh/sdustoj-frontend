@@ -1,7 +1,10 @@
 #menu-sider-bar-layout .logo {
-    width: 120px;
+    width: 150px;
     height: 31px;
     font-size: 20px;
+    font-family: Avenir;
+    font-weight: 600;
+    padding-right: 0.5em;
     /* background: rgba(253, 158, 158, 0.2);   */
     /*margin: 16px 24px 16px 0; */
     float: left;
@@ -13,10 +16,20 @@
     padding: 50px;
     background: rgb(238, 238, 238);
 }
+#menu-sider-bar-layout .fixed {
+    position: fixed;
+    width:100%;
+    z-index: 100;
+    top: 0;
+    left: 0;
+    right: auto;
+    bottom: auto;
+}
 #menu-sider-bar-layout #content {
     display: flex;
     flex-direction: row;
     align-items: stretch;
+    margin-top: 2em;
     min-height: 40em;
     /* height: 500px; */
 }

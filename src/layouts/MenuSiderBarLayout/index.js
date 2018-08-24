@@ -5,6 +5,7 @@ import { Layout, Breadcrumb } from 'antd';
 import { Dropdown, Icon } from 'antd';
 import Menu from '../../components/Menu';
 import SiderBar from "../../components/SiderBar";
+import FooterComponent from "../../components/FooterComponent";
 
 const { Header, Content, Footer } = Layout;
 class Logo extends React.Component {
@@ -44,7 +45,7 @@ class MenuSiderBarLayout extends React.Component {
         let { children } = this.props;
         return (
             <Layout className="layout" id="menu-sider-bar-layout">
-                <Header>
+                <Header className='fixed'>
                     <Logo/>
                     <Menu dataSource={this.state.menu} />
                 </Header>
@@ -52,9 +53,7 @@ class MenuSiderBarLayout extends React.Component {
                     <SiderBar id="siderbar"/>
                     {children}
                 </Content>
-                <Footer style={{ textAlign: 'center' }}>
-                Ant Design ©2016 Created by Ant UED
-                </Footer>
+                <FooterComponent/>
             </Layout>
         );
     }

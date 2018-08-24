@@ -18,14 +18,15 @@ let initialState = {
   loading: false,
   loggedIn: auth.loggedIn(),
   username: localStorage.getItem('username'),
-  role: localStorage.getItem('role')
+  role: localStorage.getItem('role'),
+  organization_name: localStorage.getItem('organization_name')
 }
   
   // Takes care of changing the application state
   function authReducer (state = initialState, action) {
     switch (action.type) {
       case SET_AUTH:
-        return {...state, loggedIn: action.newAuthState, username: action.username, role: action.role}
+        return {...state, loggedIn: action.newAuthState, username: action.username, role: action.role, organization_name: action.organization_name}
       case SENDING_REQUEST:
         return {...state, loading: action.sending}
       case REQUEST_ERROR:

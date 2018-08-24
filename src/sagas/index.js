@@ -97,7 +97,7 @@ export function * loginFlow () {
 
     // If `authorize` was the winner...
     if (winner.auth) {
-      yield put({type: SET_AUTH, newAuthState: true, username: username, role: localStorage.getItem("role") }) // User is logged in (authorized)
+      yield put({type: SET_AUTH, newAuthState: true, username: username, role: localStorage.getItem("role"), organization_name: localStorage.getItem('organization_name') }) // User is logged in (authorized)
       yield put(push('/'))
     }
   }

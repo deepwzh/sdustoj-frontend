@@ -1,10 +1,18 @@
 import moment from "moment";
 import { Drawer, Form, Button, Col, Row, Input, Select, DatePicker } from 'antd';
 import React from 'react';
+import { getFormattedDate } from "../../../utils/common";
 const { Option } = Select;
 class DrawerForm extends React.Component {
-  state = { visible: false };
-
+  state = { 
+    visible: false,
+    course_meta_list: []
+  };
+  componentDidMount() {
+    this.props.listCourseMeta().then((data) => {
+      this.setState({course_meta_list: data.results})
+    })
+  }
   showDrawer = () => {
     this.setState({
       visible: true,
@@ -20,12 +28,13 @@ class DrawerForm extends React.Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
         if (!err) {
-          values = {...values, start_time: values.start_time[0], end_time: values.start_time[1]};
-          console.log('Received values of form: ', JSON.stringify(values));
+          values = {...values, start_time: getFormattedDate(values.start_time[0]), 
+            end_time: getFormattedDate(values.start_time[1]),
+          };
           if (this.props.data) {
-            this.props.onUpdate(JSON.stringify(values));
+            this.props.onUpdate(values);
           } else {
-            this.props.onCreate(JSON.stringify(values));
+            this.props.onCreate(values, values.course_meta_id);
           }
         }
 
@@ -42,6 +51,7 @@ class DrawerForm extends React.Component {
 }
   render() {
     const { getFieldDecorator } = this.props.form;
+    const { course_meta_list } = this.state;
     return (
       <div>
         <Drawer
@@ -66,6 +76,21 @@ class DrawerForm extends React.Component {
                   })(<Input placeholder="请输入任务名称" />)}
                 </Form.Item>
               </Col>
+              <Col span={12}>
+                <Form.Item label="课元">
+                  {getFieldDecorator('course_meta_id', {
+                    rules: [{ required: true, message: 'Please select an owner' }],
+                  })(
+                    <Select disabled={this.props.data?true:false} placeholder="请选择课元">
+                      {
+                        course_meta_list.map((item) => (
+                        <Option value={item.id}>{item.caption}</Option>
+                      ))
+                      }
+                    </Select>
+                  )}
+                </Form.Item>
+              </Col>
             </Row>
             <Row gutter={16}>
               <Col span={12}>
@@ -74,7 +99,7 @@ class DrawerForm extends React.Component {
                     initialValue: "true",
                     rules: [{ required: true, message: 'Please select an owner' }],
                   })(
-                    <Select placeholder="请选择是否可用" defaultValue="true">
+                    <Select placeholder="请选择是否可用">
                       <Option value="true">可用</Option>
                       <Option value="false">不可用</Option>
                     </Select>
@@ -171,8 +196,9 @@ const CreateMissionDrawer = Form.create({
         if (!data) {
           return {};
         }
-        const {caption, introduction, weight, start_time, end_time, mode, available, deleted} = data;
+        const {caption, introduction, meta, start_time, end_time, mode, available, deleted} = data;
         return {
+            course_meta_id: Form.createFormField({value: meta}),
             available: Form.createFormField({value: available + ""}),
             deleted: Form.createFormField({value: deleted + ""}),
             caption: Form.createFormField({value: caption}),

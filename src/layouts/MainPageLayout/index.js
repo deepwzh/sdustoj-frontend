@@ -2,6 +2,7 @@ import React from "react";
 import { NavLink, withRouter  } from 'react-router-dom';
 import { Layout, Breadcrumb } from 'antd';
 import './MainPageLayout.css';
+import FooterComponent from "../../components/FooterComponent";
 import { Dropdown, Icon } from 'antd';
 import Menu from '../../components/Menu';
 
@@ -21,23 +22,43 @@ class Logo extends React.Component {
 class MainPageLayout extends React.Component {
     constructor(props) {
         super(props);
+        // this.state = {
+        //     menu: [{
+        //             key: 0,
+        //             title: <Icon type = 'home' style = {{fontSize: 25}} ></Icon>,
+        //             target: "/",
+        //         },{
+        //             key: 1,
+        //             title: <Icon type = 'book' style = {{fontSize: 25}}> </Icon>,
+        //             target: "/course"
+        //         },{
+        //             key: 2,
+        //             title: <Icon type = 'database' style = {{fontSize: 25}}> </Icon>,
+        //             target: "/problemset"
+                    
+        //         }, {
+        //             key: 3,
+        //             title: <Icon type = 'trophy' style = {{fontSize: 25}}> </Icon>,
+        //             target: "/submission"
+        //         }
+        //     ]
+        // };
         this.state = {
             menu: [{
                     key: 0,
-                    title: <Icon type = 'home' style = {{fontSize: 25}} ></Icon>,
-                    target: "/",
+                    title: "主页",
+                    target: "/"
                 },{
                     key: 1,
-                    title: <Icon type = 'book' style = {{fontSize: 25}}> </Icon>,
+                    title: "课程",
                     target: "/course"
                 },{
                     key: 2,
-                    title: <Icon type = 'database' style = {{fontSize: 25}}> </Icon>,
+                    title: "题库",
                     target: "/problemset"
-                    
                 }, {
                     key: 3,
-                    title: <Icon type = 'trophy' style = {{fontSize: 25}}> </Icon>,
+                    title: "提交",
                     target: "/submission"
                 }
             ]
@@ -67,7 +88,7 @@ class MainPageLayout extends React.Component {
         // }
         return (
             <Layout className="layout" id="menu-layout-content">
-                <Header>
+                <Header className='fixed'>
                     <Logo/>
                     <Menu dataSource={this.state.menu} />
                 </Header>
@@ -80,9 +101,7 @@ class MainPageLayout extends React.Component {
                     </Breadcrumb>
                     <div style={{ background: '#fff', padding: 24, minHeight: 280 }}>Content</div> */}
                 </Content>
-                <Footer style={{ textAlign: 'center' }}>
-                Ant Design ©2016 Created by Ant UED
-                </Footer>
+                <FooterComponent />
             </Layout>
         );
     }

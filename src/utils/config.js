@@ -13,10 +13,12 @@ const API = {
     ACCOUNT_PROFILE: '/api/account/profile/',
     ACCOUNT_PASSWORD: '/api/account/password/',
     LEARNING_COURSES_LIST: '/api/learning-courses/',
-
     TEACHING_COURSES_LIST: '/api/teaching-courses/',
+    
     COURSE_INSTANCE: (course_id) => `/api/courses/${course_id}/`,
     COURSE_LIST: (course_meta_id) => `/api/course-metas/${course_meta_id}/courses/`,
+    COURSE_META_LIST: (organization_id) => `/api/organizations/${organization_id}/course-metas/`,
+    
     MISSION_GROUP_LIST: (course_id) => `/api/courses/${course_id}/mission-groups/`,
     MISSION_GROUP_INSTANCE: (mission_group_id) => `/api/mission-groups/${mission_group_id}/`,
 

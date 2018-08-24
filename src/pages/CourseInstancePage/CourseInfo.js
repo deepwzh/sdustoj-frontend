@@ -58,8 +58,7 @@ const columns = [{
 }];
 
 class LessonInfo extends React.Component {
-    constructor(props)
-    {
+    constructor(props){
         super(props);
         this.state = {
             data : null
@@ -94,8 +93,8 @@ class LessonInfo extends React.Component {
 }
 
 const mapStateToProp = (state, ownProps) => {
-    let { course_id, mission_group_id, mission_id } = ownProps.match.params;
-    console.log(ownProps.match.params);
+    // let { course_id, mission_group_id, mission_id } = ownProps.match.params;
+    // console.log(ownProps.match.params);
     // console.log(state.router.location.hash);
     // console.log(state.router.location.search);
     // console.log(state.router.location.hash);
@@ -104,9 +103,8 @@ const mapStateToProp = (state, ownProps) => {
         pathname: state.router.location.pathname,
         search: state.router.location.search,
         hash: state.router.location.hash,
-        course_id,
-        mission_group_id,
-        mission_id
+        // mission_group_id,
+        // mission_id
         // data: state.course.courseList,
         // loading: state.course.loading,
         // error: state.course.error

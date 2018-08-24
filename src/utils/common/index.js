@@ -19,3 +19,6 @@ export function addIndexToArray(data, index_field) {
 export function getFormattedTime(str) {
     return moment(str).format('LLL');
 }
+export function getFormattedDate(str) {
+    return moment(str).format('YYYY-MM-DD');
+}
