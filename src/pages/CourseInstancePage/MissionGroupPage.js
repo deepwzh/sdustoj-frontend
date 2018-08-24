@@ -9,6 +9,7 @@ import { RESOURCE, PERMISSION, has_permission } from '../../utils/config';
 import { getFormattedTime } from '../../utils/common';
 import { callbackDecorator } from '../../utils/message';
 
+import './index.css';
 /**
  * @description 一个小按钮而已(添加按钮)
  */
@@ -198,6 +199,7 @@ class MissionGroupPage extends React.Component {
             createMission = <CreateMission onCreate = {()=>{this.setState({createMissionFlag : true, editing_record: null})}}/>
         }
         return (
+            <div>
             <Card extra = {createMission}>
                 <Table columns={columns} dataSource={dataSource} onChange={this.handleChange} />
                 <CreateMissionDrawer visible = {this.state.createMissionFlag}
@@ -206,6 +208,7 @@ class MissionGroupPage extends React.Component {
                     onUpdate={(data) => callbackDecorator(this.fetchDataSource)(this.props.updateMission)(data, this.props.mission_group_id, this.state.editing_record.id)}
                     onClose = {() => {this.setState({createMissionFlag : false})}} />
             </Card>
+            </div>
         );
     }
 }

@@ -1,0 +1,31 @@
+#states-page{
+    display: flex;
+    flex-direction: column;
+}
+
+
+#selector{
+    display: flex;
+    flex-direction: row;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#table-center{
+    text-align: center;
+}
+
+#item{
+    width : 200px;
+}
+
+#tag{
+    font-size : 2em;
+}
+
+#language{
+    width : 200px;
+}
+#result{
+    width : 200px;
+}

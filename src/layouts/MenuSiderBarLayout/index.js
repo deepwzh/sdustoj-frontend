@@ -2,12 +2,12 @@ import './MenuSiderBarLayout.css';
 import React from "react";
 import { NavLink, withRouter  } from 'react-router-dom';
 import { Layout, Breadcrumb } from 'antd';
-import { Dropdown, Icon } from 'antd';
+import { Dropdown, Icon, Card } from 'antd';
 import Menu from '../../components/Menu';
 import SiderBar from "../../components/SiderBar";
 import FooterComponent from "../../components/FooterComponent";
 
-const { Header, Content, Footer } = Layout;
+const { Header, Content, Footer, Sider } = Layout;
 class Logo extends React.Component {
     render() {
         return (
@@ -22,23 +22,23 @@ class MenuSiderBarLayout extends React.Component {
         super(props);
         this.state = {
             menu: [{
-                    key: 0,
-                    title: "主页",
-                    target: "/"
-                },{
-                    key: 1,
-                    title: "课程",
-                    target: "/course"
-                },{
-                    key: 2,
-                    title: "题库",
-                    target: "/problemset"
-                }, {
-                    key: 3,
-                    title: "提交",
-                    target: "/submission"
-                }
-            ]
+                key: 0,
+                title: <div><Icon type = 'home' style = {{fontSize: 25}} ></Icon><span style = {{fontWeight: 'bold'}}>主页</span></div>,
+                target: "/",
+            },{
+                key: 1,
+                title: <div><Icon type = 'book' style = {{fontSize: 25}}> </Icon><span style = {{fontWeight: 'bold'}}>课程</span></div>,
+                target: "/course"
+            },{
+                key: 2,
+                title: <div><Icon type = 'database' style = {{fontSize: 25}}> </Icon><span style = {{fontWeight: 'bold'}}>题库</span></div>,
+                target: "/problemset"
+                
+            }, {
+                key: 3,
+                title: <div><Icon type = 'trophy' style = {{fontSize: 25}}> </Icon><span style = {{fontWeight: 'bold'}}>提交</span></div>,
+                target: "/submission"
+            }]
         };
     }
     render() {

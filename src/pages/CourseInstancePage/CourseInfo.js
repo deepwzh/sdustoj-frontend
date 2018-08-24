@@ -1,11 +1,18 @@
 /**
  * @description 课程详细信息展示表
  * TODO:
+ * @time 18-08-21 修改为表单形式，目的是为了完善提交修改课程信息操作（此权限一般为教务管理员所拥有）
+ * 另外，我们好像不需要展示全部的课程信息，只展示用户关心的一部分即可。
+ * 顺便，加入权限
+ * 
+ * 目前功能还不完善，
  */
 import React from 'react';
-import {Table, Card} from 'antd';
+import {Form, Card, Button, Input} from 'antd';
 import { getAPIUrl, API, ROLE, PERMISSION_TABLE, PERMISSION, has_permission, RESOURCE} from "../../utils/config";
 import { connect } from 'react-redux';
+
+
 /**
  * @description 课程信息英文至中文的翻译映射
  */
@@ -25,45 +32,79 @@ const LessonE2CMap = {
     'end_time' : '课程结束日期'
 };
 
+// { 与表单相关
+const FormItem = Form.Item;
+const formItemLayout = {
+    labelCol: {
+      xs: { span: 24 },
+      sm: { span: 8 },
+    },
+    wrapperCol: {
+      xs: { span: 24 },
+      sm: { span: 16 },
+    },
+  };
 
-
-let createData = (attr, val)=>{
-    return {
-        attribute : attr,
-        value : val,
-    };
+  let createFormItem = (keyword, value, isUpdate, getFieldDecorator) => {
+    let content = null;
+    if(isUpdate)
+    {
+        content = <Input placeholder = {keyword}/>;
+    } else {
+        content = <span>{value}</span>;
+    }
+  return (
+    <FormItem label = {LessonE2CMap[keyword]} {...formItemLayout}>
+        {
+            getFieldDecorator(keyword, {initialValue: value})(content)
+        }
+    </FormItem>
+  );
 }
+
+// }
 
 /**
- * @description 提供英文至中文的翻译映射
- * @param lessonInfo 后台返回的课程信息（json格式）
- * @returns Table 可以使用的 dataSource 
+ * @description 一个简单的更新按钮
  */
-let attributeMap = (lessonInfo)=> {
-    let dataList = [];
-    for(var key in lessonInfo)
-    {
-        dataList.push(createData(LessonE2CMap[key], lessonInfo[key]));
+class UpdateButton extends React.Component {
+    constructor(props) {
+        super(props);
     }
-    return dataList;
+    render() {
+        return (
+            <Button onClick = {this.props.onClick}>
+                Update
+            </Button>
+        );
+    }
 }
 
 
-const columns = [{
-    title : '属性',
-    dataIndex : 'attribute',
-}, {
-    title : '值',
-    dataIndex : 'value',
-}];
 
 class LessonInfo extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            data : null
+            data : null,
+            isUpdate: false     // 用以判断修改按钮是否点击
         }
 
+    }
+
+    onUpdateClick = () => {
+        let old = this.state.isUpdate;
+        this.setState({isUpdate: !old});
+    }
+    onSubmit = (e) => {
+        e.preventDefault();
+        this.props.form.validateFields((err, values) => {
+            if (!err) {
+                console.log('Received values of form: ', values);
+            }
+        });
+        // 目的是为了关闭编辑
+        this.onUpdateClick();
     }
 
     componentWillMount() {
@@ -83,9 +124,31 @@ class LessonInfo extends React.Component {
      */
     render() {
         console.log('course_data course_data course_data course_data course_data ' + this.state.data);
+        const { getFieldDecorator } = this.props.form;
+
+        let extra = null;
+        if(has_permission(RESOURCE.COURSE, PERMISSION.UPDATE))
+            extra = <UpdateButton onClick = {this.onUpdateClick} />
+        let submitButton = null;
+        if(this.state.isUpdate)
+        {
+            submitButton = (
+                <Button type="primary" htmlType="submit" >
+                    提交
+                </Button>);
+        }
+        let formItemList = [];
+        for(let key in this.state.data)
+        {
+            formItemList.push(createFormItem(key, this.state.data[key], this.state.isUpdate, getFieldDecorator));
+        }
+
         return (
-            <Card title = '课程详细信息'>
-                <Table columns = {columns} dataSource = {attributeMap(this.state.data)}/>    
+            <Card title = '课程详细信息' extra = {extra}>
+                <Form onSubmit = {this.onSubmit}>
+                    {formItemList}
+                    {submitButton}
+                </Form>
             </Card>
         );
     }
@@ -111,13 +174,14 @@ const mapStateToProp = (state, ownProps) => {
     }
 }
 
+const LessonInfoForm = Form.create()(LessonInfo);
 
+export default connect(mapStateToProp, null)(LessonInfoForm)
 
-export default connect(mapStateToProp, null)(LessonInfo);
 
 /**
- * 注释即是雪藏
- * 18-08-09
+ * 注释即是雪藏   18-08-09
+ * 还会再次用到吗 18-08-21
 /**
  * @description 任务信息 英文至中文的翻译映射
 const MissionE2CMap = {

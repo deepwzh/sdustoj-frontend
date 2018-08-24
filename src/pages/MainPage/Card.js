@@ -2,7 +2,7 @@ import React from 'react';
 import { Card as AntdCard, Table } from 'antd';
 const dataSource = [{
     key: '1',
-    title: '山东科技大学OnlineJudge系统正在试运行!',
+    title: <span style = {{fontWeight: 'bold', fontSize: '15px'}}>山东科技大学OnlineJudge系统正在试运行!</span>,
     time: '2018-05-26',
     author: 'wzh'
   }, {
@@ -27,7 +27,7 @@ const dataSource = [{
   
 const Card = (props) => {
     return (
-        <AntdCard title="公告" /*extra={<a href="#">More</a>}*/>
+    <AntdCard title= {<span style = {{fontWeight: 'bold', fontSize: '20px'}}> 公告</span>} > 
             <Table dataSource={dataSource} columns={columns} />
         </AntdCard>
     )

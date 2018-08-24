@@ -57,26 +57,20 @@ class SiderBar extends React.Component {
         // this.props.push(this.props.dataSource[selectedKey].target);
     }
     render() {
-        let { dataSource } = this.props;
-        let menu = <div>Hello </div>;
-        if (dataSource.length > 0) {
-            return (<Menu
-            onSelect={this.handleClick}
-            style={{ width: 256 }} 
-            defaultSelectedKeys={[this.state.selectedKey]}
-            defaultOpenKeys={['sub1']}
-            mode="inline"
-          >
-          {this.getMenuItemList(this.props.dataSource)}
-          </Menu>);
-        } else {
-            return (<div></div>);
-        }
-
+      return (
+        <Menu
+          onSelect={this.handleClick}
+          style={{ width: '100%' }} 
+          defaultSelectedKeys={[this.props.siderbarKey]}
+          defaultOpenKeys={['sub1']}
+          mode="inline"
+        >
+        {this.getMenuItemList(this.props.dataSource)}
+        </Menu>
+      );
     }
 }
 function mapStateToProps(state) {
-    console.log('before the render' + state.ui.siderbar.key);
     return ({
         hash: state.router.location.hash,
         siderbarKey: state.ui.siderbar.key + '',

@@ -1,9 +1,9 @@
 #menu-sider-bar-layout .logo {
-    width: 150px;
+    width: 220px;
     height: 31px;
     font-size: 20px;
     font-family: Avenir;
-    font-weight: 600;
+    font-weight: bold;
     padding-right: 0.5em;
     /* background: rgba(253, 158, 158, 0.2);   */
     /*margin: 16px 24px 16px 0; */
@@ -14,6 +14,7 @@
 }
 #menu-sider-bar-layout #content{
     padding: 50px;
+    width: 100%;
     background: rgb(238, 238, 238);
 }
 #menu-sider-bar-layout .fixed {
@@ -37,6 +38,9 @@
     flex:1;
 }
 
-#menu-sider-bar-layout #content > #siderbar {
-    width: 50px;
+#sider {
+    height: 100%;
+    width: 250px;
+    background: #fff;
+    color: #fff;
 }

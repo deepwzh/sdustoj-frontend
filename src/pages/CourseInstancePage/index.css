@@ -20,3 +20,10 @@
 #lesson-detail #lesson-detail-mission-sidebar {
     /* flex:1; */
 }
+
+Card
+{
+border:1px solid;
+border-radius:25px;
+-moz-border-radius:25px; /* Old Firefox */
+}

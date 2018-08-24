@@ -46,19 +46,19 @@ class MainPageLayout extends React.Component {
         this.state = {
             menu: [{
                     key: 0,
-                    title: "主页",
-                    target: "/"
+                    title: <div><Icon type = 'home' style = {{fontSize: 25}} ></Icon><span style = {{ fontSize: 18}}>主页</span></div>,
+                    target: "/",
                 },{
                     key: 1,
-                    title: "课程",
+                    title: <div><Icon type = 'book' style = {{fontSize: 25}}> </Icon><span style = {{fontSize: 18}}>课程</span></div>,
                     target: "/course"
                 },{
                     key: 2,
-                    title: "题库",
+                    title: <div><Icon type = 'database' style = {{fontSize: 25}}> </Icon><span style = {{fontSize: 18}}>题库</span></div>,
                     target: "/problemset"
                 }, {
                     key: 3,
-                    title: "提交",
+                    title: <div><Icon type = 'trophy' style = {{fontSize: 25}}> </Icon><span style = {{fontSize: 18}}>提交</span></div>,
                     target: "/submission"
                 }
             ]
