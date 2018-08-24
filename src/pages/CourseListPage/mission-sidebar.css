@@ -26,3 +26,23 @@
     /* border-left:blue solid 0.2em; */
 
 }
+
+/**
+ * @descrption 与LessonInfo相关的布局，写在这儿
+ * @time 18-08-20
+*/
+#div-attr {
+    width: 300px;
+    
+    float: left;
+}
+#attr-float {
+    float: right;
+}
+#div-val {
+    float: right;
+}
+
+#va-float {
+    float: left;
+}

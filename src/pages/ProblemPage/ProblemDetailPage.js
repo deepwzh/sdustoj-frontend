@@ -26,8 +26,8 @@ class ProblemDetailPage extends React.Component {
                 {limit?
                 (
                 <Card id = 'problem-title'>
-                    <div>编程环境：{limit.env_name}</div>
-                    <div>时间限制：{limit.time_limit} 内存限制：{limit.memory_limit}</div>
+                    <div style = {{fontWeight:'bold'}}>编程环境：{limit.env_name}</div>
+                    <div style = {{fontWeight:'bold'}}>时间限制：{limit.time_limit} 内存限制：{limit.memory_limit}</div>
                 </Card>
                 )
                 :null

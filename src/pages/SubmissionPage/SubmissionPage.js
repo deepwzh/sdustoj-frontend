@@ -12,7 +12,6 @@ class SubmissionPage extends React.Component {
     render() {
         return (
             <Card id="submission-card">
-                <Button onClick={() => this.props.get_submission_list()}>刷新</Button>
                 <Table data={this.props.data}/>
             </Card>
         );

@@ -1,7 +1,8 @@
 #menu-sider-bar-layout .logo {
-    width: 120px;
+    width: 220px;
     height: 31px;
     font-size: 20px;
+    font-weight: bold;
     /* background: rgba(253, 158, 158, 0.2);   */
     /*margin: 16px 24px 16px 0; */
     float: left;
@@ -11,19 +12,17 @@
 }
 #menu-sider-bar-layout #content{
     padding: 50px;
+    width: 100%;
     background: rgb(238, 238, 238);
 }
-#menu-sider-bar-layout #content {
-    display: flex;
-    flex-direction: row;
-    align-items: stretch;
-    min-height: 40em;
-    /* height: 500px; */
-}
+
 #menu-sider-bar-layout #content > div:nth-child(2) {
     flex:1;
 }
 
-#menu-sider-bar-layout #content > #siderbar {
-    width: 50px;
+#sider {
+    height: 100%;
+    width: 250px;
+    background: #fff;
+    color: #fff;
 }

@@ -94,7 +94,7 @@ function getAPIUrl(path) {
 }
 
 /**
- * @description 判断某角色（role）对某资源（object）是否具有某权限（permission）
+ * @description 判断某角色 对某资源（object）是否具有某权限（permission）
  */
 let has_permission = (object, permission) => {
     const role = localStorage.getItem('role');

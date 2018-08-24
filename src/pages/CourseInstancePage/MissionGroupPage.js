@@ -7,6 +7,7 @@ import { DrawerForm }  from './Form';
 import { RESOURCE, PERMISSION, has_permission } from '../../utils/config';
 import { getFormattedTime } from '../../utils/common';
 
+import './index.css';
 /**
  * @description 一个小按钮而已(添加按钮)
  */
@@ -141,11 +142,13 @@ class MissionGroupPage extends React.Component {
             createMission = <CreateMission onCreate = {()=>{this.setState({createMissionFlag : true})}}/>
         }
         return (
+            <div>
             <Card extra = {createMission}>
                 <Table columns={columns} dataSource={data} onChange={this.handleChange} />
                 <DrawerForm visible = {this.state.createMissionFlag}  onSubmit={(data) => this.props.createMission(data, this.props.mission_group_id)}
                     onClose = {() => {this.setState({createMissionFlag : false})}} />
             </Card>
+            </div>
         );
     }
 }

@@ -40,7 +40,7 @@ class SiderBar extends React.Component {
       return (
         <Menu
           onSelect={this.handleClick}
-          style={{ width: 256 }} 
+          style={{ width: '100%' }} 
           defaultSelectedKeys={[this.props.siderbarKey]}
           defaultOpenKeys={['sub1']}
           mode="inline"
@@ -51,7 +51,6 @@ class SiderBar extends React.Component {
     }
 }
 function mapStateToProps(state) {
-    console.log('before the render' + state.ui.siderbar.key);
     return ({
         siderbarKey: state.ui.siderbar.key + '',
         dataSource: state.ui.siderbar.dataSource,

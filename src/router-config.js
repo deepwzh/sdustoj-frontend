@@ -14,6 +14,8 @@ import LessonInfo from './pages/CourseListPage/LessonInfo'
 import StudentTable from './pages/CourseInstancePage/StudentTable'
 import TeacherTable from './pages/CourseInstancePage/TeacherTable'
 import GroupInTable from './pages/CourseInstancePage/GroupInTable'
+
+import CodeDisplay from './pages/StatusPage/CodeDisplay'
 const routers = [
     {
         path: '/',
@@ -68,8 +70,11 @@ const routers = [
         component: StatusPage,
         layout: MainPageLayout
     }, {
-        path: 'account',
-        component: <h1>hello world</h1>,
+        path: '/submission',
+        component: CodeDisplay,
+        layout: MainPageLayout
+    }, {
+        path: '/account',
         layout: MainPageLayout
     }
 ];

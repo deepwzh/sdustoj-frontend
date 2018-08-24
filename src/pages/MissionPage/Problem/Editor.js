@@ -18,6 +18,7 @@ class Editor extends React.Component {
 //   }
   onChange = (newValue, e) =>{
     //TODO: 可能用这种方法会有性能问题？
+    // 这个地方确实会出现问题。复现请打开调试模式并在编辑代码区编辑。
       this.setState({code:newValue});
     // console.log('onChange', newValue, e);
     }
@@ -51,7 +52,7 @@ class Editor extends React.Component {
             theme="vs-light"
             value={code}
             options={options}
-            onChange={this.onChange}
+            onChange={this.onChange}  
             // editorDidMount={this.editorDidMount}
           />
           <Button type="primary" onClick={() => {

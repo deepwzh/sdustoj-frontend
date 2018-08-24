@@ -1,7 +1,8 @@
 #menu-layout-content .logo {
-    width: 120px;
+    width: 220px;
     height: 31px;
     font-size: 20px;
+    font-weight: bold;
     /* background: rgba(253, 158, 158, 0.2);   */
     /*margin: 16px 24px 16px 0; */
     float: left;
@@ -11,7 +12,7 @@
 }
 #menu-layout-content #content{
     padding: 50px;
-    background: rgb(238, 238, 238);
+   
 }
 #menu-layout-content #content {
     display: flex;
@@ -26,4 +27,9 @@
 }
 #menu-layout-content #content > :nth-child(1) {
     flex:1
+}
+
+#test {
+    background: red;
+    box-shadow: 3px 3px 5px #aaa;
 }

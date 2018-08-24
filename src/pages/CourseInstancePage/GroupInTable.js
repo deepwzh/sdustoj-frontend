@@ -74,7 +74,7 @@ class GroupInTable extends React.Component {
         }];
         data = [];
         return (
-            <Card title = '所在课程组'>
+            <Card hoverable = {true} title = '所在课程组'>
                 <Table columns={columns} dataSource={data} onChange={this.handleChange} />
                 <DrawerForm visible = {this.state.createMissionFlag}  onSubmit={(data) => this.props.createMission(data, this.props.mission_group_id)}
                     onClose = {() => {this.setState({createMissionFlag : false})}} />
