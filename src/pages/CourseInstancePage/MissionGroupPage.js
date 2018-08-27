@@ -3,6 +3,7 @@ import { Button, Card, Popconfirm, message, Drawer, Form, } from 'antd';
 import { Link } from 'react-router-dom'; 
 import Table from '../../components/Table';
 import { CreateMissionDrawer }  from './Form';
+import { UpdateMissionDrawer }  from './Form';
 
 import { HeaderPage } from '../HeaderPage';
 import { RESOURCE, PERMISSION, has_permission } from '../../utils/config';
@@ -77,7 +78,8 @@ class MissionGroupPage extends React.Component {
             this.props.listRunningMission()
             .then(data => 
                 this.setState({
-                    dataSource: data.results
+                    dataSource: data.results,
+                    createMissionFlag: false
                 })
             ); 
         } else {
@@ -202,11 +204,15 @@ class MissionGroupPage extends React.Component {
             <div>
             <Card extra = {createMission}>
                 <Table columns={columns} dataSource={dataSource} onChange={this.handleChange} />
-                <CreateMissionDrawer visible = {this.state.createMissionFlag}
+                {this.state.editing_record?
+                <UpdateMissionDrawer visible = {this.state.createMissionFlag}
                     data={this.state.editing_record}
-                    onCreate={(data) => callbackDecorator(this.fetchDataSource)(this.props.createMission)(data, this.props.mission_group_id)}
                     onUpdate={(data) => callbackDecorator(this.fetchDataSource)(this.props.updateMission)(data, this.props.mission_group_id, this.state.editing_record.id)}
                     onClose = {() => {this.setState({createMissionFlag : false})}} />
+                :<CreateMissionDrawer visible = {this.state.createMissionFlag}
+                    onCreate={(data) => callbackDecorator(this.fetchDataSource)(this.props.createMission)(data, this.props.mission_group_id)}
+                    onClose = {() => {this.setState({createMissionFlag : false})}} />
+                }
             </Card>
             </div>
         );

@@ -58,9 +58,9 @@ class SiderBar extends React.Component {
     }
     render() {
       return (
-        <Menu
+        <Menu className='siderbar'
           onSelect={this.handleClick}
-          style={{ width: '100%' }} 
+        //   style={{ }} 
           defaultSelectedKeys={[this.props.siderbarKey]}
           defaultOpenKeys={['sub1']}
           mode="inline"

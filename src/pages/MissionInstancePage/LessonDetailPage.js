@@ -5,6 +5,7 @@ import pic from "../../image/lesson_c.png";
 // import LessonSideBar from './LessonSideBar';
 import MissionGroupPage from './MissionGroupPage';
 import {Card} from 'antd';
+import { HeaderPage } from '../HeaderPage';
 
 class LessonDetailPage extends React.Component{
     constructor(props) {
@@ -24,10 +25,7 @@ class LessonDetailPage extends React.Component{
     render() {
         return (
             <div id="lesson-detail">
-                <div>
-                    <Card id="lesson-detail-banner">{this.props.caption}</Card>
-                    <Card id="lesson-detail-introduction">{this.props.introduction?this.props.introduction:"暂无通告"}</Card>
-                </div>
+                <HeaderPage {...props}/>
                 <div id="lesson-detail-container">
                     <div id="lesson-detail-mission-sidebar">
                         {/* <LessonSideBar onSideBarChange={this.onMissionChange} /> */}

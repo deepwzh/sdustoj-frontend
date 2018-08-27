@@ -13,7 +13,7 @@
     background: rgba(255, 255, 255, 1)
 }
 #menu-sider-bar-layout #content{
-    padding: 50px;
+    /* padding: 50px; */
     width: 100%;
     background: rgb(238, 238, 238);
 }
@@ -28,9 +28,11 @@
 }
 #menu-sider-bar-layout #content {
     display: flex;
+    width: calc(100% - 166px - 30px*2);
     flex-direction: row;
     align-items: stretch;
-    margin-top: 2em;
+    margin-left: calc(166px + 30px);
+    margin-top: 6em;
     min-height: 40em;
     /* height: 500px; */
 }
@@ -38,9 +40,14 @@
     flex:1;
 }
 
-#sider {
-    height: 100%;
-    width: 250px;
+#menu-sider-bar-layout #content > .siderbar {
+    width: 181px;
+    position: fixed;
+    left: 0;
+    z-index: 100;
+    top: 4.7em;
+    min-height: 40em;
+    /* height: 100%; */
     background: #fff;
-    color: #fff;
+    /* color: #fff; */
 }

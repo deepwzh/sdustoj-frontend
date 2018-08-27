@@ -6,23 +6,23 @@
 }
 #mission-instance #mission-instance-content {
     flex:1;
-    margin-left: 20px;
-    margin-top: 5px;
+    /* margin-left: 20px;
+    margin-top: 5px; */
     padding: 20px;
     background: rgb(255, 255, 255);
     border: rgb(233, 234, 236) solid 1px;
 }
-#mission-instance #mission-instance-process {
-    margin-left: 20px;
-    margin-top: 5px;
+/* #mission-instance #mission-instance-process {
+     margin-left: 20px;
+    margin-top: 5px; 
 }
 
 #mission-instance #mission-instance-process  #banner{
     font-size: 2em;
     text-align: center;
-    margin-left: 20px;
-    margin-top: 5px;
-}
+     margin-left: 20px;
+    margin-top: 5px; 
+} */
 #mission-instance #mission-instance-container {
     flex:1;
     display: flex;

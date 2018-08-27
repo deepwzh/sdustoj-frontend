@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { getAPIUrl, API, ROLE, PERMISSION_TABLE, PERMISSION} from "../../utils/config";
 import { setSiderbarDataSource } from '../../actions';
 import { infoRequest } from "../../utils/message";
+import MissionInfoPage from "../../pages/MissionInstancePage/MissionInfoPage";
 class MissionInstanceContainer extends React.Component {
     constructor(props) {
         super(props);
@@ -23,6 +24,10 @@ class MissionInstanceContainer extends React.Component {
     }
     static defaultProps = {
         siderbar : [{
+            key:"-1",
+            title: "任务管理",
+            target: "#info"
+        },{
             key:"0",
             title: "概览",
             target: "#overview"
@@ -62,8 +67,8 @@ class MissionInstanceContainer extends React.Component {
      */
     listSubmissionList = infoRequest({
         loading_text: '正在获取提交记录',
-    })((mission_id) => {
-        const url = getAPIUrl(API.SUBMISSION_LIST(mission_id));
+    })((mission_id, params) => {
+        const url = getAPIUrl(API.SUBMISSION_LIST(mission_id, params));
         const config = {
             method: 'get',
         }
@@ -109,7 +114,7 @@ class MissionInstanceContainer extends React.Component {
                     target: `#problem/${item.id}`, 
                 });
             });
-            this.props.siderbar[1].childrens = childrens;
+            this.props.siderbar[2].childrens = childrens;
             this.props.setSiderbarDataSource([...this.props.siderbar]);
         }
     })((mission_id) => {
@@ -221,10 +226,14 @@ class MissionInstanceContainer extends React.Component {
     updateMission = infoRequest({
         loading_text: '正在更新任务',
         success_text: '更新成功'
-    })((mission_id) => {
+    })((data, mission_id) => {
         let url = getAPIUrl(API.MISSION_INSTANCE(mission_id));
         let config = {
             method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
         }
         return fetch(url, config);
     })
@@ -238,7 +247,6 @@ class MissionInstanceContainer extends React.Component {
         }
         return fetch(url, config);
     })
-
 
     //################################ Mission END
 
@@ -272,7 +280,17 @@ class MissionInstanceContainer extends React.Component {
             );
         } else if(hash.startsWith("#score")) {
             return <h1>hello world</h1>;
-        } else {
+        } else if (hash.startsWith("#info")) {
+            return <MissionInfoPage
+                mission_id = {this.props.mission_id}
+                introduction={this.state.introduction}
+                caption={this.state.caption}
+                start_time={this.state.start_time}
+                end_time={this.state.end_time}
+                retrieveMission={this.retrieveMission}
+                updateMission={this.updateMission}
+            />
+        }else {
             return (
                 <Page
                     mission_id={this.props.mission_id}

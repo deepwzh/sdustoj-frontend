@@ -25,6 +25,8 @@ const API = {
     MISSION_LIST: (mission_group_id) => `/api/mission-groups/${mission_group_id}/missions/`,
     RUNNING_MISSION_LIST: (course_id) => `/api/courses/${course_id}/running-missions/`,
     MISSION_INSTANCE: (mission_id) => `/api/missions/${mission_id}/`,
+    
+    
     CREATE_MISSION_INSTANCE: (mission_group_id) => `/api/mission-groups/${mission_group_id}/missions-direct/`,
     DELETE_MISSION_INSTANCE: (mission_group_id, mission_id) => `/api/mission-groups/${mission_group_id}/missions/${mission_id}/`,
     UPDATE_MISSION_INSTANCE: (mission_group_id, mission_id) => `/api/mission-groups/${mission_group_id}/missions/${mission_id}/`,
@@ -34,10 +36,10 @@ const API = {
     PROBLEM_INSTANCE: (mission_id, problem_id) => `/api/missions/${mission_id}/problems/${problem_id}/`,
     CREATE_MISSION_PROBLEM_INSTANCE: (mission_id) => `/api/missions/${mission_id}/problems/`,
     DELETE_MISSION_PROBLEM_INSTANCE: (mission_id, id) => `/api/missions/${mission_id}/problems/${id}/`,
-    SUBMISSION_LIST: (mission_id) => `/api/missions/${mission_id}/submissions/`,
+    SUBMISSION_LIST: (mission_id, params) => `/api/missions/${mission_id}/submissions/?${params}`,
 
     AVAILABLE_PROBLEM: (mission_id) => `/api/missions/${mission_id}/available-problems/`,
-    
+    SUBMISSIONCODE: (submission_id) => `/api/submissioncode/${submission_id}`
 }
 const PERMISSION = {
     CREATE: "CREATE",

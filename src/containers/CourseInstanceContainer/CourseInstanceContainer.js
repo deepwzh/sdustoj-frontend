@@ -29,7 +29,7 @@ class CourseInstanceContainer extends React.Component {
         siderbar : [{
             key: '5',
             title: '课程详细信息',
-            target: ''
+            target: '#info'
         },{
             key: '100',
             title: '正在进行的任务',
@@ -122,7 +122,7 @@ class CourseInstanceContainer extends React.Component {
         });
         this.props.siderbar.find(({key}) => key === '0').childrens = childrens;
         ///////// 加几个bug :)
-        this.props.siderbar[0].target = `#course_info`;
+        // this.props.siderbar[0].target = `#course_info`;
         //////////////////
         this.props.setSiderbarDataSource([...this.props.siderbar]);
     }
@@ -333,7 +333,7 @@ class CourseInstanceContainer extends React.Component {
             return <CourseInfoPage
                     course_id={this.props.course_id}
                 />
-        }
+        } 
         return (
             <Page {...this.props} 
             introduction={this.state.introduction}

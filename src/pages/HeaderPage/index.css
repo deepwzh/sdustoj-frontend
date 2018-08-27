@@ -1,17 +1,17 @@
 #header-block #banner {
     font-size: 2em;
     text-align: center;
-    margin-left: 20px;
-    margin-top: 5px;
+    /* margin-left: 20px;
+    margin-top: 5px; */
 }
 #header-block #introduction {
     font-size: 1em;
-    margin-left: 20px;
-    margin-top: 5px;
+    /* margin-left: 20px;
+    margin-top: 5px; */
 }
 #processbar-header-block{
-    margin-left: 20px;
-    margin-top: 5px;
+    /* margin-left: 20px;
+    margin-top: 5px; */
 }
 #processbar-header-block #banner {
     text-align: center;

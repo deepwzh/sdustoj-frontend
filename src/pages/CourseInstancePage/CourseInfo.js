@@ -34,14 +34,22 @@ const LessonE2CMap = {
 
 // { 与表单相关
 const FormItem = Form.Item;
+// const formItemLayout = {
+//     labelCol: {
+//       xs: { span: 24 },
+//       sm: { span: 8 },
+//     },
+//     wrapperCol: {
+//       xs: { span: 24 },
+//       sm: { span: 16 },
+//     },
+//   };
 const formItemLayout = {
     labelCol: {
-      xs: { span: 24 },
-      sm: { span: 8 },
+      span: 4,
     },
     wrapperCol: {
-      xs: { span: 24 },
-      sm: { span: 16 },
+      span: 14,
     },
   };
 
@@ -138,14 +146,13 @@ class LessonInfo extends React.Component {
                 </Button>);
         }
         let formItemList = [];
-        for(let key in this.state.data)
-        {
+        for(let key in this.state.data){
             formItemList.push(createFormItem(key, this.state.data[key], this.state.isUpdate, getFieldDecorator));
         }
 
         return (
             <Card title = '课程详细信息' extra = {extra}>
-                <Form onSubmit = {this.onSubmit}>
+                <Form layout='vertical' onSubmit = {this.onSubmit}>
                     {formItemList}
                     {submitButton}
                 </Form>
