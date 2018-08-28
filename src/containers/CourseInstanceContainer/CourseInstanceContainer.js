@@ -87,7 +87,6 @@ class CourseInstanceContainer extends React.Component {
         if(isInitFlag) return;
         isInitFlag = true;
         
-        
         // 如果对该任务组具有create权限
         if(has_permission(RESOURCE.MISSION_GROUP, PERMISSION.CREATE))
         {
@@ -121,9 +120,6 @@ class CourseInstanceContainer extends React.Component {
             });
         });
         this.props.siderbar.find(({key}) => key === '0').childrens = childrens;
-        ///////// 加几个bug :)
-        // this.props.siderbar[0].target = `#course_info`;
-        //////////////////
         this.props.setSiderbarDataSource([...this.props.siderbar]);
     }
     get_mission_group = infoRequest({

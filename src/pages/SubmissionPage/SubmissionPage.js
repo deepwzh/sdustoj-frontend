@@ -1,7 +1,7 @@
 import React from 'react';
 import {Table} from 'antd';
 import { Selector } from './SubmissionTable';
-import { Card, Button, Tag } from 'antd';
+import { Card, Button, Tag, Icon } from 'antd';
 import './index.css';
 import { connect } from "react-redux";
 import { push } from "connected-react-router";
@@ -14,41 +14,61 @@ import { infoRequest } from '../../utils/message';
 const languageType = [
     "All", "C", "C++", "Pascal", "Java", "Ruby", "Bash", "Python", "PHP", "Perl", "C#"
   ];
-  const resultType = [
-    "All",
-    "Accepted",
-    "Presentation Error",
-    "Wrong Answer",
-    "Time Limit Exceed",
-    "Memory Limit Exceed",
-    "Output Limit Exceed",
-    "Runtime Error",
-    "Compile Error",
-    "Compile OK",
-    "Invalid Word",
-    "Pending",
-    "Pending Rejudging",
-    "Compiling",
-    "Running & Judging"
+ 
+  const languageMap = {
+      'gcc': 'C',
+      'g++': 'C++',
+  };
+
+
+  const status = [
+    {title: 'Accepted', value: 'AC'},
+    {title: 'Punctuation Error', value: 'UE'},
+    {title: 'Presentation Error', value: 'PE'},
+    {title: 'Wrong Answer', value: 'WA'},
+    {title: 'Judging', value: 'JD'},
+    {title: 'Running Done', value: 'RD'},
+    {title: 'Length Limit Exceed', value: 'LLE'},
+    {title: 'Invalid Word', value: 'IW'},
+    {title: 'Output Limit Exceed', value: 'OLE'},
+    {title: 'Memory Limit Exceed', value: 'MLE'},
+    {title: 'Time Limit Exceed', value: 'TLE'},
+    {title: 'Runtime Error', value: 'RE'},
+    {title: 'Running', value: 'RN'},
+    {title: 'Running & Judging', value: 'RJ'},
+    {title: 'Compile Done', value: 'CD'},
+    {title: 'Compile Error', value: 'CE'},
+    {title: 'Compiling', value: 'CP'},
+    {title: 'Pending Rejudge', value: 'PDR'},
+    {title: 'Pending', value: 'PD'},
+    {title: 'Submit Failed', value: 'SF'},
   ];
+
+
   const resultColor = {
     '' : "black",
-    "Accepted" : "green",
+    "Accepted" : "#00aa33",
     "Presentation Error" : "#ff0000",
-    "Wrong Answer" : "red",
+    "Wrong Answer" : "#e00",
     "Time Limit Exceed" : "rgb(153,50,204)",
     "Memory Limit Exceed" : "rgb(153,50,204)",
     "Output Limit Exceed" : "rgb(153,50,204)",
     "Runtime Error" : "rgb(153,50,204)",
     "Compile Error" : "navy",
-    "Compile OK" : "navy",
+    "Compile Done" : "navy",
     "Invalid Word" : "navy",
     "Pending" : "rgb(128,128,128)",
-    "Pending Rejudging" : "rgb(128,128,128)",
+    "Pending Rejudge" : "rgb(128,128,128)",
     "Compiling" : "rgb(128,128,128)",
-    "Running & Judging" : "rgb(128,128,128)"
+    "Running & Judging" : "rgb(128,128,128)",
+    "Submit Failed": '#ffaa00'
   };
+
   
+let p = () => {
+    return status.map((value) => {return {status_word: value.title}});
+} 
+
 class SubmissionPage extends React.Component {
     constructor(props) {
         super(props);
@@ -67,11 +87,13 @@ class SubmissionPage extends React.Component {
             // limit: 1,
             // offset: 0,
             pagination: {
-                pageSize: 1,
+                pageSize: 20,
                 showSizeChanger: true,
-                pageSizeOptions: ['1', '2', '3', '5', '10', '20', '50', '100']
+                pageSizeOptions: ['15', '20', '25', '50',]
             },
             visible: false,
+
+            isSubmitFailed: true,
         }
     }
     clearFilters = () => {
@@ -139,6 +161,11 @@ class SubmissionPage extends React.Component {
       const params = this.getParam();
       this.fetchDataSource(params);
     }
+
+    reload = () => {
+        this.setState({isSubmitFailed: false});
+    }
+
     columns = [{
         title: '提交ID',
         dataIndex: 'id',
@@ -160,7 +187,7 @@ class SubmissionPage extends React.Component {
         title: '语言',
         dataIndex: 'env_name',
         key: 'env_name',
-        render: text => {return <span  >{text} </span>},
+        render: text => {return <span  >{languageMap[text]} </span>},
         // sorter: (a, b) => a.start_time > b.start_time, //从小到大
         // sortOrder: sortedInfo.columnKey === 'start_time' && sortedInfo.order,
       }, {
@@ -175,7 +202,21 @@ class SubmissionPage extends React.Component {
                 showing_record: record
               });
           }
-          return <Link to={`#submission/${record.id}`}><Tag color = {resultColor[text]} >{text}</Tag></Link>},
+          let textEx = text;
+          if(text == 'Submit Failed')
+          {
+              let icon = null;
+             if(this.state.isSubmitFailed)
+             {
+                icon = <Icon type="reload" onClick = {this.reload}></Icon>;
+             }
+             else 
+             {
+                icon = <Icon type="loading" ></Icon>;
+             }   
+             textEx = <span><span>{text}</span>{' '}<span style = {{fontSize: '15px'}}>{icon}</span></span>;         
+          }
+          return <Link to={`#submission/${record.id}`}><Tag color = {resultColor[text]} >{textEx}</Tag></Link>},
       }, {
         title: '时间',
         dataIndex: 'time',
@@ -275,29 +316,27 @@ class SubmissionPage extends React.Component {
         let { sortedInfo, filteredInfo } = this.state;
         sortedInfo = sortedInfo || {};
         filteredInfo = filteredInfo || {};
+        let problem = [];
+        let problemset = this.props.siderbar.find(({key}) => key === '1');
+        if(problemset)
+        {
+            problemset = problemset.childrens;
+            problem = problemset.map((value, index) => {return {title: value.title, value: index + 1}});
+        }
         return (
             <Card id="submission-card">
                 {/* <Button onClick={() => }>刷新</Button> */}
                 <Selector 
                     dataSource={{
-                        problem: [{
-                            title: 'A: A+B',
-                            value: 1
-                        }, {
-                            title: 'B: A-B',
-                            value: 2
-                        }],
+                        problem: problem,
                         environment: [{
-                            title: 'gcc',
+                            title: 'C',
                             value: 2
                         }, {
-                            title: 'g++',
+                            title: 'C++',
                             value: 3
                         }],
-                        status: [{
-                            title: 'Pending',
-                            value: 'PD'
-                        }]
+                        status: status
                     }}
                     onChange={this.handle}
                     onFlush={this.onFlush}
@@ -305,7 +344,7 @@ class SubmissionPage extends React.Component {
                     />
                 <Table
                     columns={this.columns}
-                    dataSource={this.state.dataSource}
+                    dataSource={p()}
                     pagination={this.state.pagination}
                     onChange={this.handleTableChange}
                     />
@@ -335,6 +374,8 @@ function mapStateToProp(state, ownProps) {
         pathname: state.router.location.pathname,
         hash: state.router.location.hash,
         submission_id,
+
+        siderbar: state.ui.siderbar.dataSource,
       }
     }
     function mapDispatchToProps(dispatch) {
