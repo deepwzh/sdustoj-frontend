@@ -75,9 +75,6 @@ const routers = [
         path: '/submission',
         component: CodeDisplay,
         layout: MainPageLayout
-    }, {
-        path: '/account',
-        layout: MainPageLayout
-    }
+    },
 ];
 export default routers;

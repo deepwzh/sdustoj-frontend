@@ -6,8 +6,8 @@
 }
 #lesson-detail #lesson-detail-content {
     flex:1;
-    margin-left: 20px;
-    margin-top: 5px;
+    /* margin-left: 20px; */
+    /* margin-top: 5px; */
     padding: 20px;
     background: rgb(255, 255, 255);
     border: rgb(233, 234, 236) solid 1px;

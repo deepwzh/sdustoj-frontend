@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete } from 'antd';
+import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete, Card } from 'antd';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -60,25 +60,25 @@ class RegistrationForm extends React.Component {
 
     const formItemLayout = {
       labelCol: {
-        xs: { span: 24 },
-        sm: { span: 8 },
+        xs: { span: 2 },
+        sm: { span: 2 },
       },
       wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 16 },
+        xs: { span: 20 },
+        sm: { span: 20 },
       },
     };
     const tailFormItemLayout = {
-      wrapperCol: {
-        xs: {
-          span: 24,
-          offset: 0,
-        },
-        sm: {
-          span: 16,
-          offset: 8,
-        },
-      },
+      // wrapperCol: {
+      //   xs: {
+      //     span: 24,
+      //     offset: 0,
+      //   },
+      //   sm: {
+      //     span: 16,
+      //     offset: 8,
+      //   },
+      // },
     };
     const prefixSelector = getFieldDecorator('prefix', {
       initialValue: '86',
@@ -94,7 +94,7 @@ class RegistrationForm extends React.Component {
     ));
 
     return (
-      <Form onSubmit={this.handleSubmit}>
+      <Form  layout={'horizontal'} onSubmit={this.handleSubmit}>
         <FormItem
           {...formItemLayout}
           label="用户名"
@@ -174,6 +174,7 @@ class RegistrationForm extends React.Component {
           <Button type="primary" htmlType="submit">修改</Button>
         </FormItem>
       </Form>
+      
     );
   }
 }
@@ -214,4 +215,8 @@ const WrappedRegistrationForm = Form.create(
     }
 )(RegistrationForm);
 
-export default WrappedRegistrationForm;
+export default (props) => (
+  <Card title = {<span style = {{fontSize: '18px'}}>用户信息</span>}>
+    <WrappedRegistrationForm {...props}/>
+  </Card>
+)

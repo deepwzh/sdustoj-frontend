@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete } from 'antd';
+import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete, Card } from 'antd';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -83,12 +83,12 @@ validateToNextPassword = (rule, value, callback) => {
 
     const formItemLayout = {
       labelCol: {
-        xs: { span: 24 },
-        sm: { span: 8 },
+        xs: { span: 2 },
+        sm: { span: 2 },
       },
       wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 16 },
+        xs: { span: 20 },
+        sm: { span: 20 },
       },
     };
     const tailFormItemLayout = {
@@ -107,6 +107,7 @@ validateToNextPassword = (rule, value, callback) => {
       <AutoCompleteOption key={website}>{website}</AutoCompleteOption>
     ));
     return (
+      <Card title = {<span>密码修改</span>}>
       <Form onSubmit={this.handleSubmit}>
         <FormItem
           {...formItemLayout}
@@ -152,6 +153,7 @@ validateToNextPassword = (rule, value, callback) => {
           <Button type="primary" htmlType="submit">修改</Button>
         </FormItem>
       </Form>
+    </Card>
     );
   }
 }

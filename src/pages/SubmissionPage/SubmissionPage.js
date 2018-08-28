@@ -344,7 +344,7 @@ class SubmissionPage extends React.Component {
                     />
                 <Table
                     columns={this.columns}
-                    dataSource={p()}
+                    dataSource={this.state.dataSource}
                     pagination={this.state.pagination}
                     onChange={this.handleTableChange}
                     />
