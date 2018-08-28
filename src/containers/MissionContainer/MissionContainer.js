@@ -4,10 +4,37 @@ import SubmissionPage from "../../pages/SubmissionPage";
 import ProblemInstancePage from "../../pages/MissionInstancePage/ProblemInstancePage";
 import SubmissionInstancePage from "../../pages/MissionInstancePage/SubmissionInstancePage";
 import { connect } from 'react-redux';
-import { getAPIUrl, API, ROLE, PERMISSION_TABLE, PERMISSION} from "../../utils/config";
+import { getAPIUrl, API, ROLE, PERMISSION_TABLE, PERMISSION, RESOURCE, has_permission} from "../../utils/config";
 import { setSiderbarDataSource } from '../../actions';
 import { infoRequest } from "../../utils/message";
 import MissionInfoPage from "../../pages/MissionInstancePage/MissionInfoPage";
+
+// 一个用以判断是否已经加载过的标记
+let isInitFlag = false;
+
+let studentSiderBar = [
+    {
+        key:"0",
+        title: "概览",
+        target: "#overview"
+    }, {
+        key: "1",
+        title: "题目",
+        target: "#problem",
+        childrens: []
+    }, {
+        key: "2",
+        title: "提交",
+        target: "#submission",
+    }, {
+        key: 3,
+        title: "成绩",
+        target: "#score"
+    }
+];
+
+
+
 class MissionInstanceContainer extends React.Component {
     constructor(props) {
         super(props);
@@ -21,38 +48,20 @@ class MissionInstanceContainer extends React.Component {
             available_problem_data: null,
             problem_prev_data: null,
         }
+
     }
     static defaultProps = {
-        siderbar : [{
-            key:"-1",
-            title: "任务管理",
-            target: "#info"
-        },{
-            key:"0",
-            title: "概览",
-            target: "#overview"
-        },{
-            key: "1",
-            title: "题目",
-            target: "#problem",
-            childrens: []
-        }, {
-            key: "2",
-            title: "提交",
-            target: "#submission",
-        }, {
-            key: 3,
-            title: "成绩",
-            target: "#score"
-        }]
+        siderbar : []
     }
     componentDidMount() {
         // this.setProblemId(this.props.hash);
+        this.getSiderBar();
         this.props.setSiderbarDataSource(this.props.siderbar);
         this.listMissionProblem(this.props.mission_id);
         this.retrieveMission(this.props.mission_id);
         // this.get_instance(this.props.mission_id);
         // this.get_problem(this.props.mission_id);
+       
     }
     componentWillReceiveProps(newProps) {
         // let new_hash = newProps.hash;
@@ -61,6 +70,29 @@ class MissionInstanceContainer extends React.Component {
         //     this.setProblemId(new_hash);
         // }
     }
+
+    /**
+     * @description 尝试获取侧边栏
+     */
+    getSiderBar() {
+       if(isInitFlag) return;
+       isInitFlag = true;
+
+        if(has_permission(RESOURCE.MISSION, PERMISSION.UPDATE))
+        {
+            this.props.siderbar.push(
+                {
+                    key:"-1",
+                    title: "任务管理",
+                    target: "#info"
+                }
+            );
+        } 
+        this.props.siderbar.push(...studentSiderBar);
+        
+    }
+
+
     /**
      * 获取提交列表
      * @param mission_id 任务ID
@@ -114,7 +146,10 @@ class MissionInstanceContainer extends React.Component {
                     target: `#problem/${item.id}`, 
                 });
             });
-            this.props.siderbar[2].childrens = childrens;
+            let key = 1;
+            if(has_permission(RESOURCE.MISSION, PERMISSION.UPDATE))
+                key = 2;
+            this.props.siderbar[key].childrens = childrens;
             this.props.setSiderbarDataSource([...this.props.siderbar]);
         }
     })((mission_id) => {
