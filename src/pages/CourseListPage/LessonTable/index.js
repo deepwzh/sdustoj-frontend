@@ -159,13 +159,15 @@ class TableComponent extends React.Component {
       <Card extra={extra}>
         <h1 id = "title-center">{this.props.title}</h1>
         <Table columns={columns} dataSource={data} onChange={this.handleChange} error={this.props.error} loading={this.props.loading}/>
-        <CreateCourseDrawer 
+        {has_permission(RESOURCE.COURSE, PERMISSION.CREATE)? 
+        (<CreateCourseDrawer 
           visible = {this.state.createCourseDrawerVisible}
           data={this.state.editing_record}
           listCourseMeta={() => this.props.listCourseMeta(this.props.organization_name)}
           onCreate={(data, course_meta_id) => callbackDecorator(this.fetchDataSource)(this.props.createCourse)(data, course_meta_id)}
           onUpdate={(data) => callbackDecorator(this.fetchDataSource)(this.props.updateCourse)(data, this.state.editing_record.cid)}
           onClose = {() => {this.setState({createCourseDrawerVisible : false})}} />
+        ):null}
       </Card>
     );
   }
