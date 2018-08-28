@@ -170,6 +170,20 @@ class CourseInstanceContainer extends React.Component {
         };
         return fetch(url, option);
     })
+    updateMissionStudent = infoRequest({
+        loading_text: '正在修改学生信息',
+        success_text: '修改成功'
+    })((data, course_id, id) => {
+        let url = getAPIUrl(API.MISSION_STUDENT_INSTANCE(course_id, id));
+        let option = {
+            method: 'put',
+            headers: {
+                "Content-Type": "application/json"
+            }, 
+            body: JSON.stringify(data),
+        };
+        return fetch(url, option);
+    })
     deleteMissionStudent = infoRequest({
         loading_text: '正在删除学生信息',
         success_text: '删除成功'
@@ -313,6 +327,7 @@ class CourseInstanceContainer extends React.Component {
             return <CourseStudentPage
                 introduction={this.state.introduction}
                 caption={this.state.caption}
+                updateMissionStudent={(data, id) => this.updateMissionStudent(data, this.props.course_id, id)}
                 createMissionStudent={(data) => this.createMissionStudent(this.props.course_id, data)}
                 listMissionStudent={() => this.listMissionStudent(this.props.course_id)}
                 deleteMissionStudent={(id) => this.deleteMissionStudent(this.props.course_id, id)}

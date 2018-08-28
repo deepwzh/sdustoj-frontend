@@ -8,7 +8,7 @@ import React from 'react';
 import { Button, Card, Popconfirm, message, Drawer, Form, } from 'antd';
 import { Link } from 'react-router-dom'; 
 import Table from '../../components/Table';
-import { BatchCreateStudentDrawer }  from './Form';
+import { BatchCreateStudentDrawer, UpdateStudentDrawer }  from './Form';
 import { RESOURCE, PERMISSION, has_permission } from '../../utils/config';
 import {simpleTime} from './../../utils/simpleTime';
 import { HeaderPage } from '../HeaderPage';
@@ -34,15 +34,13 @@ class CreateMission extends React.Component {
 /**
  * @description 另一个小按钮(每个列项最后的删除按钮)
  */
-class DeleteItem extends React.Component {
+class OperationItem extends React.Component {
     constructor(props) {
         super(props);
     }
     
     confirm = (e)=> {
-        console.log(e);
         this.props.onSubmit();
-        // message.success('删除成功');
     }
     
     cancel = (e)=> {
@@ -52,9 +50,13 @@ class DeleteItem extends React.Component {
     
     render() {  //TODO: 这个地方需要修改，原因是 现在还没有按钮动作 甚至更换按钮
         return (
-          <Popconfirm title="确定要删除该项?" onConfirm={this.confirm} onCancel={this.cancel} okText="Yes" cancelText="No">
-           <Button>Delete</Button>
-          </Popconfirm>
+          <div>
+                <a href="javascript:;" onClick={this.props.onUpdate}>修改</a>
+                <span> | </span>
+                <Popconfirm title="确定要删除该项?" onConfirm={this.confirm} onCancel={this.cancel} okText="Yes" cancelText="No">
+                    <a href="javascript:;">删除</a>
+                </Popconfirm>
+          </div>
         )
     }
 }
@@ -68,7 +70,9 @@ class StudentTable extends React.Component {
             filteredInfo: {},
             sortedInfo: {},
             batchCreateStudentDrawerVisible: false,
-            dataSource: []
+            updateStudentDrawerVisible: false,
+            dataSource: [],
+            editing_record: null
         }
     }
     handleChange = (pagination, filters, sorter) => {
@@ -84,7 +88,10 @@ class StudentTable extends React.Component {
     fetchDataSource = () => {
         this.props.listMissionStudent().then((data) => {
             this.setState({
-                dataSource: data.results
+                dataSource: data.results,
+                editing_record: null,
+                updateStudentDrawerVisible: false,
+                batchCreateStudentDrawerVisible: false
             });
         });
     }
@@ -125,15 +132,19 @@ class StudentTable extends React.Component {
             dataIndex: 'sex',
             key : 'sex',
         }, {
-            title: '删除',      // 名叫删除，索引编辑 cool :)
-            dataIndex: 'edit',
+            title: '操作',    
+            dataIndex: 'operation',
             key: 'edit',
-            render: (text, record, index)=>(
-                <DeleteItem 
-                // id={record.id} 
-                onSubmit={() => callbackDecorator(this.fetchDataSource)(this.props.deleteMissionStudent)(record.id)} />)
-        }
-            ];
+            render: (text, record, index)=>{
+                return (<OperationItem 
+                    onUpdate={() => this.setState({
+                        updateStudentDrawerVisible: true,
+                        editing_record: record
+                    })} 
+                    onDelete={() => callbackDecorator(this.fetchDataSource)(this.props.deleteMissionStudent)(record.id)} 
+                    />)
+                }
+        }];
         let createMission = <CreateMission onBatchCreate = {()=>{this.setState({batchCreateStudentDrawerVisible : true})}}/>;
 
         return (
@@ -141,9 +152,17 @@ class StudentTable extends React.Component {
                 <HeaderPage {...this.props}/>
                 <Card id='lesson-detail-content' extra = {createMission}>
                     <Table columns={columns} dataSource={dataSource} onChange={this.handleChange} />
-                    <BatchCreateStudentDrawer visible = {this.state.batchCreateStudentDrawerVisible}
-                        onSubmit={(data) => callbackDecorator(this.fetchDataSource)(this.props.createMissionStudent)(data, this.props.mission_group_id)}
-                        onClose = {() => {this.setState({batchCreateStudentDrawerVisible : false})}} />
+                    <BatchCreateStudentDrawer 
+                        visible = {this.state.batchCreateStudentDrawerVisible}
+                        onSubmit={(data) => callbackDecorator(this.fetchDataSource)(this.props.createMissionStudent)(data)}
+                        onClose = {() => {this.setState({batchCreateStudentDrawerVisible : false})}} 
+                        />
+                    <UpdateStudentDrawer 
+                        data={this.state.editing_record}
+                        visible = {this.state.updateStudentDrawerVisible}
+                        onSubmit={(data) => callbackDecorator(this.fetchDataSource)(this.props.updateMissionStudent)(data, this.state.editing_record.id)}
+                        onClose = {() => {this.setState({updateStudentDrawerVisible : false})}} 
+                        />
                 </Card>
             </div>
         );
