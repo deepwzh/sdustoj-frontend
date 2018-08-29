@@ -1,7 +1,6 @@
 import React from 'react';
 import { Card } from 'antd';
 import ReactMarkDown from 'react-markdown';
-import { runInDebugContext } from 'vm';
 import {message, Icon} from 'antd';
 import {CopyToClipboard} from 'react-copy-to-clipboard'
 import './index.css'

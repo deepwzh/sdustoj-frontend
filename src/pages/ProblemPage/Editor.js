@@ -5,11 +5,10 @@
  */
 
 import React from 'react';
-import MonacoEditor from './MonacoEditor';
+import MonacoEditor from '../../components/MonacoEditor';
 import { Select, Card } from 'antd';
 import { Button } from 'antd';
 import Operation from 'antd/lib/transfer/operation';
-
 
 const env2Language = {
   'gcc': 'C',

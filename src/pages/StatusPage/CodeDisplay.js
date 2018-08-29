@@ -4,7 +4,7 @@
  * 其中前两项数据需要上层组件传递。其中，data = {state, time, memory, language, author, } 暂定
  * @time 18-08-21
  */
-import MonacoEditor from './../ProblemPage/MonacoEditor';
+import MonacoEditor from '../../components/MonacoEditor';
 import {Card, Table, Tag} from 'antd';
 import React from 'react';
 import { getFormattedTime } from '../../utils/common';

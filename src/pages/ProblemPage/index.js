@@ -1,9 +1,7 @@
+import Editor from './Editor';
 import React from 'react';
 import ProblemDetailPage from './ProblemDetailPage';
-import { withRouter } from "react-router-dom";
-import Editor from './Editor';
-import Cookie from 'js-cookie';
-import NavMenu from './NavMenu';
+// import { withRouter } from "react-router-dom";
 import './index.css';
 
 class ProblemPage extends React.Component {
@@ -107,7 +105,13 @@ class ProblemPage extends React.Component {
                 <div id="problem-detail-container">
                     <ProblemDetailPage data={detail_data}/>
                     {!this.props.disableEditor?
-                        <Editor submit={this.submit} envs = {envs} onChange = {this.onLanguageChange} language = {this.state.language}/>: null}
+                        <Editor 
+                            submit={this.submit}
+                            envs = {envs}
+                            onChange = {this.onLanguageChange}
+                            language = {this.state.language}/>
+                    
+                    : null}
                 </div>
                 {/* <div id="problem-info-container">
                     <NavMenu/>
@@ -125,4 +129,4 @@ class ProblemPage extends React.Component {
  */
 
 
-export default withRouter(ProblemPage);
+export default ProblemPage;

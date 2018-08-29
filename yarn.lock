@@ -5002,6 +5002,10 @@ moment@2.x, moment@^2.19.3, moment@^2.22.2:
   version "2.22.2"
   resolved "http://registry.npm.taobao.org/moment/download/moment-2.22.2.tgz#3c257f9839fc0e93ff53149632239eb90783ff66"
 
+monaco-editor-webpack-plugin@^1.5.1:
+  version "1.5.1"
+  resolved "http://registry.npm.taobao.org/monaco-editor-webpack-plugin/download/monaco-editor-webpack-plugin-1.5.1.tgz#2f2ff876d522e25042e5621bc81cb9eee6743010"
+
 monaco-editor@0.13.1:
   version "0.13.1"
   resolved "http://registry.npm.taobao.org/monaco-editor/download/monaco-editor-0.13.1.tgz#6b9ce20e4d1c945042d256825eb133cb23315a52"
