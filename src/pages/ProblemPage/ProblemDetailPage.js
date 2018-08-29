@@ -15,9 +15,6 @@ class ProblemDetailPage extends React.Component {
     render() {
         let {limit, number_test_data} = this.props.data;
         // console.log(limit);
-        if (limit) {
-            limit = limit[0];
-        }
         let {title, description, sample, source} = this.props.data;
         return (
             <Card style = {{backgroundColor : '#ffd'}}>

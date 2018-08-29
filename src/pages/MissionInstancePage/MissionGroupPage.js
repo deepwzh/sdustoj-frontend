@@ -131,7 +131,7 @@ class MissionGroupPage extends React.Component {
             render: (text, record, index) => {
               console.log(record);
                 
-              let to = this.props.location.pathname + "#problem/" + record.id;
+              let to = this.props.location.pathname + "#problem/" + String.fromCharCode('A'.charCodeAt(0) + index);
               return <Link to={to} >{text}</Link>
             }
           }, {
@@ -155,6 +155,9 @@ class MissionGroupPage extends React.Component {
                     title: '权重',     
                     dataIndex: 'weight',
                     key: 'weight',
+                    render: (text) => (
+                        Number.prototype.toFixed.call(parseFloat(text), 3)
+                    )
                 }
             );
         }
