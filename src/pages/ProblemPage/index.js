@@ -20,7 +20,12 @@ class ProblemPage extends React.Component {
     }
     fetchDataSource = (data) => {
         let {problem_id } = data || {};
-        this.props.retrieveMissionProblem(this.props.mission_id, problem_id || this.props.problem_id)
+        problem_id = problem_id || this.props.problem_id;
+        // 当题目或任务没有加载好，不加载数据
+        if (!problem_id || !this.props.mission_id) {  
+            return; 
+        }
+        this.props.retrieveMissionProblem(this.props.mission_id, problem_id)
             .then((data) => {
                 this.setState({dataSource: data})
                 console.log("Hello World"); 

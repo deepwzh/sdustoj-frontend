@@ -47,6 +47,7 @@ class MissionInstanceContainer extends React.Component {
             problem_detail_data: null,
             available_problem_data: null,
             problem_prev_data: null,
+            alpha_to_problem_id: new Map(),
         }
 
     }
@@ -135,22 +136,28 @@ class MissionInstanceContainer extends React.Component {
     listMissionProblem = infoRequest({
         loading_text: '正在获取题目列表',
         callback: (v) =>{
-            this.setState({
-                problem_data: v.results
-            });
             let childrens = [];
+            let alpha_to_problem_id = new Map();
             v.results.map((item, key) => {
+                const alpha = String.fromCharCode(65 + key);
+                alpha_to_problem_id.set(alpha, item.id);
                 childrens.push({
                     key: "0" + key,
                     title: item.title,
-                    target: `#problem/${item.id}`, 
+                    target: `#problem/${alpha}`
+                    // target: `#problem/${item.id}`, 
                 });
+            });
+            this.setState({
+                problem_data: v.results,
+                alpha_to_problem_id: alpha_to_problem_id,
             });
             let key = 1;
             if(has_permission(RESOURCE.MISSION, PERMISSION.UPDATE))
                 key = 2;
             this.props.siderbar[key].childrens = childrens;
             this.props.setSiderbarDataSource([...this.props.siderbar]);
+
         }
     })((mission_id) => {
         const url = getAPIUrl(API.PROBLEM_LIST(mission_id));
@@ -290,9 +297,12 @@ class MissionInstanceContainer extends React.Component {
         let {hash} = this.props;
         if (hash.startsWith("#problem/")) {
             let {problem_id} = this.props;
+            console.log("alpha_to_problem_id");
+            console.log(this.state.alpha_to_problem_id);
+            console.log(problem_id);
             return (
                 <ProblemInstancePage 
-                    problem_id={problem_id}
+                    problem_id={this.state.alpha_to_problem_id.get(problem_id)}
                     mission_id={this.props.mission_id}
                     introduction={this.state.introduction}
                     caption={this.state.caption}
@@ -354,15 +364,15 @@ const mapStateToProp = (state, ownProps) => {
     // console.log(state.router.location.hash);
     let problem_id = null;
     const setProblemId = (hash) => {
-        function isNumber(v){
-            return (/^[0-9]+.?[0-9]*/).test(v);
-        }
+        // function is(v){
+        //     return (/^[0-9]+.?[0-9]*/).test(v);
+        // }
         if (hash.startsWith('#problem')) {
             let tmp = hash.split('/');
             if (tmp.length == 2) {
-                if (isNumber(tmp[1])) {
-                    problem_id = tmp[1];
-                }
+                // if (isNumber(tmp[1])) {
+                problem_id = tmp[1];
+                // }
             }
         }
     }
