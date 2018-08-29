@@ -311,7 +311,7 @@ class SubmissionPage extends React.Component {
         'loading_text': '正在获取代码',
         callback: (data) => {
             this.setState({
-                code: data.code
+                code: data.code || ""
             })
         } 
     })((submission_id) => {
