@@ -7,7 +7,9 @@ export default class HeaderPage extends React.Component{
     render() {
         return (
         <div id="header-block">
-            <Card id="introduction">{this.props.introduction?this.props.introduction:"暂无通告"}</Card>
+            <Card id="introduction">{this.props.introduction?
+                this.props.introduction.split("\n").map((item) => (<p>{item}</p>))
+                :"暂无通告"}</Card>
             <Card id="banner">{this.props.caption}</Card>
         </div>
         )

@@ -21,10 +21,11 @@ class CreateMission extends React.Component {
     render() {
         return (
         <div>
-            <Button>
+            <Button type = {'primary'}>
                 添加
             </Button>
-            <Button onClick={this.props.onBatchCreate}>
+            {' '}
+            <Button onClick={this.props.onBatchCreate} type = {'primary'}>
                 批量添加
             </Button>
         </div>
@@ -40,7 +41,7 @@ class OperationItem extends React.Component {
     }
     
     confirm = (e)=> {
-        this.props.onSubmit();
+        this.props.onDelete();
     }
     
     cancel = (e)=> {

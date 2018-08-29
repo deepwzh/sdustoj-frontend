@@ -10,6 +10,8 @@ import { RESOURCE, PERMISSION, has_permission } from '../../utils/config';
 import { getFormattedTime } from '../../utils/common';
 import { callbackDecorator } from '../../utils/message';
 
+import moment from 'moment';
+
 import './index.css';
 /**
  * @description 一个小按钮而已(添加按钮)
@@ -17,8 +19,8 @@ import './index.css';
 class CreateMission extends React.Component {
     render() {
         return (
-            <Button onClick = {this.props.onCreate}>
-                Create
+            <Button onClick = {this.props.onCreate} type = {'primary'}>
+                创建任务
             </Button>
         );
     }
@@ -26,15 +28,13 @@ class CreateMission extends React.Component {
 /**
  * @description 另一个小按钮(每个列项最后的删除按钮)
  */
-class DeleteItem extends React.Component {
+class OperationItem extends React.Component {
     constructor(props) {
         super(props);
     }
     
     confirm = (e)=> {
-        console.log(e);
         this.props.onDelete();
-        // message.success('删除成功');
     }
     
     cancel = (e)=> {
@@ -44,12 +44,17 @@ class DeleteItem extends React.Component {
     
     render() {  //TODO: 这个地方需要修改，原因是 现在还没有按钮动作 甚至更换按钮
         return (
-          <Popconfirm title="确定要删除该项?" onConfirm={this.confirm} onCancel={this.cancel} okText="Yes" cancelText="No">
-           <Button>删除</Button>
-          </Popconfirm>
+          <div>
+                <a href="javascript:;" onClick={this.props.onUpdate}>修改</a>
+                <span> | </span>
+                <Popconfirm title="确定要删除该项?" onConfirm={this.confirm} onCancel={this.cancel} okText="Yes" cancelText="No">
+                    <a href="javascript:;">删除</a>
+                </Popconfirm>
+          </div>
         )
     }
 }
+//
 // TODO: 不知道是不是这么写，有待商榷
 // const CompleteForm = WrappedTimeRelatedForm;
 class MissionGroupPage extends React.Component {
@@ -145,29 +150,24 @@ class MissionGroupPage extends React.Component {
             dataIndex: 'available',
             key : 'available',
             render: (text, record, index) => {
-                return <span>{text?"可用":"废弃"}</span>
+                return <span>{text.toString()}</span>
             }
         }];
         if(has_permission(RESOURCE.MISSION, PERMISSION.UPDATE))   { // 如果可写，添加删除列项描述， 并在每条数据后加一个可编辑项
             columns.push(
                 {
-                    title: '修改',      // 名叫删除，索引编辑 cool :)
-                    dataIndex: 'edit',
+                    title: '操作',      // 名叫删除，索引编辑 cool :)
+                    dataIndex: 'operation',
                     key: 'edit',
                     render: (text, record, index)=>(
-                        <Button onClick={() => {
-                            this.setState({
+
+                        <OperationItem 
+                            onUpdate={() => this.setState({
                                 editing_record: record,
                                 createMissionFlag: true,
-                            })
-                            // this.props.getMissionInstance(record.mission_id).then((data) => {
-                            //     this.setState({
-                            //         editing_record: data,
-                            //         createMissionFlag: true,
-                            //     });
-                            // })
-                        }
-                        }>修改</Button> 
+                            })} 
+                            onDelete={() => callbackDecorator(this.fetchDataSource)(this.props.deleteMission)(this.props.mission_group_id, record.id)} 
+                            />
                     )
                 }
             );
@@ -179,25 +179,7 @@ class MissionGroupPage extends React.Component {
         }
         let createMission = null;
         
-        if(has_permission(RESOURCE.MISSION, PERMISSION.DELETE))   { // 如果可写，添加删除列项描述， 并在每条数据后加一个可编辑项
-            columns.push(
-                {
-                    title: '删除',      // 名叫删除，索引编辑 cool :)
-                    dataIndex: 'delete',
-                    key: 'delete',
-                    render: (text, record, index)=>(
-                        <DeleteItem 
-                            onDelete={() => callbackDecorator(this.props.deleteMission)((record.id, this.props.mission_group_id))}
-                         />)
-                }
-            );
-            dataSource = dataSource.map(
-                (ele) => {
-                    return Object.assign({}, ele, {delete : true});
-                  }
-            );
-        }
-        if (has_permission(RESOURCE.MISSION, PERMISSION.CREATE)) {
+        if (has_permission(RESOURCE.MISSION, PERMISSION.CREATE) && this.props.mission_group_id != 0) {
             createMission = <CreateMission onCreate = {()=>{this.setState({createMissionFlag : true, editing_record: null})}}/>
         }
         return (

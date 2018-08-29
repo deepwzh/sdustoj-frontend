@@ -81,8 +81,8 @@ class UpdateButton extends React.Component {
     }
     render() {
         return (
-            <Button onClick = {this.props.onClick}>
-                Update
+            <Button onClick = {this.props.onClick} type = {'primary'}>
+                修改课程信息
             </Button>
         );
     }

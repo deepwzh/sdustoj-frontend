@@ -72,7 +72,7 @@ class TimeRender extends React.Component {
         }
         return (
             <div>
-                <Tooltip title="3 done / 3 in progress / 4 to do">
+                <Tooltip title="">
                     <Progress percent={100} successPercent={this.state.percent} showInfo={false}  status="active" />
                 </Tooltip>
             {is_running?(
@@ -99,11 +99,13 @@ export default class ProcessBarHeaderPage extends React.Component{
         let introduction = null;
         if(this.props.introduction)
         {
-            introduction = <Card id="introduction">{this.props.introduction}</Card>
+            introduction = <Card id="introduction">{this.props.introduction?
+                this.props.introduction.split("\n").map((item) => (<p>{item}</p>))
+                :"暂无通告"}</Card>
         }
         return (
         <div id="processbar-header-block">
-            {introduction}
+                {introduction}
             <Card id="processbar">
                 <div id="banner">
                 {this.props.caption}

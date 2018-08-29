@@ -14,7 +14,7 @@ import { callbackDecorator } from '../../utils/message';
 class CreateProblem extends React.Component {
     render() {
         return (
-            <Button onClick = {this.props.onCreate}>
+            <Button onClick = {this.props.onCreate} type = {'primary'}>
                 添加题目
             </Button>
         );
@@ -23,23 +23,29 @@ class CreateProblem extends React.Component {
 /**
  * @description 另一个小按钮(每个列项最后的删除按钮)
  */
-class DeleteItem extends React.Component {
+class OperationItem extends React.Component {
     constructor(props) {
         super(props);
     }
+    
     confirm = (e)=> {
-        console.log(e);
         this.props.onDelete();
     }
+    
     cancel = (e)=> {
         console.log(e);
         message.error('取消成功');
     }
-    render() {
+    
+    render() {  //TODO: 这个地方需要修改，原因是 现在还没有按钮动作 甚至更换按钮
         return (
-          <Popconfirm title="确定要删除该项?" onConfirm={this.confirm} onCancel={this.cancel} okText="Yes" cancelText="No">
-           <Button>删除</Button>
-          </Popconfirm>
+          <div>
+                <a href="javascript:;" onClick={this.props.onUpdate}>修改</a>
+                <span> | </span>
+                <Popconfirm title="确定要删除该项?" onConfirm={this.confirm} onCancel={this.cancel} okText="Yes" cancelText="No">
+                    <a href="javascript:;">删除</a>
+                </Popconfirm>
+          </div>
         )
     }
 }
@@ -164,14 +170,17 @@ class MissionGroupPage extends React.Component {
         if(has_permission(RESOURCE.PROBLEM, PERMISSION.UPDATE))   { // 如果可写，添加删除列项描述， 并在每条数据后加一个可编辑项
             columns.push(
                 {
-                    title: '修改',      // 名叫删除，索引编辑 cool :)
+                    title: '操作',      // 名叫删除，索引编辑 cool :)
                     dataIndex: 'edit',
                     key: 'edit',
                     render: (text, record, index)=>(
-                        <Button onClick={() => this.setState({
-                            editing_record: record,
-                            updateDrawerFormVisible: true,
-                        })}>修改</Button> 
+                        <OperationItem 
+                            onUpdate={() => this.setState({
+                                editing_record: record,
+                                updateDrawerFormVisible: true,
+                            })} 
+                            onDelete={() =>  callbackDecorator(this.fetchDataSource)(this.props.deleteMissionProblem)(this.props.mission_id, record.id)}
+                            />
                     )
                 }
             );
@@ -181,24 +190,7 @@ class MissionGroupPage extends React.Component {
                   }
             );
         }
-        if(has_permission(RESOURCE.PROBLEM, PERMISSION.DELETE))   { // 如果可写，添加删除列项描述， 并在每条数据后加一个可编辑项
-            columns.push(
-                {
-                    title: '删除',      // 名叫删除，索引编辑 cool :)
-                    dataIndex: 'delete',
-                    key: 'delete',
-                    render: (text, record, index)=>(
-                        <DeleteItem 
-                            onDelete={() =>  callbackDecorator(this.fetchDataSource)(this.props.deleteMissionProblem)(this.props.mission_id, record.id)}
-                         />)
-                }
-            );
-            dataSource = dataSource.map(
-                (ele) => {
-                    return Object.assign({}, ele, {edit : true});
-                  }
-            );
-        }
+        
 
         if (has_permission(RESOURCE.PROBLEM, PERMISSION.CREATE)) {
             createProblem = <CreateProblem 

@@ -7,6 +7,35 @@ import CreateCourseDrawer from './CreateCourseDrawer';
 import { getFormattedTime } from "../../../utils/common";
 import { has_permission, RESOURCE, PERMISSION } from "../../../utils/config";
 import { infoRequest, callbackDecorator } from "../../../utils/message";
+
+class OperationItem extends React.Component {
+  constructor(props) {
+      super(props);
+  }
+  
+  confirm = (e)=> {
+      this.props.onDelete();
+  }
+  
+  cancel = (e)=> {
+      console.log(e);
+      message.error('取消成功');
+  }
+  
+  render() {  //TODO: 这个地方需要修改，原因是 现在还没有按钮动作 甚至更换按钮
+      return (
+        <div>
+              <a href="javascript:;" onClick={this.props.onUpdate}>修改</a>
+              <span> | </span>
+              <Popconfirm title="确定要删除该项?" onConfirm={this.confirm} onCancel={this.cancel} okText="Yes" cancelText="No">
+                  <a href="javascript:;">删除</a>
+              </Popconfirm>
+        </div>
+      )
+  }
+}
+
+
 class TableComponent extends React.Component {
   componentDidMount() {
     this.fetchDataSource();
@@ -64,7 +93,7 @@ class TableComponent extends React.Component {
       dataIndex: 'cid',
       key: 'cid',
       sorter: (a, b) => a.cid - b.cid,
-      sortOrder: sortedInfo.columnKey === 'cid' && sortedInfo.order,
+      sortOrder: 'descend',
     }, {
       title: '课程名称',
       dataIndex: 'caption',
@@ -113,14 +142,18 @@ class TableComponent extends React.Component {
     }
     if (has_permission(RESOURCE.COURSE, PERMISSION.UPDATE)) {
       columns.push({
-          title: '修改',
+          title: '操作',
           dataIndex: 'edit',
           key: 'edit',
           render: (text, record, index) => {
             return (
-              <Button onClick={() => this.setState({createCourseDrawerVisible: true, editing_record: record})}>
-              修改
-              </Button>
+              <OperationItem 
+                            onUpdate={() => this.setState({
+                              createCourseDrawerVisible: true, 
+                              editing_record: record
+                            })} 
+                            onDelete={() => callbackDecorator(this.fetchDataSource)(this.props.deleteCourse)(record.cid) }
+                            />
             )
           }
       });
@@ -130,31 +163,7 @@ class TableComponent extends React.Component {
         }
       ))
     }
-    if (has_permission(RESOURCE.COURSE, PERMISSION.DELETE)) {
-      columns.push({
-          title: '删除',
-          dataIndex: 'delete',
-          key: 'delete',
-          render: (text, record, index) => {
-            return (
-              <Popconfirm title="确定要删除该项?" 
-                onConfirm={(e) => {
-                callbackDecorator(this.fetchDataSource)(this.props.deleteCourse)(record.cid) 
-                }}
-                onCancel={(e) => message.error('取消成功')} 
-                okText="Yes"
-                cancelText="No">
-              <Button>删除</Button>
-              </Popconfirm>
-            )
-          }
-      });
-      data = data.map((item) => (
-        {...item,
-          delete: true
-        }
-      ))
-    }
+   
     return (
       <Card extra={extra}>
         <h1 id = "title-center">{this.props.title}</h1>
