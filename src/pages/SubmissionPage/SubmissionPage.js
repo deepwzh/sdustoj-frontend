@@ -359,7 +359,7 @@ class SubmissionPage extends React.Component {
                     />
                 <SubmissionInstancePage
                     submission_id={this.props.submission_id}
-                    data={this.state.showing_record}
+                    data={this.state.dataSource.find((d) => d.id == this.props.submission_id)}
                     // retrieveSubmissionCode={this.props.retrieveSubmissionCode}
                     code={this.state.code}
                     visible={this.props.submission_id? true: false}
