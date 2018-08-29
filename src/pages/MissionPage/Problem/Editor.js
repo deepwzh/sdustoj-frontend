@@ -1,6 +1,6 @@
 import React from 'react';
 import MonacoEditor from './MonacoEditor';
-import { Select, Card } from 'antd';
+import { Select, Card, message } from 'antd';
 import { Button } from 'antd';
 
 const Option = Select.Option;
@@ -11,6 +11,7 @@ class Editor extends React.Component {
       code: '// type your code...',
       language: 'cpp'
     }
+    
   }
 //   editorDidMount(editor, monaco) {
 //     console.log('editorDidMount', editor);
@@ -27,6 +28,9 @@ class Editor extends React.Component {
             language: value
         })
     }
+
+
+ 
 
   render() {
     const code = this.state.code;
@@ -56,8 +60,10 @@ class Editor extends React.Component {
             // editorDidMount={this.editorDidMount}
           />
           <Button type="primary" onClick={() => {
-            alert(this.state.code);
-            this.props.submit(this.state.code);
+            alert(this.timeout + '        this.timeout');
+    
+              this.props.submit(this.state.code);
+            
             }
           }>提交</Button>
       </Card>

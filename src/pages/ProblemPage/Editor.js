@@ -6,7 +6,7 @@
 
 import React from 'react';
 import MonacoEditor from '../../components/MonacoEditor';
-import { Select, Card } from 'antd';
+import { Select, Card, message } from 'antd';
 import { Button } from 'antd';
 import Operation from 'antd/lib/transfer/operation';
 
@@ -28,8 +28,9 @@ class Editor extends React.Component {
     super(props);
     this.state = {
       code: '// type your code...',
-      
+      timeout: 0
     }
+    this.int = null;
   }
 
   onChange = (newValue, e) =>{
@@ -38,6 +39,23 @@ class Editor extends React.Component {
     // console.log('onChange', newValue, e);
     }
     
+    trick = () => {
+      if(this.state.timeout != 0)
+        this.setState({timeout: --this.state.timeout})
+      else
+        clearInterval(this.int);
+    }
+  
+    click = () => {
+      if(this.state.timeout == 0)
+      {
+        this.setState({timeout: 5});
+        this.int = setInterval(this.trick, 1000);
+      }
+    }
+  
+
+
   render() {
     const code = this.state.code;
     const options = {
@@ -72,10 +90,12 @@ class Editor extends React.Component {
             onChange={this.onChange}
             // editorDidMount={this.editorDidMount}
           />
-          <Button type="primary" onClick={() => {
-            this.props.submit(this.state.code);
+          <Button type="primary" disabled = {this.state.timeout == 0 ? false: true}  onClick={() => {
+             if(this.state.timeout == 0)
+                this.props.submit(this.state.code);
+             this.click();
             }
-          }>提交</Button>
+          }>{this.state.timeout ? '请于 ' + this.state.timeout + 's 后提交' : '提交'}</Button>
       </Card>
     );
   }

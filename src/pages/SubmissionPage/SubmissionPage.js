@@ -170,13 +170,15 @@ class SubmissionPage extends React.Component {
         title: '提交ID',
         dataIndex: 'id',
         key: 'id',
-        sorter: (a, b) => a.id - b.id,
-        // sortOrder: sortedInfo.columnKey === 'id' && sortedInfo.order,
+        sorter: (a, b) => Number(a.id) - Number(b.id),
+        sortOrder: 'descend',
+        //sortOrder: sortedInfo.columnKey === 'id' && sortedInfo.order,
       }, {
         title: '题目',
         dataIndex: 'problem_title',
         key: 'problem_title',
         sorter: (a, b) => a.problem_title > b.problem_title, //从小到大
+        sortOrder: false,
         // sortOrder: sortedInfo.columnKey === 'problem_title' && sortedInfo.order,
         render: (text, record, index) => {
           console.log(record);
@@ -189,12 +191,14 @@ class SubmissionPage extends React.Component {
         key: 'env_name',
         render: text => {return <span  >{languageMap[text]} </span>},
         // sorter: (a, b) => a.start_time > b.start_time, //从小到大
+        sortOrder: false,
         // sortOrder: sortedInfo.columnKey === 'start_time' && sortedInfo.order,
       }, {
         title: '状态',
         dataIndex: 'status_word',
         key: 'status_word',
         sorter: (a, b) => a.status_word > b.status_word, //从小到大
+        sortOrder: false,
         // sortOrder: sortedInfo.columnKey === 'status_word' && sortedInfo.order,
         render: (text, record) => {
           if (!this.state.showing_record) {
@@ -223,6 +227,7 @@ class SubmissionPage extends React.Component {
         key: 'time',
         render: text => {return <span >{text} </span>},
         sorter: (a, b) => a.time > b.time, //从小到大
+        sortOrder: false,
         // sortOrder: sortedInfo.columnKey === 'time' && sortedInfo.order,
         // render: (text, record, index) => {
         //   return getFormattedTime(text);
@@ -234,6 +239,7 @@ class SubmissionPage extends React.Component {
         key: 'memory',
         render: text => {return <span >{text} </span>},
         sorter: (a, b) => a.memory > b.memory, //从小到大
+        sortOrder: false,
         // sortOrder: sortedInfo.columnKey === 'memory' && sortedInfo.order,
       }, {
         title: '长度',
@@ -241,6 +247,7 @@ class SubmissionPage extends React.Component {
         key: 'length',
         render: text => {return <span  >{text} </span>},
         sorter: (a, b) => a.length > b.length, //从小到大
+        sortOrder: false,
         // sortOrder: sortedInfo.columnKey === 'length' && sortedInfo.order,
       }, {
         title: '提交者',
@@ -248,12 +255,14 @@ class SubmissionPage extends React.Component {
         key: 'user_name',
         render: text => {return <span  >{text} </span>},
         sorter: (a, b) => a.user_name > b.user_name, //从小到大
+        sortOrder: false,
         // sortOrder: sortedInfo.columnKey === 'user_name' && sortedInfo.order,
       }, {
         title: '提交时间',
         dataIndex: 'submit_time',
         key: 'submit_time',
         sorter: (a, b) => a.submit_time > b.submit_time, //从小到大
+        sortOrder: false,
         // sortOrder: sortedInfo.columnKey === 'submit_time' && sortedInfo.order,
         render: (text, record, index) => {
           return <span>{getFormattedTime(text)} </span>
