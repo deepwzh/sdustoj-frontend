@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Card, Popconfirm, message, Drawer, Form, } from 'antd';
+import { Button, Card, Popconfirm, message, Drawer, Form, Tag} from 'antd';
 import { Link } from 'react-router-dom'; 
 import Table from '../../components/Table';
 import { CreateMissionDrawer }  from './Form';
@@ -10,9 +10,13 @@ import { RESOURCE, PERMISSION, has_permission } from '../../utils/config';
 import { getFormattedTime } from '../../utils/common';
 import { callbackDecorator } from '../../utils/message';
 
-import moment from 'moment';
-
 import './index.css';
+
+import moment from "moment";
+import 'moment/locale/zh-cn';
+moment.locale('zh-cn');
+
+
 /**
  * @description 一个小按钮而已(添加按钮)
  */
@@ -150,7 +154,20 @@ class MissionGroupPage extends React.Component {
             dataIndex: 'available',
             key : 'available',
             render: (text, record, index) => {
-                return <span>{text.toString()}</span>
+                console.log(moment(record.start_time));
+                if(moment().isBefore(moment(record.start_time)))
+                {
+                    return <Tag color = {'#0000aa'} >{"还未开始"}</Tag>
+                }
+                else if(moment().isBetween(moment(record.start_time), moment(record.end_time)))
+                {
+                    return <Tag color = {'#aa0000'}>{"正在进行"}</Tag>
+                }
+                else if(moment().isAfter(moment(record.end_time)))
+                {
+                    return <Tag color = {'#00aa00'}>{"已结束"}</Tag>
+                }
+                return <Tag>{text.toString()}</Tag>
             }
         }];
         if(has_permission(RESOURCE.MISSION, PERMISSION.UPDATE))   { // 如果可写，添加删除列项描述， 并在每条数据后加一个可编辑项
