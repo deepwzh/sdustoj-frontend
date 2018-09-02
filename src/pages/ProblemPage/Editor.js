@@ -75,7 +75,7 @@ class Editor extends React.Component {
     return (
       <Card style = {{backgroundColor : '#ffd'}}>
           <div>
-            <span>Language:</span>
+            <span style = {{fontWeight: 'bold'}}>Language: </span>
             <Select defaultValue="C" style={{ width: 120 }} onChange={this.props.onChange}>
                 {optionsOfEnv}
             </Select>

@@ -173,7 +173,7 @@ class MissionGroupPage extends React.Component {
         if(has_permission(RESOURCE.MISSION, PERMISSION.UPDATE))   { // 如果可写，添加删除列项描述， 并在每条数据后加一个可编辑项
             columns.push(
                 {
-                    title: '操作',      // 名叫删除，索引编辑 cool :)
+                    title: '操作',      
                     dataIndex: 'operation',
                     key: 'edit',
                     render: (text, record, index)=>(

@@ -326,11 +326,11 @@ class SubmissionPage extends React.Component {
         sortedInfo = sortedInfo || {};
         filteredInfo = filteredInfo || {};
         let problem = [];
-        let problemset = this.props.siderbar.find(({key}) => key === '1');
+        let problemset = this.props.siderbar.find(({key}) => key === 'pb');
         if(problemset)
         {
             problemset = problemset.childrens;
-            problem = problemset.map((value, index) => {return {title: value.title, value: index + 1}});
+            problem = problemset.map((value, index) => {return {title: value.title, value: value.key}});
         }
         return (
             <Card id="submission-card">
