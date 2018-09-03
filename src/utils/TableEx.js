@@ -168,7 +168,7 @@ const columns = [
 /*
   columns.push(
                 {
-                    title: '删除',      // 名叫删除，索引编辑 cool :)
+                    title: '删除',      
                     dataIndex: 'edit',
                     key: 'edit',
                     render: ()=>{<DeleteItem />}

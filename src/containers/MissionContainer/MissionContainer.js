@@ -14,20 +14,20 @@ let isInitFlag = false;
 
 let studentSiderBar = [
     {
-        key:"0",
+        key:"ov",
         title: "概览",
         target: "#overview"
     }, {
-        key: "1",
+        key: "pb",
         title: "题目",
         target: "#problem",
         childrens: []
     }, {
-        key: "2",
+        key: "sm",
         title: "提交",
         target: "#submission",
     }, {
-        key: 3,
+        key: "sc",
         title: "成绩",
         target: "#score"
     }
@@ -83,7 +83,7 @@ class MissionInstanceContainer extends React.Component {
         {
             this.props.siderbar.push(
                 {
-                    key:"-1",
+                    key:"if",
                     title: "任务管理",
                     target: "#info"
                 }
@@ -142,7 +142,8 @@ class MissionInstanceContainer extends React.Component {
                 const alpha = String.fromCharCode(65 + key);
                 alpha_to_problem_id.set(alpha, item.id);
                 childrens.push({
-                    key: "0" + key,
+//                    key: item.id,
+                      key: item.problem_id,
                     title: item.title,
                     target: `#problem/${alpha}`
                     // target: `#problem/${item.id}`, 

@@ -344,7 +344,7 @@ class CourseInstanceContainer extends React.Component {
             return <CourseInfoPage
                     course_id={this.props.course_id}
                 />
-        } 
+        }  
         return (
             <Page {...this.props} 
             introduction={this.state.introduction}

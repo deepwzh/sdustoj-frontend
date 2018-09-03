@@ -1,11 +1,11 @@
 /**
- * @description student table 
+ * @description
  * @time 18-08-16
  * 有点太久了 emmm
  */
 
 import React from 'react';
-import { Button, Card, Popconfirm, message, Drawer, Form, } from 'antd';
+import { Button, Card, Popconfirm, message, Drawer, Form, Upload, Icon } from 'antd';
 import { Link } from 'react-router-dom'; 
 import Table from '../../components/Table';
 import { BatchCreateStudentDrawer, UpdateStudentDrawer }  from './Form';
@@ -14,6 +14,22 @@ import {simpleTime} from './../../utils/simpleTime';
 import { HeaderPage } from '../HeaderPage';
 import { callbackDecorator } from '../../utils/message';
 
+const upload_info = {
+  name: 'students.csv',
+  action: '//',     // 此处 上传文件的地址
+  
+  onChange(info) {
+    if (info.file.status !== 'uploading') {
+      console.log(info.file, info.fileList);
+    }
+    if (info.file.status === 'done') {
+      message.success(`${info.file.name} 文件上传成功`);
+    } else if (info.file.status === 'error') {
+      message.error(`${info.file.name} 文件上传失败! 请重试`);
+    }
+  },
+};
+
 /**
  * @description 一个小按钮而已(添加按钮)
  */
@@ -21,13 +37,15 @@ class CreateMission extends React.Component {
     render() {
         return (
         <div>
-            <Button type = {'primary'}>
-                添加
-            </Button>
-            {' '}
-            <Button onClick={this.props.onBatchCreate} type = {'primary'}>
+             <Button onClick={this.props.onBatchCreate} type = {'primary'} >
                 批量添加
             </Button>
+            {' '}
+            <Upload {...upload_info}>
+                <Button type = {'primary'} >
+                 <Icon type="upload" /> 批量添加-上传文件版
+                </Button>
+            </Upload>
         </div>
         );
     }

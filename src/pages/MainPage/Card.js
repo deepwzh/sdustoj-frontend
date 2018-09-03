@@ -7,7 +7,7 @@ const dataSource = [{
     author: 'wzh'
   }, {
       key: '2',
-      title: '山东科技大学OnlineJudge系统正在试运行!',
+      title: <span style = {{fontWeight: 'bold', fontSize: '15px'}}>山东科技大学OnlineJudge系统正在试运行!</span>,
       time: '2018-05-26',
       author: 'wzh'
 }];
