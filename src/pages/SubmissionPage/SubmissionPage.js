@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom';
 import SubmissionInstancePage from './SubmissionInstancePage';
 import { getAPIUrl, API } from '../../utils/config';
 import { infoRequest } from '../../utils/message';
+import { RejudgeDrawer } from './Form';
 
 const languageType = [
     "All", "C", "C++", "Pascal", "Java", "Ruby", "Bash", "Python", "PHP", "Perl", "C#"
@@ -92,7 +93,7 @@ class SubmissionPage extends React.Component {
                 pageSizeOptions: ['15', '20', '25', '50',]
             },
             visible: false,
-
+            rejudgeDrawerVisible: false,
             isSubmitFailed: true,
         }
     }
@@ -321,6 +322,11 @@ class SubmissionPage extends React.Component {
         }
         return fetch(url, config);
     })
+    onRejudge = () => {
+        this.setState({
+            rejudgeDrawerVisible: true,
+        })
+    }
     render() {
         let { sortedInfo, filteredInfo } = this.state;
         sortedInfo = sortedInfo || {};
@@ -349,6 +355,7 @@ class SubmissionPage extends React.Component {
                     }}
                     onChange={this.handle}
                     onFlush={this.onFlush}
+                    onRejudge={this.onRejudge}
                     value = {this.state.value}
                     />
                 <Table
@@ -366,6 +373,12 @@ class SubmissionPage extends React.Component {
                     showModal={this.showModal}
                     onClose={this.handleCancel}
                     />
+                <RejudgeDrawer 
+                    visible={this.state.rejudgeDrawerVisible}
+                    onClose={() => this.setState({
+                        rejudgeDrawerVisible: false
+                    })}
+                />
             </Card>
         );
     }

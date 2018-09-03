@@ -1,5 +1,6 @@
 import React from "react";
 import {Table, Button, Select, Input, Tag, Card} from 'antd';
+import { has_permission, RESOURCE, PERMISSION } from "../../../utils/config";
 
 /**
  * @description 一个小选择器，目的是为了提供提交结果的搜索。
@@ -59,6 +60,9 @@ export class Selector extends React.Component
                 </Select>
                 </div>
                 <Button type="primary" onClick = {this.props.onFlush} >更新</Button>
+                {has_permission(RESOURCE.SUBMISSION, PERMISSION.UPDATE)?
+                <Button type="danger" onClick = {this.props.onRejudge} >重判</Button>
+                :null}
             </div>
         );
         
