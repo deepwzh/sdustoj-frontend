@@ -47,6 +47,7 @@ class MissionInstanceContainer extends React.Component {
             problem_detail_data: null,
             available_problem_data: null,
             problem_prev_data: null,
+            grade_info: null,
             alpha_to_problem_id: new Map(),
         }
 
@@ -60,6 +61,7 @@ class MissionInstanceContainer extends React.Component {
         this.props.setSiderbarDataSource(this.props.siderbar);
         this.listMissionProblem(this.props.mission_id);
         this.retrieveMission(this.props.mission_id);
+        this.retrieveRank(this.props.auth.username);
         // this.get_instance(this.props.mission_id);
         // this.get_problem(this.props.mission_id);
        
@@ -122,7 +124,20 @@ class MissionInstanceContainer extends React.Component {
         };
         return fetch(url, config);
     });
-    
+    retrieveRank = infoRequest({
+        loading_text: '正在获取成绩信息',
+        callback: (data) => {
+            this.setState({
+                grade_info: data.result
+            });
+        }
+    })((user_id) => {
+        const url = getAPIUrl(API.RANK_INSTANCE(user_id));
+        const config = {
+            method: 'get',
+        }
+        return fetch(url, config);
+    })
     // ####################################### Problem START
     retrieveAvailableProblem = infoRequest({
         loading_text: '正在获取题库信息'
@@ -345,6 +360,7 @@ class MissionInstanceContainer extends React.Component {
                     start_time={this.state.start_time}
                     end_time={this.state.end_time}
                     has_permission = {this.has_permission}
+                    grade_info={this.state.grade_info}
                     retrieveAvailableProblem={this.retrieveAvailableProblem}
                     listMissionProblem={this.listMissionProblem}
                     createMissionProblem={this.createMissionProblem}

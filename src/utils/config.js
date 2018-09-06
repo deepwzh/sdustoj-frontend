@@ -14,7 +14,7 @@ const API = {
     ACCOUNT_PASSWORD: '/api/account/password/',
     LEARNING_COURSES_LIST: '/api/learning-courses/',
     TEACHING_COURSES_LIST: '/api/teaching-courses/',
-    
+    RANK_INSTANCE: (user_id) => `/api/missions/14/ranks/${user_id}/`,
     COURSE_INSTANCE: (course_id) => `/api/courses/${course_id}/`,
     COURSE_LIST: (course_meta_id) => `/api/course-metas/${course_meta_id}/courses/`,
     COURSE_META_LIST: (organization_id) => `/api/organizations/${organization_id}/course-metas/`,

@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Card, Popconfirm, message, Drawer, Form, } from 'antd';
 import { Link } from 'react-router-dom'; 
 import Table from '../../components/Table';
-import { DrawerForm }  from './Form';
+import { DrawerForm, CreateProblemQuick }  from './Form';
 import { RESOURCE, PERMISSION, has_permission } from '../../utils/config';
 import { CreateDrawerForm, UpdateDrawerForm }  from './Form';
 import { callbackDecorator } from '../../utils/message';
@@ -14,9 +14,14 @@ import { callbackDecorator } from '../../utils/message';
 class CreateProblem extends React.Component {
     render() {
         return (
-            <Button onClick = {this.props.onCreate} type = {'primary'}>
-                添加题目
-            </Button>
+            <div>
+                <Button onClick = {this.props.onCreate} type = {'primary'}>
+                    添加题目
+                </Button>
+                <Button onClick = {this.props.onQuickCreate} type = {'primary'}>
+                    快速添加题目
+                </Button>
+            </div>
         );
     }
 }
@@ -60,7 +65,8 @@ class MissionGroupPage extends React.Component {
             filteredInfo: {},
             sortedInfo: {},
             dataSource: [],
-            available_problem_data: []
+            available_problem_data: [],
+            problemCreateQuickVisible: false
             // data: []
         }
     }
@@ -116,10 +122,24 @@ class MissionGroupPage extends React.Component {
                 title: '分数',
                 dataIndex: 'score',
                 key: 'score',
+                render: (text, item, index) => {
+                    if (this.props.grade_info && this.props.grade_info[item.problem_id]) {
+                        return this.props.grade_info[item.problem_id]['score']
+                    } else {
+                        return "-";
+                    }
+                }
             }, {
                  title: '状态',
                  dataIndex: 'problem_state',
                  key: 'problem_state',
+                 render: (text, item, index) => {
+                    if (this.props.grade_info && this.props.grade_info[item.problem_id]) {
+                        return this.props.grade_info[item.problem_id]['status']
+                    } else {
+                        return "-";
+                    }
+                }
             },
         ];
         let columns = [...score_state,
@@ -200,18 +220,35 @@ class MissionGroupPage extends React.Component {
         
 
         if (has_permission(RESOURCE.PROBLEM, PERMISSION.CREATE)) {
-            createProblem = <CreateProblem 
-            onCreate = {
-                () => {
-                    this.setState({createProblemFlag : true});
-                    this.props.retrieveAvailableProblem(this.props.mission_id)
-                        .then((res) => {
-                            this.setState({
-                                available_problem_data: res.results
-                            })
+            if (this.state.problemCreateQuickVisible) {
+                createProblem = <CreateProblemQuick
+                    onCreate={(data) => callbackDecorator(this.fetchDataSource)(this.props.createMissionProblem)(data, this.props.mission_id)}
+                    onClose={() => this.setState({
+                        problemCreateQuickVisible: false
+                    })}
+                />
+            } else {
+                createProblem = <div>
+                <CreateProblem 
+                    onCreate = {
+                        () => {
+                            this.setState({createProblemFlag : true});
+                            this.props.retrieveAvailableProblem(this.props.mission_id)
+                                .then((res) => {
+                                    this.setState({
+                                        available_problem_data: res.results
+                                    })
+                                })
+                        }
+                    }
+                    onQuickCreate = {
+                        () => this.setState({
+                            problemCreateQuickVisible: true
                         })
-                }
-            }/>
+                    }
+                    />
+                </div>
+            }
         }
         return (
             <Card extra = {createProblem}>
