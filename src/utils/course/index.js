@@ -50,7 +50,18 @@ const course = {
 
 function getStudentItem(item) {
     let raw_data = item.split(/[\s\t]+/);
-    console.log(raw_data);
+    let class_info = raw_data[2];
+    // 软件工程16-2
+    let major = '';
+    let grade = '';
+    let class_in = '';
+    if (/([^\d]+)(\d+)-?(\d+)?/.test(class_info)) {
+        major = RegExp.$1
+        grade = RegExp.$2
+        class_in = RegExp.$3 || 1
+    }
+
+    // console.log(raw_data);
     return ({
         username:raw_data[0],
         available:true,
@@ -58,9 +69,9 @@ function getStudentItem(item) {
         password:raw_data[0],
         student_id:raw_data[0],
         name:raw_data[1],
-        major:null,
-        grade:null,
-        class_in:null,
+        major:major,
+        grade:grade,
+        class_in:class_in,
     });
 }
 

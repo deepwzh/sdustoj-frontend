@@ -27,6 +27,11 @@ class DrawerForm extends React.Component {
         }
     });
 }
+  componentDidMount() {
+    this.setState({
+      data: studentDataParserFromCsv("201601060928  wzh 软件工程2016-2\n201601061028 hzh  软件工程2016-3")
+    })
+  }
   render() {
     const { getFieldDecorator } = this.props.form;
     const columns = [{
@@ -42,7 +47,20 @@ class DrawerForm extends React.Component {
         title: '姓名',
         dataIndex: 'name',
         key: 'name',
-      }];
+      }, {
+        title: '专业',
+        dataIndex: 'major',
+        key: 'major',
+      }, {
+        title: '年级',
+        dataIndex: 'grade',
+        key: 'grade',
+      }, {
+        title: '班级',
+        dataIndex: 'class_in',
+        key: 'class_in',
+      }
+    ];
     return (
       <div>
         <Drawer
@@ -63,7 +81,7 @@ class DrawerForm extends React.Component {
               <Col span={12}>
                 <Form.Item label="需要添加的数据">
                   {getFieldDecorator('data', {
-                    initialValue: "201601060928  wzh\n201601060928 wzh",
+                    initialValue: "201601060928  wzh 软件工程2016-2\n201601061028 hzh  软件工程2016-3",
                     rules: [{ required: true, message: '请输入数据' }],
                   })(<TextArea rows={6} placeholder="请输入学生信息                
                   "
