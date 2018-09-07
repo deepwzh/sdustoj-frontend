@@ -222,6 +222,7 @@ class MissionGroupPage extends React.Component {
         if (has_permission(RESOURCE.PROBLEM, PERMISSION.CREATE)) {
             if (this.state.problemCreateQuickVisible) {
                 createProblem = <CreateProblemQuick
+                    mission_id={this.props.mission_id}
                     onCreate={(data) => callbackDecorator(this.fetchDataSource)(this.props.createMissionProblem)(data, this.props.mission_id)}
                     onClose={() => this.setState({
                         problemCreateQuickVisible: false

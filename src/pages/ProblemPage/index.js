@@ -72,7 +72,13 @@ class ProblemPage extends React.Component {
         this.props.createSubmission(data, this.props.mission_id);
     }
     render() {
-        let problem_data = this.state.dataSource;
+        let {dataSource} = this.props;
+        let problem_data = null;
+        if (!dataSource) {
+            problem_data = this.state.dataSource;
+        } else {
+            problem_data = dataSource;
+        }
         // console.log(problem_data);
         let detail_data = {};
         let info_data = {};

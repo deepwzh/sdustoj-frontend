@@ -39,7 +39,12 @@ const API = {
     SUBMISSION_LIST: (mission_id, params) => `/api/missions/${mission_id}/submissions/?${params}`,
 
     AVAILABLE_PROBLEM: (mission_id) => `/api/missions/${mission_id}/available-problems/`,
-    SUBMISSIONCODE: (submission_id) => `/api/submissioncode/${submission_id}`
+    SUBMISSIONCODE: (submission_id) => `/api/submissioncode/${submission_id}`,
+
+
+    // TMP API
+    GLOBAL_PROBLEM_INSTANCE: (problem_id) => `/api/problem/${problem_id}`
+
 }
 const PERMISSION = {
     CREATE: "CREATE",

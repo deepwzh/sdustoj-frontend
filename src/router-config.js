@@ -9,6 +9,7 @@ import SubmissionPage from './pages/SubmissionPage';
 import StatusPage from './pages/StatusPage';
 import CourseInstanceContainer from './containers/CourseInstanceContainer';
 import MissionContainer from './containers/MissionContainer/MissionContainer';
+import ProblemListContainer from './containers/ProblemListContainer';
 
 import TeacherTable from './pages/CourseInstancePage/TeacherTable'
 import GroupInTable from './pages/CourseInstancePage/GroupInTable'
@@ -75,6 +76,10 @@ const routers = [
         path: '/submission',
         component: CodeDisplay,
         layout: MainPageLayout
-    },
+    }, {
+        path: '/problemset/:mission_id',
+        component: ProblemListContainer,
+        layout: MainPageLayout,
+    }
 ];
 export default routers;

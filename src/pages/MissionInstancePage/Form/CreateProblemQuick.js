@@ -1,6 +1,7 @@
 import React from 'react';
 import { Select } from 'antd';
 import { Button } from 'antd';
+import { connect } from 'tls';
 
 const Option = Select.Option;
 
@@ -44,8 +45,18 @@ class CreateProblemQuick extends React.Component {
                     {children}
                 </Select>
                 <Button type="primary" onClick={this.onSubmit}>添加</Button>
+                <Button type="dashed" onClick={() => {
+                    var url = "/problemset/" + this.props.mission_id;
+                    var win = window.open(url, '_blank');
+                    win.focus();
+                }} >浏览题库</Button>
+                {/* <Link to></Link> */}
+                {/* <Button type="primary" onClick={this.onSubmit}></Button> */}
             </div>
         );
     }
 }
+// const mapDispatchToProps = (dispatch) => {
+//     return dispatch;
+// }
 export default CreateProblemQuick;
