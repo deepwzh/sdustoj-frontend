@@ -2,7 +2,7 @@ import React from 'react';
 import { BlankLayout, MainPageLayout, MenuSiderBarLayout } from "./layouts";
 import LoginPage from "./pages/LoginPage";
 import CourseList from './containers/CourseListContainer';
-import MainPage from './pages/MainPage';
+import MainPageContainer from './containers/MainPageContainer';
 import MissionPage from './pages/MissionPage';
 import ProblemPage from './pages/ProblemPage';
 import SubmissionPage from './pages/SubmissionPage';
@@ -19,9 +19,13 @@ import CodeDisplay from './pages/StatusPage/CodeDisplay'
 const routers = [
     {
         path: '/',
-        component: MainPage,
+        component: MainPageContainer,
         layout: MainPageLayout
     }, {
+        path: '/board/:id',
+        component: MainPageContainer,
+        layout: MainPageLayout,
+    },{
         path: '/login',
         component: LoginPage,
         layout: BlankLayout

@@ -8,6 +8,8 @@ if (DEBUG) {
 }
 
 const API = {
+    ANNOUNCEMENT_INSTANCE : (id) => `/api/announcement/${id}`,
+    ANNOUNCEMENT_LIST: '/api/announcement',
     LOGIN: '/api/login/',
     LOGOUT: '/api/logout',
     ACCOUNT_PROFILE: '/api/account/profile/',

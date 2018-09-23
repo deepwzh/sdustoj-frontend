@@ -124,7 +124,7 @@ class MissionGroupPage extends React.Component {
                 key: 'score',
                 render: (text, item, index) => {
                     if (this.props.grade_info && this.props.grade_info[item.problem_id]) {
-                        return this.props.grade_info[item.problem_id]['score']
+                        return Number.prototype.toFixed.call(this.props.grade_info[item.problem_id]['score'], 2);
                     } else {
                         return "-";
                     }
@@ -142,7 +142,7 @@ class MissionGroupPage extends React.Component {
                 }
             },
         ];
-        let columns = [...score_state,
+        let columns = [
              {
                 title: '题目ID',
                 render: (text, record, index) => {
@@ -155,7 +155,7 @@ class MissionGroupPage extends React.Component {
             // key: 'index',
             // sorter: (a, b) => a.index - b.problem_id,
             // sortOrder: sortedInfo.columnKey === 'problem_id' && sortedInfo.order,
-          }, {
+          }, ...score_state,{
             title: '标题',
             dataIndex: 'title',
             key: 'title',

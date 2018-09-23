@@ -66,6 +66,12 @@ function infoRequest(user_config) {
                             message: '输入数据有误, 请检查是否有数据格式有误或者重复', 
                             data});
                     }));
+                } else if (response.status == 403) {
+                    return response.json().then(data => new Promise((resolve, reject) => {
+                        reject({
+                            message: '无权限访问！', 
+                            data});
+                    }));
                 }
                 return response.json().then(data => new Promise((resolve, reject) => {
                     reject({

@@ -8,6 +8,7 @@ import { getAPIUrl, API, ROLE, PERMISSION_TABLE, PERMISSION, RESOURCE, has_permi
 import { setSiderbarDataSource } from '../../actions';
 import { infoRequest } from "../../utils/message";
 import MissionInfoPage from "../../pages/MissionInstancePage/MissionInfoPage";
+import ScorePage from '../../pages/MissionInstancePage/ScorePage';
 
 // 一个用以判断是否已经加载过的标记
 let isInitFlag = false;
@@ -340,7 +341,9 @@ class MissionInstanceContainer extends React.Component {
                 />
             );
         } else if(hash.startsWith("#score")) {
-            return <h1>hello world</h1>;
+            return <ScorePage 
+                dataSource={this.state.grade_info}
+            />
         } else if (hash.startsWith("#info")) {
             return <MissionInfoPage
                 mission_id = {this.props.mission_id}

@@ -112,13 +112,15 @@ class MissionGroupPage extends React.Component {
         let { sortedInfo, filteredInfo } = this.state;
         
         let {dataSource} = this.state;
-        let columns = [{
-            title: '任务ID',
-            dataIndex: 'id',
-            key: 'id',
-            sorter: (a, b) => a.id - b.id,
-            sortOrder: this.state.sortedInfo.columnKey === 'id' && this.state.sortedInfo.order,
-        }, {
+        let columns = [
+        //     {
+        //     title: '任务ID',
+        //     dataIndex: 'id',
+        //     key: 'id',
+        //     sorter: (a, b) => a.id - b.id,
+        //     sortOrder: this.state.sortedInfo.columnKey === 'id' && this.state.sortedInfo.order,
+        // }, 
+        {
             title: '任务名称',
             dataIndex: 'caption',
             key: 'caption',

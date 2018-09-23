@@ -13,7 +13,6 @@ import { push, replace } from "connected-react-router";
 import CourseInfoPage from '../../pages/CourseInstancePage/CourseInfo';
 // 一个用以判断是否已经加载过的标记
 let isInitFlag = false;
-
 class CourseInstanceContainer extends React.Component {
     constructor(props) {
         super(props);
@@ -23,27 +22,6 @@ class CourseInstanceContainer extends React.Component {
             studentData: [],
             mission_group_id: null,
         };
-    }
-    static defaultProps = {
-        
-        siderbar : [{
-            key: '5',
-            title: '课程详细信息',
-            target: '#info'
-        },{
-            key: '100',
-            title: '正在进行的任务',
-            target: '#running'
-        }, {
-            key: "0",
-            title: "所有任务",
-            target: "",
-            childrens: []
-        }, {
-            key: '4',
-            title: '任务组',
-            target: "#mission_group"
-        }, ],
     }
     componentDidMount() {
         this.props.setSiderbarDataSource(this.props.siderbar);
@@ -388,6 +366,45 @@ const mapStateToProp = (state, ownProps) => {
         // loading: state.course.loading,
         // error: state.course.error
     }
+}
+if (has_permission(RESOURCE.COURSE, PERMISSION.UPDATE)) {
+    CourseInstanceContainer.defaultProps = {
+        siderbar : [{
+            key: '5',
+            title: '课程详细信息',
+            target: '#info'
+        }, {
+            key: '100',
+            title: '正在进行的任务',
+            target: '#running'
+        }, {
+            key: "0",
+            title: "所有任务",
+            target: "",
+            childrens: []
+        }, {
+            key: '4',
+            title: '任务组',
+            target: "#mission_group"
+        }, ],
+    };
+} else {
+    CourseInstanceContainer.defaultProps = {
+        siderbar : [{
+            key: '100',
+            title: '正在进行的任务',
+            target: '#running'
+        }, {
+            key: "0",
+            title: "所有任务",
+            target: "",
+            childrens: []
+        }, {
+            key: '4',
+            title: '任务组',
+            target: "#mission_group"
+        }, ],
+    };
 }
 const mapDispatchToProps = (dispatch) => {
     return {
