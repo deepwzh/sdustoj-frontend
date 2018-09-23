@@ -21,6 +21,11 @@ class DrawerForm extends React.Component {
     this.props.form.validateFields((err, values) => {
         if (!err) {
           values = {...values, start_time: values.start_time[0], end_time: values.start_time[1]};
+          values = {...values, config: {
+            ...this.props.data.config,
+            type: values.mode,
+            difficulty: values.difficulty
+          }}
           // console.log('Received values of form: ', JSON.stringify(values));
           if (this.props.data) {
             this.props.onUpdate(values);
@@ -53,13 +58,16 @@ class DrawerForm extends React.Component {
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item label="模式">
-                  {getFieldDecorator('mode', {
-                    rules: [{ required: true, message: '请选择模式' }],
+                <Form.Item label="起止时间">
+                  {getFieldDecorator('start_time', {
+                    rules: [{ required: true, message: '请选择任务的起止时间' }],
                   })(
-                    <Select placeholder="请选择模式" defaultValue="ACM">
-                      <Option value="ACM">ACM</Option>
-                    </Select>
+                    <DatePicker.RangePicker
+                      showTime={{ format: 'HH:mm' }}
+                      format="YYYY-MM-DD HH:mm"
+                      style={{ width: '100%' }}
+                      getPopupContainer={trigger => trigger.parentNode}
+                    />
                   )}
                 </Form.Item>
               </Col>
@@ -98,26 +106,31 @@ class DrawerForm extends React.Component {
                   {getFieldDecorator('mode', {
                     rules: [{ required: true, message: '请选择模式' }],
                   })(
-                    <Select placeholder="请选择模式" defaultValue="ACM">
-                      <Option value="ACM">ACM</Option>
+                    <Select placeholder="请选择模式" defaultValue="Experiment">
+                      <Option value="Experiment">实验</Option>
+                      <Option value="Homework">作业</Option>
                     </Select>
                   )}
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item label="起止时间">
-                  {getFieldDecorator('start_time', {
-                    rules: [{ required: true, message: '请选择任务的起止时间' }],
+                <Form.Item label="难度值">
+                  {getFieldDecorator('difficulty', {
+                    rules: [{ required: true, message: '请选择难度值' }],
                   })(
-                    <DatePicker.RangePicker
-                      showTime={{ format: 'HH:mm' }}
-                      format="YYYY-MM-DD HH:mm"
-                      style={{ width: '100%' }}
-                      getPopupContainer={trigger => trigger.parentNode}
-                    />
+                    <Select placeholder="请选择难度值" defaultValue="0">
+                      <Option value="0">0</Option>
+                      <Option value="10">10</Option>
+                      <Option value="15">15</Option>
+                      <Option value="20">20</Option>
+                      <Option value="25">25</Option>
+                      <Option value="30">30</Option>
+                      <Option value="35">35</Option>
+                      <Option value="40">40</Option>
+                    </Select>
                   )}
                 </Form.Item>
-              </Col>
+              </Col>  
             </Row>
             <Row gutter={16}>
               <Col span={24}>
@@ -179,7 +192,8 @@ const CreateMissionForm = Form.create({
         if (!data) {
           return {};
         }
-        const {caption, introduction, start_time, end_time, mode, available, deleted} = data;
+        const {caption, introduction, start_time, end_time, mode, available, deleted, config } = data;
+        const { difficulty } = config || {};
         return {
             // weight: Form.createFormField({value: weight}),
             available: Form.createFormField({value: available + ""}),
@@ -188,6 +202,7 @@ const CreateMissionForm = Form.create({
             introduction: Form.createFormField({value: introduction }),
             mode: Form.createFormField({value: mode}),
             start_time: Form.createFormField({value: [moment(start_time), moment(end_time)]}),
+            difficulty: Form.createFormField({value: difficulty}),
         };
   }}
 )(DrawerForm);
